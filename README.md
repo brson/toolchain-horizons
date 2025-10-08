@@ -27,7 +27,6 @@ chrono
 crossbeam
 env_logger
 extension-trait
-derive_more
 futures
 hex
 itertools
@@ -39,6 +38,7 @@ rand
 rayon
 regex
 serde
+semver
 socket2
 syn
 thiserror
