@@ -81,7 +81,7 @@ fn test_control_case() -> Result<ExperimentResult, Box<dyn std::error::Error>> {
     let cargo_toml = r#"[package]
 name = "control"
 version = "0.1.0"
-edition = "2021"
+edition = "2018"
 
 [dependencies]
 "#;
@@ -91,9 +91,8 @@ edition = "2021"
     fs::create_dir(project_path.join("src"))?;
     fs::write(project_path.join("src/lib.rs"), "// Control case with no dependencies\n")?;
 
-    let versions = get_rust_versions()?;
-    let oldest = find_oldest_compatible(&versions, project_path)?;
-    let latest = versions.last().cloned();
+    let oldest = find_oldest_compatible(project_path)?;
+    let latest = RUST_VERSIONS.last().map(|s| s.to_string());
 
     Ok(ExperimentResult {
         crate_name: "CONTROL".to_string(),
@@ -115,7 +114,7 @@ fn test_crate(crate_name: &str, version_spec: &str) -> Result<ExperimentResult, 
         r#"[package]
 name = "test-{}"
 version = "0.1.0"
-edition = "2021"
+edition = "2018"
 
 [dependencies]
 {} = "{}"
@@ -132,9 +131,8 @@ edition = "2021"
     // Get resolved version with latest stable.
     let resolved_version = get_resolved_version(project_path, crate_name)?;
 
-    let versions = get_rust_versions()?;
-    let oldest = find_oldest_compatible(&versions, project_path)?;
-    let latest = versions.last().cloned();
+    let oldest = find_oldest_compatible(project_path)?;
+    let latest = RUST_VERSIONS.last().map(|s| s.to_string());
 
     Ok(ExperimentResult {
         crate_name: crate_name.to_string(),
@@ -200,41 +198,36 @@ fn get_resolved_version(
     Err("Could not find version in Cargo.lock".into())
 }
 
-/// Get list of Rust versions to test.
-fn get_rust_versions() -> Result<Vec<String>, Box<dyn std::error::Error>> {
-    // For now, return a curated list of important versions.
-    // In a full implementation, we'd fetch from rustup or parse release data.
-    Ok(vec![
-        "1.0.0".to_string(),
-        "1.10.0".to_string(),
-        "1.20.0".to_string(),
-        "1.30.0".to_string(),
-        "1.40.0".to_string(),
-        "1.50.0".to_string(),
-        "1.60.0".to_string(),
-        "1.70.0".to_string(),
-        "1.80.0".to_string(),
-        "1.85.0".to_string(),
-    ])
-}
+/// All stable Rust releases (latest point releases only).
+const RUST_VERSIONS: &[&str] = &[
+    "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0",
+    "1.10.0", "1.11.0", "1.12.1", "1.13.0", "1.14.0", "1.15.1", "1.16.0", "1.17.0", "1.18.0", "1.19.0",
+    "1.20.0", "1.21.0", "1.22.1", "1.23.0", "1.24.1", "1.25.0", "1.26.2", "1.27.2", "1.28.0", "1.29.2",
+    "1.30.1", "1.31.1", "1.32.0", "1.33.0", "1.34.2", "1.35.0", "1.36.0", "1.37.0", "1.38.0", "1.39.0",
+    "1.40.0", "1.41.1", "1.42.0", "1.43.1", "1.44.1", "1.45.2", "1.46.0", "1.47.0", "1.48.0", "1.49.0",
+    "1.50.0", "1.51.0", "1.52.1", "1.53.0", "1.54.0", "1.55.0", "1.56.1", "1.57.0", "1.58.1", "1.59.0",
+    "1.60.0", "1.61.0", "1.62.1", "1.63.0", "1.64.0", "1.65.0", "1.66.1", "1.67.1", "1.68.2", "1.69.0",
+    "1.70.0", "1.71.1", "1.72.1", "1.73.0", "1.74.1", "1.75.0", "1.76.0", "1.77.2", "1.78.0", "1.79.0",
+    "1.80.1", "1.81.0", "1.82.0", "1.83.0", "1.84.1", "1.85.1", "1.86.0", "1.87.0", "1.88.0", "1.89.0",
+    "1.90.0",
+];
 
 /// Find the oldest compatible Rust version using binary search.
 fn find_oldest_compatible(
-    versions: &[String],
     project_path: &Path,
 ) -> Result<Option<String>, Box<dyn std::error::Error>> {
     let mut left = 0;
-    let mut right = versions.len();
+    let mut right = RUST_VERSIONS.len();
     let mut oldest = None;
 
     while left < right {
         let mid = left + (right - left) / 2;
-        let version = &versions[mid];
+        let version = RUST_VERSIONS[mid];
 
         println!("  Testing Rust {}", version);
 
         if test_rust_version(project_path, version)? {
-            oldest = Some(version.clone());
+            oldest = Some(version.to_string());
             right = mid;
         } else {
             left = mid + 1;
