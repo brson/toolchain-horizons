@@ -4,14 +4,14 @@ use std::path::Path;
 use std::process::Command;
 use tempfile::TempDir;
 
-/// List of crates to test.
-const CRATES: &[&str] = &[
-    "bitflags",
-    "byteorder",
-    "cfg-if",
-    "futures",
-    "log",
-    "num_cpus",
+/// List of crates to test (name, version).
+const CRATES: &[(&str, &str)] = &[
+    ("bitflags", "1"),
+    ("byteorder", "1"),
+    ("cfg-if", "1"),
+    ("futures", "0.3"),
+    ("log", "0.4"),
+    ("num_cpus", "1"),
 ];
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -44,9 +44,9 @@ fn main() {
     }
 
     // Test each crate.
-    for crate_name in CRATES {
+    for (crate_name, version) in CRATES {
         println!("\n=== Testing {} ===", crate_name);
-        match test_crate(crate_name) {
+        match test_crate(crate_name, version) {
             Ok(result) => {
                 println!("{}: oldest={:?}, latest={:?}",
                     crate_name, result.oldest_compatible, result.latest_compatible);
@@ -56,7 +56,7 @@ fn main() {
                 eprintln!("{} failed: {}", crate_name, e);
                 results.push(ExperimentResult {
                     crate_name: crate_name.to_string(),
-                    dependency_spec: format!("\"{}\"", get_version_spec(crate_name)),
+                    dependency_spec: version.to_string(),
                     resolved_version: None,
                     oldest_compatible: None,
                     latest_compatible: None,
@@ -106,11 +106,9 @@ edition = "2021"
 }
 
 /// Test a single crate.
-fn test_crate(crate_name: &str) -> Result<ExperimentResult, Box<dyn std::error::Error>> {
+fn test_crate(crate_name: &str, version_spec: &str) -> Result<ExperimentResult, Box<dyn std::error::Error>> {
     let temp_dir = TempDir::new()?;
     let project_path = temp_dir.path();
-
-    let version_spec = get_version_spec(crate_name);
 
     // Create Cargo.toml.
     let cargo_toml = format!(
@@ -140,26 +138,12 @@ edition = "2021"
 
     Ok(ExperimentResult {
         crate_name: crate_name.to_string(),
-        dependency_spec: version_spec,
+        dependency_spec: version_spec.to_string(),
         resolved_version: Some(resolved_version),
         oldest_compatible: oldest,
         latest_compatible: latest,
         error: None,
     })
-}
-
-/// Get the version spec for a crate (major.minor format).
-fn get_version_spec(crate_name: &str) -> String {
-    // For most crates, use the major version.
-    // Some special cases where we want to be more specific.
-    match crate_name {
-        "extension-trait" => "1.0".to_string(),
-        _ => {
-            // We'll try to fetch the latest version and use major.minor.
-            // For now, use common patterns.
-            "1".to_string()
-        }
-    }
 }
 
 /// Generate lib.rs content that uses the crate.
