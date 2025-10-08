@@ -5,6 +5,11 @@ use std::process::Command;
 use tempfile::TempDir;
 
 /// List of crates to test (name, version).
+///
+/// It should be the latest major version.
+///
+/// Only put the major version here (for >= 1.0),
+/// or major.minor (for <= 1.0), to give a range of resolution options.
 const CRATES: &[(&str, &str)] = &[
     ("bitflags", "1"),
     ("byteorder", "1"),
