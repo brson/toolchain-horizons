@@ -41,7 +41,6 @@ regex
 serde
 socket2
 syn
-tempfile
 thiserror
 toml
 unicode-segmentation
