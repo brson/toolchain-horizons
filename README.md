@@ -46,3 +46,21 @@ toml
 unicode-segmentation
 url
 walkdir
+
+
+## Other languages
+
+
+### Go - long toolchain horizon not practical
+
+-Go 1.18 (March 2022):                                                                                           
+  - Generics - Major language change that many modern packages use                                                
+  - Many packages published after this require generics features                                                  
+                                                                                                                  
+- Go 1.16 (Feb 2021):                                                                                             
+  - Module mode became default - Before this, GOPATH was still common                                             
+  - go install behavior changed significantly                                                                     
+                                                                                                                  
+- Go 1.13 (Sept 2019):                                                                                            
+  - Go modules became production-ready                                                                            
+  - Earlier versions have buggy/incomplete module support
