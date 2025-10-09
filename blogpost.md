@@ -29,3 +29,7 @@ This appears to be something like the median consensus of the crate ecosystem,
 and pushing past that requires increasing effort.
 
 todo
+
+
+
+## The experiment
