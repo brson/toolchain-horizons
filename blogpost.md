@@ -12,9 +12,16 @@ It usually goes something like this:
 
 What I found was in hindsight not surprising,
 but at the time was kinda revelatory,
-even though I have gone through the process numerous times.
+even though I have gone through the process numerous times:
+
+> If you use any Rust dependencies, even as dev-dependencies,
+  you are committing to supporting only 2 years of Rust toolchains.
+
+You will likely be chasing toolchain upgrades to stay in that 2 year window.
 
 I eventually settled on the minimum supported version
 being [Rust 1.63].
+This appears to be something like the median consensus of the crate ecosystem,
+and pushing past that requires increasing effort.
 
 todo
