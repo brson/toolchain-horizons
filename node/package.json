@@ -1,0 +1,12 @@
+{
+  "name": "node-toolchain-experiment",
+  "version": "1.0.0",
+  "description": "Node.js dependency toolchain compatibility experiment",
+  "main": "experiment.js",
+  "scripts": {
+    "start": "node experiment.js"
+  },
+  "keywords": ["experiment", "compatibility", "node", "toolchain"],
+  "author": "",
+  "license": "MIT"
+}
