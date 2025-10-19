@@ -1,49 +1,54 @@
 # How dependencies destroy your Rust MSRV
 
-During a recent project to get the [Rust client](https://github.com/tigerbeetle/tigerbeetle/tree/main/src/clients/rust) for the [TigerBeetle database](https://tigerbeetle.com/)
-ready for production,
-I went through the familiar process of establishing the minimum supported version
-of the Rust toolchain (MSRV) the crate could support.
+I was working on the [Rust client](https://github.com/tigerbeetle/tigerbeetle/tree/main/src/clients/rust) for the [TigerBeetle database](https://tigerbeetle.com/),
+getting it ready for production,
+when I hit the familiar wall of MSRV determination.
 
-It usually goes something like this:
+You know the drill:
+start optimistically with an ancient toolchain,
+binary search your way up through compiler errors and dependency failures,
+settle on whatever actually builds,
+then watch your MSRV creep forward anyway as your dependencies update under you.
 
-1. Start with the oldest toolchain you can reasonably support
-2. Try to build with progressively older toolchains
-3. Hit compiler errors or dependency incompatibilities
-4. Settle on whatever version actually builds
-5. Watch your MSRV creep forward as dependencies update
-
-What I found was, in hindsight, not surprising -
-yet it felt surprisingly revelatory at the time,
-even though I've gone through this process numerous times:
+I had this moment of clarity -
+one of those things that's obvious in retrospect but hits you sideways anyway,
+even after doing it a dozen times:
 
 > If you use any Rust dependencies, even as dev-dependencies,
   you are committing to supporting only 2-3 years of Rust toolchains.
 
-You will likely be chasing toolchain upgrades to stay in that 2-3 year window.
+And you will spend time chasing toolchain upgrades to stay in that window.
 
-Whether this is good or bad I'm not sure.
-I generally think healthy projects should keep their toolchains upgraded.
-But _only_ being _able_ to support two years of toolchains feels kinda offensive to me.
+Is this good or bad? I don't know.
+I believe healthy projects should keep their toolchains upgraded.
+But _only_ being able to support two years of toolchains feels kinda offensive to me,
+especially for a language that prides itself on stability guarantees.
 
-I eventually settled on the minimum supported version
-being Rust 1.63, from August 2022, about 2.5 years prior to publication.
-This appears to be something like the median consensus of the crate ecosystem,
-and pushing past that requires increasing effort.
+I settled on Rust 1.63, from August 2022, about 2.5 years before publication.
+This appears to be the median consensus of the ecosystem right now.
+Pushing past it requires increasing effort, and at some point you just give up.
 
-I decided to measure exactly how much each dependency restricts your toolchain horizon.
+But I wanted to know: exactly how much does each dependency cost?
 
 ## The experiment
 
-I took 29 foundational Rust crates (stuff like `serde`, `rand`, `futures`, `log` - the kind of things everybody uses) and for each one I created a minimal project with that single dependency. Then I used binary search to find the oldest Rust toolchain that could compile it.
+I took 29 foundational Rust crates -
+the usual suspects like `serde`, `rand`, `futures`, `log`,
+the kind of things that show up in every `Cargo.toml` -
+and for each one created a minimal project with that single dependency.
+Then I binary searched through Rust's release history to find the oldest toolchain that could compile it.
 
-For comparison, I also tested a control project with zero dependencies.
+For comparison, I tested a control project with zero dependencies.
 
 The setup:
 - Edition 2018
-- Latest stable version specs (like `"1"` for serde, `"0.3"` for futures)
+- Latest stable version specs (`"1"` for serde, `"0.3"` for futures)
 - Binary search over all stable Rust releases from 1.0.0 to 1.90.0
 - Each toolchain can generate its own lockfile, but uses the same manifest
+
+I wrote some quick automation to do the binary search,
+and honestly I should have done this years ago.
+It's satisfying to just let the computer tell you the answer instead of guessing.
 
 ## The results
 
@@ -101,7 +106,9 @@ So the edition choice matters, but dependencies matter way more.
 
 ## Is this just Rust?
 
-I was curious if this phenomenon was unique to Rust, so I ran the same experiment on Python, Java, and Node.js.
+I got curious whether this was unique to Rust,
+or if I'd just been living in my Rust bubble for too long.
+So I ran the same experiment on Python, Java, and Node.js.
 
 Short answer: **yes, this is mostly a Rust thing**.
 
@@ -111,9 +118,18 @@ Short answer: **yes, this is mostly a Rust thing**.
 
 - **Node.js**: More like Rust - 33% of packages work on Node 14+, but 24% require Node 20+ (released 2023). The ecosystem moves fast and drops old versions.
 
-The JVM's bytecode compatibility and the ecosystem's commitment to long-term support mean you can use cutting-edge libraries while supporting decade-old Java versions. Python's slower language evolution keeps compatibility broad. Node and Rust both move fast and break things.
+The JVM's bytecode compatibility and cultural commitment to long-term support mean you can use cutting-edge libraries while supporting decade-old Java versions.
+Python's slower language evolution keeps compatibility broad.
+Node and Rust both move fast and break things.
 
-(Full cross-language results in the coda below, for the curious.)
+I spent years working on Rust at Mozilla,
+watching us obsess over stability guarantees and backwards compatibility.
+The irony is that while _rustc_ rarely breaks your code,
+the ecosystem doesn't share that discipline.
+Every crate author makes their own tradeoffs,
+and collectively we've ended up with a 2-3 year compatibility window.
+
+(Full cross-language results in the coda below if you want the details.)
 
 ## Takeaways
 
@@ -124,14 +140,51 @@ If you're a library author who cares about MSRV:
 - Consider if you really need that dep
 
 If you're an application author:
-- You probably don't care as much, but know that your MSRV is determined by your most aggressive dependency
-- Want to support older systems? Audit your deps
+- You probably don't care as much, but your MSRV is determined by your most aggressive dependency
+- Want to support older systems? Audit your deps first
 
-I'm not saying "never use dependencies" - that would be silly. But the cost is real and it's higher than I expected. A single `rand` or `futures` dependency cuts out five years of Rust history.
+I'm not saying "never use dependencies."
+That would be silly, and I've written enough from-scratch code in my life to know it's usually a mistake.
+But the cost is real and higher than I expected.
+A single `rand` or `futures` dependency cuts out five years of Rust history.
 
-This isn't necessarily bad. Rust is evolving fast, and that's part of what makes it exciting. But it's a tradeoff: innovation vs compatibility. Other ecosystems made different choices.
+This isn't necessarily bad.
+Rust is evolving fast, and that's part of what makes it exciting.
+But it's a tradeoff: innovation vs compatibility.
+Other ecosystems made different choices.
+
+The Rust I helped build at Mozilla obsessed over backwards compatibility,
+and I'm proud of that work.
+But the Rust ecosystem is its own thing now,
+with its own values and priorities.
+Watching it evolve from the sidelines is fascinating,
+even when it goes directions I wouldn't have chosen.
 
 Anyway, full results and the experiment code are [on GitHub](https://github.com/brson/dep-tool-comp).
+
+---
+
+## Postscript: On writing this with Claude Code
+
+I wrote most of this post by hand,
+but I used Claude Code to help me run the experiments and organize the data.
+This was exactly the kind of tedious-but-straightforward automation work that AI is good at:
+binary searching through toolchain versions,
+running builds in Docker containers,
+collecting and formatting results.
+
+The funny thing is,
+I still had to know what I was doing.
+Claude helped me avoid a bunch of stupid mistakes with iterator adapters and error handling,
+but it also confidently suggested things that were wrong,
+and I had to know enough to catch them.
+
+It's a useful tool.
+Not a replacement for understanding,
+but a way to move faster when you do understand.
+Kind of like a really helpful but occasionally overconfident intern.
+
+I'm not sure what to make of it yet.
 
 ---
 
@@ -222,5 +275,15 @@ Tested packages: express, koa, lodash, date-fns, uuid, axios, node-fetch, jest, 
 - Java: Binary search using Maven with compile validation
 - Node: Binary search using nvm with runtime import validation
 - All used major version specs to allow maximum dependency flexibility
+
+A note on the code:
+I had Claude Code help me write the binary search logic,
+and we went through a few iterations to get the iterator adapters right.
+It suggested a verbose but clear implementation first,
+then we refined it to something more concise and idiomatic.
+The back-and-forth reminded me that even for straightforward algorithms,
+there's often a tension between "obviously correct" and "elegantly concise."
+I tend to err on the side of concise these days,
+but I can see the argument for verbose when the code is meant to be copied.
 
 Full experimental code and raw data available in the [GitHub repository](https://github.com/brson/dep-tool-comp).
