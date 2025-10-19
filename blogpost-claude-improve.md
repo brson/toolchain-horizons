@@ -69,6 +69,8 @@ A simple Rust 2018 edition crate can compile on toolchains spanning 7.4 years of
 
 But add a single dependency and that window shrinks fast:
 
+![Rust Crate Toolchain Compatibility Timeline](rust/compatibility-timeline.png)
+
 - **bitflags 1.x**: Rust 1.31+ only (lost 20% of versions)
 - **futures 0.3**: Rust 1.61+ only (lost 61% of versions)
 - **num_cpus 1.x**: Rust 1.63+ only (lost 64% of versions)

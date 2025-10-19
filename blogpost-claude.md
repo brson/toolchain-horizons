@@ -24,7 +24,7 @@ That's 74 versions, spanning 7.4 years of Rust history. Pretty good!
 
 Now here's what happens when you add a single dependency:
 
-![Rust Crate Toolchain Compatibility Timeline](compatibility-timeline.png)
+![Rust Crate Toolchain Compatibility Timeline](rust/compatibility-timeline.png)
 
 ### The spectrum of pain
 
