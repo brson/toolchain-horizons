@@ -38,6 +38,11 @@ This appears to be something like the median consensus of the crate ecosystem,
 and pushing past that requires increasing effort.
 
 That revision had 3 dependencies: [`anyhow`], [`futures`], and [`walkdir`].
+Fundamental Rust crates.
+
+**As I was working on this blog post, the `syn` crate published
+a point release (2.0.107) that bumped their MSVR from 1.63 to 1.68,
+breaking the build of our crate that had only 3 Rust dependencies.**
 
 Eventually we just decided to go for it and remove all dependencies
 (even `futures`, which I'll explain how we replaced in [an appendix]).
@@ -105,3 +110,4 @@ Some very common crates heavily restrict your Rust toolchain:
   - **86% version loss** - only 4 months old when I ran this!
 - `backtrace`: Requires Rust 1.82.0 (Oct 2024)
   - **89% version loss** - basically requires the latest toolchain
+  
