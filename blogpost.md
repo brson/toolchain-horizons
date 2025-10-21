@@ -55,10 +55,53 @@ So I did an experiment to satisfy my curiousity.
 
 ## The experiment
 
+To measure the MSRV cost of dependencies, I selected 29 foundational Rust crates
+that commonly appear in production projects: `serde`, `rand`, `futures`, `log`,
+and similar widely-used libraries.
+
+For each crate, I created a minimal project with that single dependency and used
+binary search to determine the oldest Rust toolchain that could compile it. This
+provides an isolated measurement of each dependency's minimum toolchain
+requirement.
+
+**Experimental parameters:**
+
+- Baseline is Rust 1.31, which introduced Rust 2018 edition in December 2018.
+  Our test crates are declared with no edition (meaning 2015 edition).
+- Latest stable version specifications (e.g. `"1"` for serde, `"0.3"` for futures).
+  Cargo is free to resolve using the minor version number.
+- Binary search space: all stable Rust releases from 1.31.0 to 1.90.0 (TODO versions).
+- Each toolchain generates its own Cargo.lock, but all use the same Cargo.toml
+
+A control project with zero dependencies compiles successfully with 1.31.
+
+We are just testing cargo's ability to automatically resolve the dependency graph &mdash;
+there are no manual interventions, which might be successful in a real project.
 
 
 
+## The results
 
+The control case compiles with Rust 1.16.0 (March 2017),
+released prior to the 2018 edition.
+I didn't check what the blocker is on going back further.
+So language stability when it is just resolving dependencies is good.
 
+Here's what happens when you add a single dependency.
 
----
+![Rust Crate Toolchain Compatibility Timeline](rust/compatibility-timeline.png)
+
+fixme these numbers are using the wrong baseline
+
+Some very common crates heavily restrict your Rust toolchain:
+
+- `bitflags`, `serde`, `mime`: Require Rust 1.31.1 (Dec 2018)
+  - **20% version loss**, 1.8 years newer than baseline
+- `futures`, `log`, `crossbeam`, `syn`, `thiserror`: Require Rust 1.61.0 (May 2022)
+  - **61% version loss**, 5.2 years newer
+- `rand`, `itertools`, `libc`, `num_cpus`: Require Rust 1.63.0 (Aug 2022)
+  - **64% version loss**, 5.4 years newer
+- `rayon`: Requires Rust 1.80.1 (Aug 2024)
+  - **86% version loss** - only 4 months old when I ran this!
+- `backtrace`: Requires Rust 1.82.0 (Oct 2024)
+  - **89% version loss** - basically requires the latest toolchain
