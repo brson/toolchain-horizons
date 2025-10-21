@@ -1,13 +1,12 @@
 # Measuring the effect of Rust dependencies on MSRV
 
-During a recent project to get the [Rust client] for the [TigerBeetle database]
-ready for production
-I went through a typical process of establishing the minimum supported version
+During a recent modestly-sized project to get the [Rust client] for the [TigerBeetle database]
+ready for production I went through a typical process of establishing the minimum supported version
 of the Rust toolchain (MSRV) the crate could support.
 
 It usually goes something like this:
 
-1. Do a binary search through rust versions to find the newest
+1. Do a binary search through recent rust versions to find the newest
    one that doesn't build and test successfully,
    using rustup and commands like `cargo +1.60 test` to specify the toolchain.
 2. Fix the build, which usually involves downgrading or removing dependencies.
