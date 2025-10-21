@@ -32,8 +32,8 @@ Besids simple API incompatibility I sometimes run into situations:
 - Older toolchains can technically work, but their resolved dependencies
   can't pass `cargo audit`; so we can claim compatibility, but it's not ideal.
 
-For TigerBeetle I initially settled on the minimum supported version
-being [Rust 1.63], from (date todo), N months prior to date of publication.
+For TigerBeetle we initially settled on the minimum supported version
+being [Rust 1.63], which was released 2.5 years prior to publication.
 This appears to be something like the median consensus of the crate ecosystem,
 and pushing past that requires increasing effort.
 
@@ -46,8 +46,11 @@ Now the TigerBeetl Rust client is compatible with Rust toolchains
 back to version XXX, from XXX &mdash; even more compatible than the
 ecosystem-fundamental `futures` crate!
 
-This experience just gnawed at me for weeks,
-so I did an experiment to satisfy my curiousity.
+This experience just gnawed at me for weeks:
+Rust's stability guarantees are well-known;
+so why does the ecosystem impose such a narrow compatibility window?
+
+So I did an experiment to satisfy my curiousity.
 
 
 ## The experiment
