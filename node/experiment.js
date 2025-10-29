@@ -209,7 +209,7 @@ function testNodeOnly(nodeVersion) {
       fs.writeFileSync(path.join(tmpDir, 'test.js'), testCode);
 
       // Run with this Node version.
-      const result = spawnSync('bash', ['-c', `source ~/.bashrc && nvm use ${nodeVersion} && node test.js`], {
+      const result = spawnSync('bash', ['-c', `source ~/.config/nvm/nvm.sh && nvm use ${nodeVersion} && node test.js`], {
         cwd: tmpDir,
         timeout: 30000,
         encoding: 'utf-8',
@@ -248,7 +248,7 @@ function testWithEngineStrict(nodeVersion, pkg) {
 
       // Try npm install.
       const result = spawnSync('bash', ['-c',
-        `source ~/.bashrc && nvm use ${nodeVersion} && npm install 2>&1`
+        `source ~/.config/nvm/nvm.sh && nvm use ${nodeVersion} && npm install 2>&1`
       ], {
         cwd: tmpDir,
         timeout: 120000,
@@ -297,7 +297,7 @@ function testRuntime(nodeVersion, pkg) {
 
       // Install package.
       const installResult = spawnSync('bash', ['-c',
-        `source ~/.bashrc && nvm use ${nodeVersion} && npm install --silent 2>&1`
+        `source ~/.config/nvm/nvm.sh && nvm use ${nodeVersion} && npm install --silent 2>&1`
       ], {
         cwd: tmpDir,
         timeout: 120000,
@@ -314,7 +314,7 @@ function testRuntime(nodeVersion, pkg) {
 
       // Run the test.
       const testResult = spawnSync('bash', ['-c',
-        `source ~/.bashrc && nvm use ${nodeVersion} && node test.js`
+        `source ~/.config/nvm/nvm.sh && nvm use ${nodeVersion} && node test.js`
       ], {
         cwd: tmpDir,
         timeout: 30000,
@@ -400,7 +400,7 @@ function generateTestCode(packageName) {
 function ensureNodeInstalled(version) {
   try {
     // Check if already installed.
-    const listResult = spawnSync('bash', ['-c', `source ~/.bashrc && nvm list`], {
+    const listResult = spawnSync('bash', ['-c', `source ~/.config/nvm/nvm.sh && nvm list`], {
       encoding: 'utf-8',
       timeout: 10000,
     });
@@ -412,7 +412,7 @@ function ensureNodeInstalled(version) {
     // Install the version.
     console.log(`    Installing Node ${version}...`);
     const installResult = spawnSync('bash', ['-c',
-      `source ~/.bashrc && nvm install ${version}`
+      `source ~/.config/nvm/nvm.sh && nvm install ${version}`
     ], {
       timeout: 300000,
       encoding: 'utf-8',
