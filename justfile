@@ -126,7 +126,7 @@ python-experiment:
 # Run Node.js experiment
 node-experiment:
     @echo "Running Node.js experiment..."
-    cd node && bash -c "source ~/.nvm/nvm.sh && node experiment.js"
+    cd node && bash -c "source ~/.config/nvm/nvm.sh && node experiment.js"
     @echo "Node.js experiment complete: node/results.json"
 
 # Visualize Rust results
