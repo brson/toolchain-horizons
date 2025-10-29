@@ -1,4 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
+# /// script
+# dependencies = [
+#   "matplotlib>=3.7.0",
+#   "numpy>=1.24.0",
+# ]
+# ///
 """
 Visualize Rust crate toolchain compatibility on a timeline.
 """
