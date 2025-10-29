@@ -1,7 +1,7 @@
 # Dependency Toolchain Compatibility Experiment
 #
 # Reproducible experiments testing how dependencies affect
-# toolchain version compatibility across Rust, Java, Go, Python, and Node.js
+# toolchain version compatibility across Rust, Java, Python, and Node.js
 
 # Default recipe shows available commands
 default:
@@ -69,15 +69,6 @@ check-prereqs:
         missing=$((missing + 1))
     fi
 
-    # Check for go
-    if command -v go &> /dev/null; then
-        echo "✓ go: $(go version)"
-    else
-        echo "✗ go: NOT FOUND"
-        echo "  Install: https://go.dev/doc/install"
-        missing=$((missing + 1))
-    fi
-
     # Check for Maven (Java build tool)
     if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
         set +u  # Temporarily disable to source SDKMAN
@@ -105,7 +96,7 @@ check-prereqs:
     fi
 
 # Run all experiments sequentially
-all-experiments: rust-experiment java-experiment python-experiment node-experiment go-experiment
+all-experiments: rust-experiment java-experiment python-experiment node-experiment
     @echo ""
     @echo "All experiments completed!"
     @echo "Results written to:"
@@ -113,7 +104,6 @@ all-experiments: rust-experiment java-experiment python-experiment node-experime
     @echo "  - java/results.json"
     @echo "  - python/results.json"
     @echo "  - node/results.json"
-    @echo "  - go/results.json"
 
 # Run Rust experiment
 rust-experiment:
@@ -139,12 +129,6 @@ node-experiment:
     cd node && bash -c "source ~/.nvm/nvm.sh && node experiment.js"
     @echo "Node.js experiment complete: node/results.json"
 
-# Run Go experiment
-go-experiment:
-    @echo "Running Go experiment..."
-    cd go && go run experiment.go
-    @echo "Go experiment complete: go/results.json"
-
 # Visualize Rust results
 visualize-rust:
     @echo "Generating Rust compatibility visualizations..."
@@ -160,7 +144,7 @@ visualize: visualize-rust
     @echo "All visualizations generated!"
 
 # Clean all results and generated files
-clean: clean-rust clean-java clean-python clean-node clean-go clean-visualizations
+clean: clean-rust clean-java clean-python clean-node clean-visualizations
     @echo "All artifacts cleaned!"
 
 # Clean Rust artifacts
@@ -188,11 +172,6 @@ clean-node:
     @echo "Cleaning Node.js artifacts..."
     rm -f node/results.json
 
-# Clean Go artifacts
-clean-go:
-    @echo "Cleaning Go artifacts..."
-    rm -f go/results.json
-
 # Clean visualization outputs
 clean-visualizations:
     @echo "Cleaning visualization outputs..."
@@ -208,7 +187,7 @@ validate-results:
     valid=0
     invalid=0
 
-    for result in rust/results.json java/results.json python/results.json node/results.json go/results.json; do
+    for result in rust/results.json java/results.json python/results.json node/results.json; do
         if [[ -f "$result" ]]; then
             if python3 -m json.tool "$result" > /dev/null 2>&1; then
                 echo "✓ $result: Valid JSON"
@@ -259,12 +238,5 @@ list-versions:
     if [[ -d "$HOME/.nvm" ]]; then
         echo "Node.js versions (nvm):"
         bash -c "source ~/.nvm/nvm.sh && nvm list | head -n 5"
-        echo ""
-    fi
-
-    # Go
-    if command -v go &> /dev/null; then
-        echo "Go version:"
-        go version
         echo ""
     fi

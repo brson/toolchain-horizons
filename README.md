@@ -50,17 +50,14 @@ walkdir
 
 ## Other languages
 
+The experiment has been expanded to include Java, Python, and Node.js to compare how different ecosystems handle dependency-driven toolchain compatibility restrictions.
 
-### Go - long toolchain horizon not practical
+See the individual experiment directories for methodology and results:
+- `rust/` - Rust experiment (completed)
+- `java/` - Java experiment (completed)
+- `python/` - Python experiment (completed)
+- `node/` - Node.js experiment (completed)
 
--Go 1.18 (March 2022):                                                                                           
-  - Generics - Major language change that many modern packages use                                                
-  - Many packages published after this require generics features                                                  
-                                                                                                                  
-- Go 1.16 (Feb 2021):                                                                                             
-  - Module mode became default - Before this, GOPATH was still common                                             
-  - go install behavior changed significantly                                                                     
-                                                                                                                  
-- Go 1.13 (Sept 2019):                                                                                            
-  - Go modules became production-ready                                                                            
-  - Earlier versions have buggy/incomplete module support
+## Running the Experiments
+
+See [REPRODUCING.md](REPRODUCING.md) for detailed instructions on running all experiments.

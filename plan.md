@@ -18,10 +18,10 @@
 ### High Priority
 
 #### 1. Cross-Language Visualization
-Create `visualize-all.py` to compare all five ecosystems on a single chart.
+Create `visualize-all.py` to compare all four ecosystems on a single chart.
 
 **Features:**
-- Timeline showing compatibility loss across Rust, Java, Go, Python, Node.js
+- Timeline showing compatibility loss across Rust, Java, Python, Node.js
 - Bar chart comparing average version loss by ecosystem
 - Heat map showing which ecosystems have the most restrictions
 - Use same PEP 723 metadata pattern as visualize.py
@@ -58,47 +58,18 @@ Create `scripts/collate-results.py` to aggregate and normalize results.
 {
   "metadata": {
     "generated_at": "2025-10-29T...",
-    "experiments": ["rust", "java", "python", "node", "go"]
+    "experiments": ["rust", "java", "python", "node"]
   },
   "rust": [...],
   "java": [...],
   "python": [...],
-  "node": [...],
-  "go": [...]
+  "node": [...]
 }
 ```
 
-#### 3. Expand Go Experiment
-The Go experiment currently only tests 3 packages and has limited scope.
-
-**Issues:**
-- Very small package list (only testify, uuid, errors)
-- Version range unclear (references Go 1.24.0 which doesn't exist)
-
-**Improvements:**
-- Expand package list to ~15-20 foundational packages:
-  - github.com/gin-gonic/gin (web framework)
-  - github.com/gorilla/mux (HTTP router)
-  - github.com/sirupsen/logrus (logging)
-  - github.com/spf13/cobra (CLI)
-  - github.com/spf13/viper (config)
-  - go.uber.org/zap (logging)
-  - github.com/stretchr/testify (already included)
-  - github.com/google/uuid (already included)
-  - github.com/pkg/errors (already included)
-  - gorm.io/gorm (ORM)
-  - github.com/go-redis/redis (Redis client)
-  - google.golang.org/grpc (gRPC)
-  - golang.org/x/sync (sync primitives)
-  - golang.org/x/crypto (crypto)
-  - golang.org/x/net (networking)
-
-- Clarify version range: Go 1.19.0 - 1.23.0 (current latest)
-- Fix any installation issues
-
 ### Medium Priority
 
-#### 4. Parallel Experiment Execution
+#### 3. Parallel Experiment Execution
 Add `just all-experiments-parallel` for faster execution.
 
 **Implementation considerations:**
@@ -111,7 +82,7 @@ Add `just all-experiments-parallel` for faster execution.
 - Sequential: ~60 minutes total
 - Parallel: ~30 minutes total (limited by longest experiment)
 
-#### 5. Result Validation Enhancement
+#### 4. Result Validation Enhancement
 Improve `validate-results` to check content, not just JSON validity.
 
 **Additional checks:**
@@ -120,7 +91,7 @@ Improve `validate-results` to check content, not just JSON validity.
 - Validate version format (semver-like)
 - Report statistics: packages tested, failures, average compatibility
 
-#### 6. CI/GitHub Actions Integration
+#### 5. CI/GitHub Actions Integration
 Add `.github/workflows/experiments.yml` to run experiments on schedule.
 
 **Benefits:**
@@ -159,7 +130,7 @@ jobs:
 
 ### Low Priority
 
-#### 7. Interactive Results Explorer
+#### 6. Interactive Results Explorer
 Create a web-based dashboard to explore results.
 
 **Technology:**
@@ -172,7 +143,7 @@ Create a web-based dashboard to explore results.
 - Compare specific packages across ecosystems
 - Timeline scrubber to see compatibility at different dates
 
-#### 8. Result Archival
+#### 7. Result Archival
 Store historical results to track changes over time.
 
 **Structure:**
@@ -192,7 +163,7 @@ results-archive/
 - Which ecosystems are getting more restrictive over time?
 - Impact of major language releases (Rust edition, Python 3.13, etc.)
 
-#### 9. Blog Post Integration
+#### 8. Blog Post Integration
 Update blog post generation to automatically include latest results.
 
 **Automation:**
@@ -201,7 +172,7 @@ Update blog post generation to automatically include latest results.
 - Regenerate charts for blog
 - Keep blog post in sync with experiment findings
 
-#### 10. Package Version Updates
+#### 9. Package Version Updates
 Regularly update the package version specs in experiments.
 
 **Current state:**
@@ -265,8 +236,7 @@ What metrics best compare ecosystems?
 **High Priority Items:**
 - Cross-language visualization: 2-3 hours
 - Result collation tool: 1-2 hours
-- Expand Go experiment: 2-3 hours
-- **Total: 5-8 hours**
+- **Total: 3-5 hours**
 
 **Medium Priority Items:**
 - Parallel execution: 1-2 hours
@@ -283,7 +253,7 @@ What metrics best compare ecosystems?
 
 ## Open Questions
 
-1. Should we add more languages (C++, C#, Ruby, PHP, etc.)?
+1. Should we add more languages (Go, C++, C#, Ruby, PHP, etc.)?
 2. Should experiments test pre-release/beta toolchain versions?
 3. What's the best way to share results (GitHub Pages, blog, paper)?
 4. Should we measure compile/check time in addition to compatibility?

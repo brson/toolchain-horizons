@@ -1,6 +1,6 @@
 # Reproducing the Dependency Toolchain Compatibility Experiment
 
-This guide explains how to reproduce the experiments that measure how dependencies affect toolchain version compatibility across five programming ecosystems: Rust, Java, Go, Python, and Node.js.
+This guide explains how to reproduce the experiments that measure how dependencies affect toolchain version compatibility across four programming ecosystems: Rust, Java, Python, and Node.js.
 
 ## Prerequisites
 
@@ -19,7 +19,6 @@ just check-prereqs
 5. **Maven** - Java build tool (install via SDKMAN: `sdk install maven`)
 6. **uv** - Python package manager (https://astral.sh/uv)
 7. **nvm** - Node.js version manager (https://github.com/nvm-sh/nvm)
-8. **go** - Go programming language (https://go.dev/doc/install)
 
 ### Quick Installation
 
@@ -40,15 +39,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-
-# Install Go (follow instructions at https://go.dev/doc/install)
 ```
 
 ## Running Experiments
 
 ### Run All Experiments
 
-To run all five experiments sequentially:
+To run all four experiments sequentially:
 
 ```bash
 just all-experiments
@@ -59,7 +56,6 @@ This will:
 2. Run the Java experiment (~10-20 minutes)
 3. Run the Python experiment (~5-10 minutes)
 4. Run the Node.js experiment (~5-10 minutes)
-5. Run the Go experiment (~5 minutes)
 
 Results will be written to `{language}/results.json` for each experiment.
 
@@ -70,7 +66,6 @@ just rust-experiment      # Rust only
 just java-experiment      # Java only
 just python-experiment    # Python only
 just node-experiment      # Node.js only
-just go-experiment        # Go only
 ```
 
 ## Generating Visualizations
@@ -94,7 +89,7 @@ Check that all experiments completed successfully:
 just validate-results
 ```
 
-This validates that all five `results.json` files exist and contain valid JSON.
+This validates that all four `results.json` files exist and contain valid JSON.
 
 ## Viewing Installed Toolchains
 
@@ -114,7 +109,6 @@ just clean-rust           # Clean Rust artifacts only
 just clean-java           # Clean Java artifacts only
 just clean-python         # Clean Python artifacts only
 just clean-node           # Clean Node.js artifacts only
-just clean-go             # Clean Go artifacts only
 just clean-visualizations # Clean PNG files only
 ```
 
@@ -155,13 +149,6 @@ Each experiment follows the same pattern:
 - Uses `nvm` for version management
 - Two-phase testing: engine-strict validation + runtime testing
 - Baseline: Significant restrictions (many require Node 18+)
-
-### Go Experiment
-
-- Tests 3 Go packages (limited scope)
-- Range: Go 1.19 to 1.23
-- Uses `go install golang.org/dl/go<version>@latest` for version management
-- Status: Preliminary/incomplete
 
 ## Results Format
 
