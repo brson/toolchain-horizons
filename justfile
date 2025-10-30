@@ -134,13 +134,18 @@ visualize-rust:
     @echo "Generating Rust compatibility visualizations..."
     uv run visualize.py
 
+# Visualize Node.js results
+visualize-node:
+    @echo "Generating Node.js compatibility visualizations..."
+    uv run visualize-node.py
+
 # Visualize all language results (cross-language comparison)
 visualize-all:
     @echo "Generating cross-language comparison..."
     @echo "TODO: Create visualize-all.py"
 
 # Generate all visualizations
-visualize: visualize-rust
+visualize: visualize-rust visualize-node
     @echo "All visualizations generated!"
 
 # Clean all results and generated files
