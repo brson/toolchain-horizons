@@ -152,8 +152,8 @@ legend_elements = [
 ax1.legend(handles=legend_elements, loc='upper left', fontsize=8, title='Impact Severity')
 
 plt.tight_layout()
-plt.savefig('compatibility-timeline.png', dpi=300, bbox_inches='tight')
-print("Visualization saved to compatibility-timeline.png")
+plt.savefig('compatibility-timeline-rust.png', dpi=300, bbox_inches='tight')
+print("Visualization saved to compatibility-timeline-rust.png")
 
 # Create a second visualization: Lost versions chart
 fig2, ax = plt.subplots(figsize=(12, 8))
@@ -187,7 +187,7 @@ for i, (bar, lost) in enumerate(zip(bars, versions_lost)):
 ax.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.5, label='Baseline (no deps)')
 
 plt.tight_layout()
-plt.savefig('versions-lost.png', dpi=300, bbox_inches='tight')
-print("Visualization saved to versions-lost.png")
+plt.savefig('versions-lost-rust.png', dpi=300, bbox_inches='tight')
+print("Visualization saved to versions-lost-rust.png")
 
 plt.show()

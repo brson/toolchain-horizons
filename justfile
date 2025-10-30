@@ -132,7 +132,7 @@ node-experiment:
 # Visualize Rust results
 visualize-rust:
     @echo "Generating Rust compatibility visualizations..."
-    uv run visualize.py
+    uv run visualize-rust.py
 
 # Visualize Node.js results
 visualize-node:
