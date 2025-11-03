@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from datetime import datetime
 import numpy as np
+import sys
 
 # Data from experiment results
 crates_data = [
@@ -190,4 +191,6 @@ plt.tight_layout()
 plt.savefig('versions-lost-rust.png', dpi=300, bbox_inches='tight')
 print("Visualization saved to versions-lost-rust.png")
 
-plt.show()
+# Only show plot window if --show argument is passed
+if '--show' in sys.argv:
+    plt.show()

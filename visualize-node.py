@@ -14,6 +14,7 @@ import matplotlib.patches as mpatches
 from datetime import datetime
 import numpy as np
 import json
+import sys
 
 # Load results
 with open('node/results.json', 'r') as f:
@@ -200,4 +201,6 @@ plt.tight_layout()
 plt.savefig('versions-lost-node.png', dpi=300, bbox_inches='tight')
 print('Visualization saved to versions-lost-node.png')
 
-plt.show()
+# Only show plot window if --show argument is passed
+if '--show' in sys.argv:
+    plt.show()

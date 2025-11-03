@@ -129,23 +129,23 @@ node-experiment:
     cd node && bash -c "source ~/.config/nvm/nvm.sh && node experiment.js"
     @echo "Node.js experiment complete: node/results.json"
 
-# Visualize Rust results
-visualize-rust:
+# Visualize Rust results (pass 'show' to display plot window)
+visualize-rust show='':
     @echo "Generating Rust compatibility visualizations..."
-    uv run visualize-rust.py
+    uv run visualize-rust.py {{ if show == 'show' { '--show' } else { '' } }}
 
-# Visualize Node.js results
-visualize-node:
+# Visualize Node.js results (pass 'show' to display plot window)
+visualize-node show='':
     @echo "Generating Node.js compatibility visualizations..."
-    uv run visualize-node.py
+    uv run visualize-node.py {{ if show == 'show' { '--show' } else { '' } }}
 
 # Visualize all language results (cross-language comparison)
-visualize-all:
+visualize-all show='':
     @echo "Generating cross-language comparison..."
     @echo "TODO: Create visualize-all.py"
 
-# Generate all visualizations
-visualize: visualize-rust visualize-node
+# Generate all visualizations (pass 'show' to display plot windows)
+visualize show='': (visualize-rust show) (visualize-node show)
     @echo "All visualizations generated!"
 
 # Clean all results and generated files
