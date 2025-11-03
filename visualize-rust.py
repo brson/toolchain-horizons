@@ -15,6 +15,12 @@ from datetime import datetime
 import numpy as np
 import sys
 
+# Check if we should show the plot window
+show_plot = '--show' in sys.argv
+
+# Font scale factor: 2x for windowed display, 1x for PNG export
+fs = 2.0 if show_plot else 1.0
+
 # Data from experiment results
 crates_data = [
     ("CONTROL", "1.16.0", "2017-03-16", 0, "baseline"),
@@ -62,7 +68,7 @@ color_map = {
 
 # Create figure
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), gridspec_kw={'height_ratios': [3, 1]})
-fig.suptitle('Rust Crate Toolchain Compatibility Timeline\nEdition 2018', fontsize=16, fontweight='bold')
+fig.suptitle('Rust Crate Toolchain Compatibility Timeline\nEdition 2018', fontsize=int(16*fs), fontweight='bold')
 
 # Plot 1: Timeline bars
 y_pos = 0
@@ -80,12 +86,12 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
              color=color, alpha=0.7, edgecolor='black', linewidth=0.5)
 
     # Add crate name
-    ax1.text(-50, y_pos, crate_name, ha='right', va='center', fontsize=9, fontweight='bold')
+    ax1.text(-50, y_pos, crate_name, ha='right', va='center', fontsize=int(9*fs), fontweight='bold')
 
     # Add version and date on the bar
     text_x = bar_start + 30
     ax1.text(text_x, y_pos, f'{rust_version}',
-             ha='left', va='center', fontsize=7, color='black')
+             ha='left', va='center', fontsize=int(7*fs), color='black')
 
     y_pos += 1
 
@@ -93,7 +99,7 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
 total_days = (latest_date - baseline_date).days
 ax1.set_xlim(0, total_days)
 ax1.set_ylim(-0.5, len(crates_data) - 0.5)
-ax1.set_xlabel('Time →', fontsize=12)
+ax1.set_xlabel('Time →', fontsize=int(12*fs))
 ax1.set_yticks([])
 
 # Add year markers
@@ -112,7 +118,7 @@ ax1.set_xticklabels([label for _, label in year_markers])
 # Add grid
 ax1.grid(axis='x', alpha=0.2)
 ax1.set_title('Compatibility Window by Crate\n(Each bar shows the range of supported Rust versions)',
-              fontsize=11, pad=10)
+              fontsize=int(11*fs), pad=10)
 
 # Add baseline indicator
 baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.8)
@@ -128,9 +134,9 @@ counts = [impact_counts.get(imp, 0) for imp in impact_order]
 colors = [color_map[imp] for imp in impact_order]
 
 bars = ax2.bar(impact_order, counts, color=colors, alpha=0.7, edgecolor='black')
-ax2.set_ylabel('Number of Crates', fontsize=11)
-ax2.set_xlabel('Impact Level', fontsize=11)
-ax2.set_title('Distribution of Compatibility Impact', fontsize=11)
+ax2.set_ylabel('Number of Crates', fontsize=int(11*fs))
+ax2.set_xlabel('Impact Level', fontsize=int(11*fs))
+ax2.set_title('Distribution of Compatibility Impact', fontsize=int(11*fs))
 ax2.grid(axis='y', alpha=0.2)
 
 # Add count labels on bars
@@ -138,7 +144,7 @@ for bar, count in zip(bars, counts):
     if count > 0:
         height = bar.get_height()
         ax2.text(bar.get_x() + bar.get_width()/2., height,
-                f'{int(count)}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+                f'{int(count)}', ha='center', va='bottom', fontsize=int(10*fs), fontweight='bold')
 
 # Create legend for impact levels
 legend_elements = [
@@ -150,7 +156,7 @@ legend_elements = [
     mpatches.Patch(color=color_map["severe"], label='Severe (47-66% loss)', alpha=0.7),
     mpatches.Patch(color=color_map["extreme"], label='Extreme (74-89% loss)', alpha=0.7),
 ]
-ax1.legend(handles=legend_elements, loc='upper left', fontsize=8, title='Impact Severity')
+ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(8*fs), title='Impact Severity')
 
 plt.tight_layout()
 plt.savefig('compatibility-timeline-rust.png', dpi=300, bbox_inches='tight')
@@ -171,10 +177,10 @@ bars = ax.barh(range(len(crate_names)), versions_lost, color=colors_sorted,
                alpha=0.7, edgecolor='black')
 
 ax.set_yticks(range(len(crate_names)))
-ax.set_yticklabels(crate_names, fontsize=9)
-ax.set_xlabel('Number of Rust Versions Lost', fontsize=12)
+ax.set_yticklabels(crate_names, fontsize=int(9*fs))
+ax.set_xlabel('Number of Rust Versions Lost', fontsize=int(12*fs))
 ax.set_title('Toolchain Compatibility Loss by Crate\n(Compared to no-dependency baseline of 74 versions)',
-             fontsize=13, fontweight='bold')
+             fontsize=int(13*fs), fontweight='bold')
 ax.grid(axis='x', alpha=0.2)
 
 # Add percentage labels
@@ -182,7 +188,7 @@ for i, (bar, lost) in enumerate(zip(bars, versions_lost)):
     percentage = (lost / 74) * 100
     ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2,
             f'{int(lost)} ({percentage:.0f}%)',
-            ha='left', va='center', fontsize=8)
+            ha='left', va='center', fontsize=int(8*fs))
 
 # Add baseline reference line
 ax.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.5, label='Baseline (no deps)')
@@ -192,5 +198,5 @@ plt.savefig('versions-lost-rust.png', dpi=300, bbox_inches='tight')
 print("Visualization saved to versions-lost-rust.png")
 
 # Only show plot window if --show argument is passed
-if '--show' in sys.argv:
+if show_plot:
     plt.show()

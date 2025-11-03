@@ -16,6 +16,12 @@ import numpy as np
 import json
 import sys
 
+# Check if we should show the plot window
+show_plot = '--show' in sys.argv
+
+# Font scale factor: 2x for windowed display, 1x for PNG export
+fs = 2.0 if show_plot else 1.0
+
 # Load results
 with open('node/results.json', 'r') as f:
     results = json.load(f)
@@ -81,7 +87,7 @@ color_map = {
 
 # Create figure with two subplots
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), gridspec_kw={'height_ratios': [3, 1]})
-fig.suptitle('Node.js Package Compatibility Timeline', fontsize=16, fontweight='bold')
+fig.suptitle('Node.js Package Compatibility Timeline', fontsize=int(16*fs), fontweight='bold')
 
 # Plot 1: Timeline bars
 y_pos = 0
@@ -100,11 +106,11 @@ for name, oldest, date_str, versions_lost, impact, has_engines in packages_data:
 
     # Add package name
     marker = '*' if has_engines else ''
-    ax1.text(-50, y_pos, f'{name}{marker}', ha='right', va='center', fontsize=9, fontweight='bold')
+    ax1.text(-50, y_pos, f'{name}{marker}', ha='right', va='center', fontsize=int(9*fs), fontweight='bold')
 
     # Add version on bar
     text_x = bar_start + 30
-    ax1.text(text_x, y_pos, f'{oldest}', ha='left', va='center', fontsize=7, color='black')
+    ax1.text(text_x, y_pos, f'{oldest}', ha='left', va='center', fontsize=int(7*fs), color='black')
 
     y_pos += 1
 
@@ -112,7 +118,7 @@ for name, oldest, date_str, versions_lost, impact, has_engines in packages_data:
 total_days = (latest_date - baseline_date).days
 ax1.set_xlim(0, total_days)
 ax1.set_ylim(-0.5, len(packages_data) - 0.5)
-ax1.set_xlabel('Time', fontsize=12)
+ax1.set_xlabel('Time', fontsize=int(12*fs))
 ax1.set_yticks([])
 
 # Add year/version markers
@@ -124,12 +130,12 @@ for version, (date_str, idx, name) in node_versions.items():
     markers.append((days, f'{version}\n{name}'))
 
 ax1.set_xticks([pos for pos, _ in markers])
-ax1.set_xticklabels([label for _, label in markers], fontsize=8)
+ax1.set_xticklabels([label for _, label in markers], fontsize=int(8*fs))
 
 # Grid
 ax1.grid(axis='x', alpha=0.2)
 ax1.set_title('Compatibility Window by Package (* = has engines declaration)\n(Each bar shows the range of supported Node.js versions)',
-              fontsize=11, pad=10)
+              fontsize=int(11*fs), pad=10)
 
 # Baseline indicator
 ax1.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.8)
@@ -144,9 +150,9 @@ counts = [impact_counts.get(imp, 0) for imp in impact_order]
 colors = [color_map[imp] for imp in impact_order]
 
 bars = ax2.bar(impact_order, counts, color=colors, alpha=0.7, edgecolor='black')
-ax2.set_ylabel('Number of Packages', fontsize=11)
-ax2.set_xlabel('Impact Level', fontsize=11)
-ax2.set_title('Distribution of Compatibility Impact', fontsize=11)
+ax2.set_ylabel('Number of Packages', fontsize=int(11*fs))
+ax2.set_xlabel('Impact Level', fontsize=int(11*fs))
+ax2.set_title('Distribution of Compatibility Impact', fontsize=int(11*fs))
 ax2.grid(axis='y', alpha=0.2)
 
 # Add count labels
@@ -154,7 +160,7 @@ for bar, count in zip(bars, counts):
     if count > 0:
         height = bar.get_height()
         ax2.text(bar.get_x() + bar.get_width()/2., height,
-                f'{int(count)}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+                f'{int(count)}', ha='center', va='bottom', fontsize=int(10*fs), fontweight='bold')
 
 # Legend
 legend_elements = [
@@ -163,7 +169,7 @@ legend_elements = [
     mpatches.Patch(color=color_map['moderate'], label='Moderate (v18+ required)', alpha=0.7),
     mpatches.Patch(color=color_map['high'], label='High (v20+ required)', alpha=0.7),
 ]
-ax1.legend(handles=legend_elements, loc='upper left', fontsize=8, title='Impact Severity')
+ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(8*fs), title='Impact Severity')
 
 plt.tight_layout()
 plt.savefig('compatibility-timeline-node.png', dpi=300, bbox_inches='tight')
@@ -182,17 +188,17 @@ bars = ax.barh(range(len(package_names)), versions_lost_list, color=colors_sorte
                alpha=0.7, edgecolor='black')
 
 ax.set_yticks(range(len(package_names)))
-ax.set_yticklabels(package_names, fontsize=9)
-ax.set_xlabel('Number of Node.js LTS Versions Lost', fontsize=12)
+ax.set_yticklabels(package_names, fontsize=int(9*fs))
+ax.set_xlabel('Number of Node.js LTS Versions Lost', fontsize=int(12*fs))
 ax.set_title('Toolchain Compatibility Loss by Package\n(Compared to no-dependency baseline of v14.21.3)',
-             fontsize=13, fontweight='bold')
+             fontsize=int(13*fs), fontweight='bold')
 ax.grid(axis='x', alpha=0.2)
 
 # Add labels
 for i, (bar, lost) in enumerate(zip(bars, versions_lost_list)):
     ax.text(bar.get_width() + 0.1, bar.get_y() + bar.get_height()/2,
             f'{int(lost)}',
-            ha='left', va='center', fontsize=8)
+            ha='left', va='center', fontsize=int(8*fs))
 
 # Baseline reference
 ax.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.5, label='Baseline (no deps)')
@@ -202,5 +208,5 @@ plt.savefig('versions-lost-node.png', dpi=300, bbox_inches='tight')
 print('Visualization saved to versions-lost-node.png')
 
 # Only show plot window if --show argument is passed
-if '--show' in sys.argv:
+if show_plot:
     plt.show()
