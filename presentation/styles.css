@@ -1,6 +1,6 @@
 /* Base styles */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --bg-transition-duration: 30s;
     --bg-r1: 255; --bg-g1: 107; --bg-b1: 53;
     --bg-r2: 247; --bg-g2: 147; --bg-b2: 30;
@@ -9,7 +9,7 @@ body {
         rgb(var(--bg-r1), var(--bg-g1), var(--bg-b1)) 0%,
         rgb(var(--bg-r2), var(--bg-g2), var(--bg-b2)) 50%,
         rgb(var(--bg-r3), var(--bg-g3), var(--bg-b3)) 100%);
-    color: #333;
+    color: #2d2d2d;
     min-height: 100vh;
     transition: --bg-r1 var(--bg-transition-duration), --bg-g1 var(--bg-transition-duration), --bg-b1 var(--bg-transition-duration),
                 --bg-r2 var(--bg-transition-duration), --bg-g2 var(--bg-transition-duration), --bg-b2 var(--bg-transition-duration),
@@ -43,28 +43,33 @@ body {
 .step h1 {
     font-size: 72px;
     margin: 0;
-    color: #1e3c72;
+    color: #d84315;
     font-weight: 700;
     text-align: center;
+    letter-spacing: -0.02em;
 }
 
 .step .subtitle {
     font-size: 36px;
-    color: #2a5298;
+    color: #e65100;
     text-align: center;
     margin-top: 20px;
+    font-weight: 400;
 }
 
 .step h2 {
     font-size: 48px;
     margin: 0 0 30px 0;
-    color: #1e3c72;
-    border-bottom: 3px solid #2a5298;
+    color: #bf360c;
+    border-bottom: 3px solid #ff6e40;
     padding-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 .step p {
     margin: 20px 0;
+    color: #424242;
 }
 
 .step ul {
@@ -98,16 +103,19 @@ body {
 
 /* Code blocks */
 pre {
-    background-color: #f4f4f4;
-    border-left: 4px solid #2a5298;
+    background-color: #2b2b2b;
+    border-left: 4px solid #ff6e40;
     padding: 15px;
     overflow-x: auto;
     font-size: 18px;
+    border-radius: 6px;
+    color: #f5f5f5;
 }
 
 code {
-    font-family: 'Courier New', monospace;
-    background-color: #f4f4f4;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    background-color: #2b2b2b;
+    color: #f5f5f5;
     padding: 2px 6px;
     border-radius: 3px;
 }
