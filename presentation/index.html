@@ -54,7 +54,22 @@
 </div>
 
 <script src="impress.js"></script>
-<script>impress().init();</script>
+<script>
+    impress().init();
+
+    // Disable Tab key for navigation entirely to prevent issues with Alt+Tab
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === 9) {
+            event.stopImmediatePropagation();
+        }
+    }, true);
+
+    document.addEventListener('keyup', function(event) {
+        if (event.keyCode === 9) {
+            event.stopImmediatePropagation();
+        }
+    }, true);
+</script>
 
 </body>
 </html>
