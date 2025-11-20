@@ -55,7 +55,38 @@
 
 <script src="impress.js"></script>
 <script>
-    impress().init();
+    var api = impress();
+    api.init();
+
+    // Store original next/prev functions
+    var originalNext = api.next;
+    var originalPrev = api.prev;
+
+    // Override next to stop at the end
+    api.next = function() {
+        var steps = document.querySelectorAll('.step');
+        var currentStep = document.querySelector('.step.active');
+        var currentIndex = Array.from(steps).indexOf(currentStep);
+
+        // Only advance if not at the last slide
+        if (currentIndex < steps.length - 1) {
+            return originalNext.apply(this, arguments);
+        }
+        return false;
+    };
+
+    // Override prev to stop at the beginning
+    api.prev = function() {
+        var steps = document.querySelectorAll('.step');
+        var currentStep = document.querySelector('.step.active');
+        var currentIndex = Array.from(steps).indexOf(currentStep);
+
+        // Only go back if not at the first slide
+        if (currentIndex > 0) {
+            return originalPrev.apply(this, arguments);
+        }
+        return false;
+    };
 
     // Prevent Tab from advancing slides while maintaining focus on the page
     document.addEventListener('keydown', function(event) {
