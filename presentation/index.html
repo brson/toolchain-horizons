@@ -57,15 +57,16 @@
 <script>
     impress().init();
 
-    // Disable Tab key for navigation entirely to prevent issues with Alt+Tab
+    // Prevent Tab from advancing slides while maintaining focus on the page
     document.addEventListener('keydown', function(event) {
         if (event.keyCode === 9) {
-            event.stopImmediatePropagation();
+            event.preventDefault();
         }
     }, true);
 
     document.addEventListener('keyup', function(event) {
         if (event.keyCode === 9) {
+            event.preventDefault();
             event.stopImmediatePropagation();
         }
     }, true);
