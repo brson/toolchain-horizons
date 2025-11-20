@@ -105,6 +105,11 @@ function updateGradient() {
     document.body.style.setProperty('--bg-r3', rgb3.r);
     document.body.style.setProperty('--bg-g3', rgb3.g);
     document.body.style.setProperty('--bg-b3', rgb3.b);
+
+    // Use the middle gradient color for the border (creates nice reflection effect)
+    document.body.style.setProperty('--border-r', rgb2.r);
+    document.body.style.setProperty('--border-g', rgb2.g);
+    document.body.style.setProperty('--border-b', rgb2.b);
 }
 
 function interpolateGradient(startColors, endColors, phase) {
