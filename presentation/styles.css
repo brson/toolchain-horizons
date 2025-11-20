@@ -1,0 +1,98 @@
+/* Base styles */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #333;
+}
+
+.fallback-message {
+    font-family: sans-serif;
+    line-height: 1.6;
+    max-width: 600px;
+    padding: 40px;
+    margin: 100px auto;
+}
+
+.fallback-message p {
+    margin-bottom: 20px;
+}
+
+/* Slide styles */
+.step {
+    width: 900px;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    font-size: 24px;
+    line-height: 1.6;
+}
+
+.step h1 {
+    font-size: 72px;
+    margin: 0;
+    color: #1e3c72;
+    font-weight: 700;
+    text-align: center;
+}
+
+.step .subtitle {
+    font-size: 36px;
+    color: #2a5298;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.step h2 {
+    font-size: 48px;
+    margin: 0 0 30px 0;
+    color: #1e3c72;
+    border-bottom: 3px solid #2a5298;
+    padding-bottom: 10px;
+}
+
+.step p {
+    margin: 20px 0;
+}
+
+.step ul {
+    margin: 20px 0;
+    padding-left: 40px;
+}
+
+.step li {
+    margin: 10px 0;
+}
+
+/* Active step highlight */
+.impress-enabled .step {
+    opacity: 0.3;
+    transition: opacity 1s;
+}
+
+.impress-enabled .step.active {
+    opacity: 1;
+}
+
+/* Code blocks */
+pre {
+    background-color: #f4f4f4;
+    border-left: 4px solid #2a5298;
+    padding: 15px;
+    overflow-x: auto;
+    font-size: 18px;
+}
+
+code {
+    font-family: 'Courier New', monospace;
+    background-color: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}

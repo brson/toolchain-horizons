@@ -148,6 +148,17 @@ visualize-all show='':
 visualize show='': (visualize-rust show) (visualize-node show)
     @echo "All visualizations generated!"
 
+# Serve the impress.js presentation on localhost:8000
+serve-presentation:
+    @echo "Starting presentation server on http://localhost:8000"
+    @echo "Press Ctrl+C to stop"
+    cd presentation && python3 -m http.server 8000
+
+# Open the presentation in the default browser
+open-presentation:
+    @echo "Opening presentation in browser..."
+    xdg-open http://localhost:8000 || open http://localhost:8000 || echo "Please manually open http://localhost:8000"
+
 # Clean all results and generated files
 clean: clean-rust clean-java clean-python clean-node clean-visualizations
     @echo "All artifacts cleaned!"
