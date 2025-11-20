@@ -3,29 +3,21 @@ body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     color: #333;
-}
-
-.fallback-message {
-    font-family: sans-serif;
-    line-height: 1.6;
-    max-width: 600px;
-    padding: 40px;
-    margin: 100px auto;
-}
-
-.fallback-message p {
-    margin-bottom: 20px;
+    min-height: 100vh;
 }
 
 /* Slide styles */
 .step {
-    width: 900px;
-    padding: 40px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 1000px;
+    height: 700px;
+    padding: 60px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     font-size: 24px;
-    line-height: 1.6;
+    line-height: 1.5;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .step h1 {
@@ -64,14 +56,24 @@ body {
     margin: 10px 0;
 }
 
-/* Active step highlight */
+/* Hide inactive steps, show active */
 .impress-enabled .step {
-    opacity: 0.3;
-    transition: opacity 1s;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
 }
 
 .impress-enabled .step.active {
     opacity: 1;
+    pointer-events: auto;
+}
+
+.impress-enabled .step.past {
+    opacity: 0;
+}
+
+.impress-enabled .step.future {
+    opacity: 0;
 }
 
 /* Code blocks */
