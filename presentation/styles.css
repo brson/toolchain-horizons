@@ -1,10 +1,30 @@
 /* Base styles */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    --bg-transition-duration: 30s;
+    --bg-r1: 255; --bg-g1: 107; --bg-b1: 53;
+    --bg-r2: 247; --bg-g2: 147; --bg-b2: 30;
+    --bg-r3: 118; --bg-g3: 75; --bg-b3: 162;
+    background: linear-gradient(135deg,
+        rgb(var(--bg-r1), var(--bg-g1), var(--bg-b1)) 0%,
+        rgb(var(--bg-r2), var(--bg-g2), var(--bg-b2)) 50%,
+        rgb(var(--bg-r3), var(--bg-g3), var(--bg-b3)) 100%);
     color: #333;
     min-height: 100vh;
+    transition: --bg-r1 var(--bg-transition-duration), --bg-g1 var(--bg-transition-duration), --bg-b1 var(--bg-transition-duration),
+                --bg-r2 var(--bg-transition-duration), --bg-g2 var(--bg-transition-duration), --bg-b2 var(--bg-transition-duration),
+                --bg-r3 var(--bg-transition-duration), --bg-g3 var(--bg-transition-duration), --bg-b3 var(--bg-transition-duration);
 }
+
+@property --bg-r1 { syntax: '<number>'; inherits: false; initial-value: 255; }
+@property --bg-g1 { syntax: '<number>'; inherits: false; initial-value: 107; }
+@property --bg-b1 { syntax: '<number>'; inherits: false; initial-value: 53; }
+@property --bg-r2 { syntax: '<number>'; inherits: false; initial-value: 247; }
+@property --bg-g2 { syntax: '<number>'; inherits: false; initial-value: 147; }
+@property --bg-b2 { syntax: '<number>'; inherits: false; initial-value: 30; }
+@property --bg-r3 { syntax: '<number>'; inherits: false; initial-value: 118; }
+@property --bg-g3 { syntax: '<number>'; inherits: false; initial-value: 75; }
+@property --bg-b3 { syntax: '<number>'; inherits: false; initial-value: 162; }
 
 /* Slide styles */
 .step {
@@ -97,4 +117,32 @@ img {
     max-width: 100%;
     height: auto;
     border-radius: 5px;
+}
+
+/* Stars for night sky */
+#stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+#stars.visible {
+    opacity: 1;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
 }
