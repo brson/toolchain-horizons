@@ -1,0 +1,190 @@
+[
+  {
+    "packageName": "CONTROL",
+    "versionSpec": "none",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.apache.commons:commons-lang3",
+    "versionSpec": "[3.12,4.0)",
+    "resolvedVersion": "3.19.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "commons-io:commons-io",
+    "versionSpec": "[2.11,3.0)",
+    "resolvedVersion": "2.20.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.apache.commons:commons-collections4",
+    "versionSpec": "[4.4,5.0)",
+    "resolvedVersion": "4.5.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.apache.commons:commons-text",
+    "versionSpec": "[1.10,2.0)",
+    "resolvedVersion": "1.14.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.apache.commons:commons-math3",
+    "versionSpec": "[3.6,4.0)",
+    "resolvedVersion": "3.6.1",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.apache.commons:commons-csv",
+    "versionSpec": "[1.10,2.0)",
+    "resolvedVersion": "1.14.1",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.slf4j:slf4j-api",
+    "versionSpec": "[2.0,3.0)",
+    "resolvedVersion": "2.1.0-alpha1",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "ch.qos.logback:logback-classic",
+    "versionSpec": "[1.4,2.0)",
+    "resolvedVersion": "1.5.19",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.google.code.gson:gson",
+    "versionSpec": "[2.10,3.0)",
+    "resolvedVersion": "2.13.2",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.fasterxml.jackson.core:jackson-databind",
+    "versionSpec": "[2.15,3.0)",
+    "resolvedVersion": "2.20.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.junit.jupiter:junit-jupiter",
+    "versionSpec": "[5.10,6.0)",
+    "resolvedVersion": "6.0.0-RC3",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.mockito:mockito-core",
+    "versionSpec": "[5.0,6.0)",
+    "resolvedVersion": "5.20.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.assertj:assertj-core",
+    "versionSpec": "[3.24,4.0)",
+    "resolvedVersion": "4.0.0-M1",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.google.guava:guava",
+    "versionSpec": "[32.0,33.0)",
+    "resolvedVersion": "32.1.3-jre",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.apache.httpcomponents:httpclient",
+    "versionSpec": "[4.5,5.0)",
+    "resolvedVersion": "4.5.14",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.squareup.okhttp3:okhttp",
+    "versionSpec": "[4.12,5.0)",
+    "resolvedVersion": "5.0.0-alpha.17",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "joda-time:joda-time",
+    "versionSpec": "[2.12,3.0)",
+    "resolvedVersion": "2.14.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "io.reactivex.rxjava3:rxjava",
+    "versionSpec": "[3.1,4.0)",
+    "resolvedVersion": "3.1.12",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.h2database:h2",
+    "versionSpec": "[2.2,3.0)",
+    "resolvedVersion": "2.4.240",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.postgresql:postgresql",
+    "versionSpec": "[42.7,43.0)",
+    "resolvedVersion": "42.7.8",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.zaxxer:HikariCP",
+    "versionSpec": "[5.1,6.0)",
+    "resolvedVersion": "5.1.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.dom4j:dom4j",
+    "versionSpec": "[2.1,3.0)",
+    "resolvedVersion": "2.2.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "org.yaml:snakeyaml",
+    "versionSpec": "[2.0,3.0)",
+    "resolvedVersion": "2.5",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "javax.inject:javax.inject",
+    "versionSpec": "[1,2)",
+    "resolvedVersion": "1",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "com.google.inject:guice",
+    "versionSpec": "[7.0,8.0)",
+    "resolvedVersion": "7.0.0",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  },
+  {
+    "packageName": "jakarta.validation:jakarta.validation-api",
+    "versionSpec": "[3.0,4.0)",
+    "resolvedVersion": "3.1.1",
+    "oldestCompatible": "8.0.432-tem",
+    "latestCompatible": "23.0.1-tem"
+  }
+]
