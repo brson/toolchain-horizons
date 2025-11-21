@@ -1,0 +1,242 @@
+[
+  {
+    "crate_name": "CONTROL",
+    "dependency_spec": "none",
+    "resolved_version": null,
+    "oldest_compatible": "1.16.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "anyhow",
+    "dependency_spec": "1",
+    "resolved_version": "1.0.100",
+    "oldest_compatible": "1.38.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "backtrace",
+    "dependency_spec": "0.3",
+    "resolved_version": "0.3.76",
+    "oldest_compatible": "1.82.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "bitflags",
+    "dependency_spec": "1",
+    "resolved_version": "1.3.2",
+    "oldest_compatible": "1.31.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "byteorder",
+    "dependency_spec": "1",
+    "resolved_version": "1.5.0",
+    "oldest_compatible": "1.60.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "cfg-if",
+    "dependency_spec": "1",
+    "resolved_version": "1.0.4",
+    "oldest_compatible": "1.32.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "chrono",
+    "dependency_spec": "0.4",
+    "resolved_version": "0.4.42",
+    "oldest_compatible": "1.62.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "crossbeam",
+    "dependency_spec": "0.8",
+    "resolved_version": "0.8.4",
+    "oldest_compatible": "1.61.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "env_logger",
+    "dependency_spec": "0.11",
+    "resolved_version": "0.11.8",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "extension-trait",
+    "dependency_spec": "1.0",
+    "resolved_version": "1.0.2",
+    "oldest_compatible": "1.68.2",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "futures",
+    "dependency_spec": "0.3",
+    "resolved_version": "0.3.31",
+    "oldest_compatible": "1.68.2",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "hex",
+    "dependency_spec": "0.4",
+    "resolved_version": "0.4.3",
+    "oldest_compatible": "1.36.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "itertools",
+    "dependency_spec": "0.13",
+    "resolved_version": "0.13.0",
+    "oldest_compatible": "1.63.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "libc",
+    "dependency_spec": "0.2",
+    "resolved_version": "0.2.177",
+    "oldest_compatible": "1.63.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "log",
+    "dependency_spec": "0.4",
+    "resolved_version": "0.4.28",
+    "oldest_compatible": "1.61.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "mime",
+    "dependency_spec": "0.3",
+    "resolved_version": "0.3.17",
+    "oldest_compatible": "1.31.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "num_cpus",
+    "dependency_spec": "1",
+    "resolved_version": "1.17.0",
+    "oldest_compatible": "1.63.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "rand",
+    "dependency_spec": "0.8",
+    "resolved_version": "0.8.5",
+    "oldest_compatible": "1.63.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "rayon",
+    "dependency_spec": "1",
+    "resolved_version": "1.11.0",
+    "oldest_compatible": "1.80.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "regex",
+    "dependency_spec": "1",
+    "resolved_version": "1.12.2",
+    "oldest_compatible": "1.51.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "serde",
+    "dependency_spec": "1",
+    "resolved_version": "1.0.228",
+    "oldest_compatible": "1.31.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "semver",
+    "dependency_spec": "1",
+    "resolved_version": "1.0.27",
+    "oldest_compatible": "1.51.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "socket2",
+    "dependency_spec": "0.5",
+    "resolved_version": "0.5.10",
+    "oldest_compatible": "1.63.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "syn",
+    "dependency_spec": "2",
+    "resolved_version": "2.0.110",
+    "oldest_compatible": "1.68.2",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "tempfile",
+    "dependency_spec": "3",
+    "resolved_version": "3.23.0",
+    "oldest_compatible": "1.65.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "thiserror",
+    "dependency_spec": "1",
+    "resolved_version": "1.0.69",
+    "oldest_compatible": "1.68.2",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "toml",
+    "dependency_spec": "0.8",
+    "resolved_version": "0.8.23",
+    "oldest_compatible": "1.82.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "unicode-segmentation",
+    "dependency_spec": "1",
+    "resolved_version": "1.12.0",
+    "oldest_compatible": "1.56.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "url",
+    "dependency_spec": "2",
+    "resolved_version": "2.5.7",
+    "oldest_compatible": "1.83.0",
+    "latest_compatible": "1.90.0",
+    "error": null
+  },
+  {
+    "crate_name": "walkdir",
+    "dependency_spec": "2",
+    "resolved_version": "2.5.0",
+    "oldest_compatible": "1.31.1",
+    "latest_compatible": "1.90.0",
+    "error": null
+  }
+]
