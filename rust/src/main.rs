@@ -53,9 +53,27 @@ struct ExperimentResult {
 }
 
 fn main() {
-    println!("Starting dependency toolchain compatibility experiment");
-    println!("Testing {} crates", CRATES.len());
+    let args: Vec<String> = std::env::args().collect();
 
+    // Check if a specific crate was requested.
+    let specific_crate = if args.len() > 1 {
+        Some(args[1].as_str())
+    } else {
+        None
+    };
+
+    if let Some(crate_name) = specific_crate {
+        println!("Testing single crate: {}", crate_name);
+        run_single_crate_experiment(crate_name);
+    } else {
+        println!("Starting dependency toolchain compatibility experiment");
+        println!("Testing {} crates", CRATES.len());
+        run_full_experiment();
+    }
+}
+
+/// Run the full experiment on all crates.
+fn run_full_experiment() {
     let mut results = Vec::new();
 
     // First, test the control case (no dependencies).
@@ -98,6 +116,47 @@ fn main() {
     let json = serde_json::to_string_pretty(&results).unwrap();
     fs::write("results.json", json).unwrap();
     println!("\n=== Results written to results.json ===");
+}
+
+/// Run experiment on a single crate.
+fn run_single_crate_experiment(crate_name: &str) {
+    // Find the crate in our list.
+    let crate_entry = CRATES.iter().find(|(name, _)| *name == crate_name);
+
+    let (version_spec, found_in_list) = match crate_entry {
+        Some((_, version)) => (*version, true),
+        None => {
+            println!("Warning: '{}' not found in predefined list, using version '1'", crate_name);
+            ("1", false)
+        }
+    };
+
+    println!("\n=== Testing {} (version spec: {}) ===", crate_name, version_spec);
+
+    match test_crate(crate_name, version_spec) {
+        Ok(result) => {
+            println!("\nResults for {}:", crate_name);
+            println!("  Dependency spec: {}", result.dependency_spec);
+            println!("  Resolved version: {}", result.resolved_version.as_ref().unwrap_or(&"N/A".to_string()));
+            println!("  Oldest compatible: {}", result.oldest_compatible.as_ref().unwrap_or(&"N/A".to_string()));
+            println!("  Latest compatible: {}", result.latest_compatible.as_ref().unwrap_or(&"N/A".to_string()));
+
+            // Write single result to a file.
+            let json = serde_json::to_string_pretty(&result).unwrap();
+            let filename = format!("result-{}.json", crate_name);
+            fs::write(&filename, json).unwrap();
+            println!("\n=== Result written to {} ===", filename);
+
+            if !found_in_list {
+                println!("\nNote: This crate was not in the predefined list.");
+                println!("To add it permanently, update the CRATES constant in src/main.rs");
+            }
+        }
+        Err(e) => {
+            eprintln!("\nFailed to test {}: {}", crate_name, e);
+            std::process::exit(1);
+        }
+    }
 }
 
 /// Test the control case with no dependencies.

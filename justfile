@@ -111,6 +111,12 @@ rust-experiment:
     cd rust && cargo run --release
     @echo "Rust experiment complete: rust/results.json"
 
+# Run Rust experiment on a single crate
+rust-experiment-crate crate_name:
+    @echo "Running Rust experiment for {{ crate_name }}..."
+    cd rust && cargo run --release -- {{ crate_name }}
+    @echo "Rust experiment complete: rust/result-{{ crate_name }}.json"
+
 # Run Java experiment
 java-experiment:
     @echo "Running Java experiment..."
