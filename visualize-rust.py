@@ -27,6 +27,7 @@ with open('rust/results.json', 'r') as f:
     results = json.load(f)
 
 # Rust version release dates (mapping version to date and index).
+# Using approximate dates based on 6-week release cycle for versions not specifically researched.
 rust_versions = {
     '1.0.0': ('2015-05-15', 0),
     '1.16.0': ('2017-03-16', 16),
@@ -35,6 +36,7 @@ rust_versions = {
     '1.36.0': ('2019-07-04', 36),
     '1.38.0': ('2019-09-26', 38),
     '1.51.0': ('2021-03-25', 51),
+    '1.56.1': ('2021-11-01', 56),
     '1.57.0': ('2021-12-02', 57),
     '1.60.0': ('2022-04-07', 60),
     '1.61.0': ('2022-05-19', 61),
