@@ -120,8 +120,14 @@ rust-experiment-crate crate_name:
 # Run Java experiment
 java-experiment:
     @echo "Running Java experiment..."
-    cd java && bash -c "source ~/.sdkman/bin/sdkman-init.sh && java Experiment.java"
+    cd java && mvn -q compile exec:java
     @echo "Java experiment complete: java/results.json"
+
+# Run Java experiment on a single package
+java-experiment-package package_coordinate:
+    @echo "Running Java experiment for {{ package_coordinate }}..."
+    cd java && mvn -q compile exec:java -Dexec.args='{{ package_coordinate }}'
+    @echo "Java experiment complete: java/result-{{ package_coordinate }}.json"
 
 # Run Python experiment
 python-experiment:
@@ -140,6 +146,11 @@ visualize-rust show='':
     @echo "Generating Rust compatibility visualizations..."
     uv run visualize-rust.py {{ if show == 'show' { '--show' } else { '' } }}
 
+# Visualize Java results (pass 'show' to display plot window)
+visualize-java show='':
+    @echo "Generating Java compatibility visualizations..."
+    uv run visualize-java.py {{ if show == 'show' { '--show' } else { '' } }}
+
 # Visualize Node.js results (pass 'show' to display plot window)
 visualize-node show='':
     @echo "Generating Node.js compatibility visualizations..."
@@ -151,7 +162,7 @@ visualize-all show='':
     @echo "TODO: Create visualize-all.py"
 
 # Generate all visualizations (pass 'show' to display plot windows)
-visualize show='': (visualize-rust show) (visualize-node show)
+visualize show='': (visualize-rust show) (visualize-java show) (visualize-node show)
     @echo "All visualizations generated!"
 
 # Serve the impress.js presentation on localhost:8000
@@ -173,12 +184,15 @@ clean: clean-rust clean-java clean-python clean-node clean-visualizations
 clean-rust:
     @echo "Cleaning Rust artifacts..."
     rm -f rust/results.json
+    rm -f rust/result-*.json
     rm -f rust/*.png
 
 # Clean Java artifacts
 clean-java:
     @echo "Cleaning Java artifacts..."
     rm -f java/results.json
+    rm -f java/result-*.json
+    rm -f java/*.png
     rm -rf java/target/
 
 # Clean Python artifacts

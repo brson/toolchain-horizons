@@ -3,6 +3,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Dependency toolchain compatibility experiment for Java.
@@ -98,11 +99,22 @@ public class Experiment {
 
     // ExperimentResult holds results for a single package test.
     static class ExperimentResult {
+        @SerializedName("package_name")
         String packageName;
+
+        @SerializedName("version_spec")
         String versionSpec;
+
+        @SerializedName("resolved_version")
         String resolvedVersion;
+
+        @SerializedName("oldest_compatible")
         String oldestCompatible;
+
+        @SerializedName("latest_compatible")
         String latestCompatible;
+
+        @SerializedName("error")
         String error;
 
         ExperimentResult(String packageName, String versionSpec) {
@@ -112,9 +124,20 @@ public class Experiment {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Starting dependency toolchain compatibility experiment");
-        System.out.printf("Testing %d packages%n", PACKAGES.length);
+        // Check if a specific package was requested.
+        if (args.length > 0) {
+            String packageCoordinate = args[0];
+            System.out.printf("Testing single package: %s%n", packageCoordinate);
+            runSinglePackageExperiment(packageCoordinate);
+        } else {
+            System.out.println("Starting dependency toolchain compatibility experiment");
+            System.out.printf("Testing %d packages%n", PACKAGES.length);
+            runFullExperiment();
+        }
+    }
 
+    // Run the full experiment on all packages.
+    static void runFullExperiment() throws Exception {
         List<ExperimentResult> results = new ArrayList<>();
 
         // First, test the control case (no dependencies).
@@ -149,6 +172,45 @@ public class Experiment {
         String json = gson.toJson(results);
         Files.writeString(Paths.get("results.json"), json);
         System.out.println("\n=== Results written to results.json ===");
+    }
+
+    // Run experiment on a single package.
+    static void runSinglePackageExperiment(String packageCoordinate) throws Exception {
+        // Find the package in our list.
+        Package targetPkg = null;
+        for (Package pkg : PACKAGES) {
+            if (pkg.getCoordinate().equals(packageCoordinate)) {
+                targetPkg = pkg;
+                break;
+            }
+        }
+
+        if (targetPkg == null) {
+            System.out.printf("Warning: '%s' not found in predefined list%n", packageCoordinate);
+            System.out.println("Available packages:");
+            for (Package pkg : PACKAGES) {
+                System.out.printf("  %s%n", pkg.getCoordinate());
+            }
+            System.exit(1);
+        }
+
+        System.out.printf("\n=== Testing %s (version spec: %s) ===%n",
+            targetPkg.getCoordinate(), targetPkg.versionRange);
+
+        ExperimentResult result = testPackage(targetPkg);
+
+        System.out.printf("\nResults for %s:%n", targetPkg.getCoordinate());
+        System.out.printf("  Version spec: %s%n", result.versionSpec);
+        System.out.printf("  Resolved version: %s%n", result.resolvedVersion != null ? result.resolvedVersion : "N/A");
+        System.out.printf("  Oldest compatible: %s%n", result.oldestCompatible != null ? result.oldestCompatible : "N/A");
+        System.out.printf("  Latest compatible: %s%n", result.latestCompatible != null ? result.latestCompatible : "N/A");
+
+        // Write single result to a file.
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(result);
+        String filename = String.format("result-%s.json", packageCoordinate.replace(":", "-"));
+        Files.writeString(Paths.get(filename), json);
+        System.out.printf("\n=== Result written to %s ===%n", filename);
     }
 
     // Test the control case with no dependencies.
