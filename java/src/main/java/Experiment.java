@@ -20,11 +20,13 @@ public class Experiment {
         String groupId;
         String artifactId;
         String versionRange;
+        String importClass;
 
-        Package(String groupId, String artifactId, String versionRange) {
+        Package(String groupId, String artifactId, String versionRange, String importClass) {
             this.groupId = groupId;
             this.artifactId = artifactId;
             this.versionRange = versionRange;
+            this.importClass = importClass;
         }
 
         String getCoordinate() {
@@ -32,59 +34,59 @@ public class Experiment {
         }
     }
 
-    // List of packages to test (groupId, artifactId, version range).
+    // List of packages to test (groupId, artifactId, version range, importable class).
     //
     // Using version ranges to allow the resolver flexibility.
     static final Package[] PACKAGES = {
         // Core Apache Commons.
-        new Package("org.apache.commons", "commons-lang3", "[3.12,4.0)"),
-        new Package("commons-io", "commons-io", "[2.11,3.0)"),
-        new Package("org.apache.commons", "commons-collections4", "[4.4,5.0)"),
-        new Package("org.apache.commons", "commons-text", "[1.10,2.0)"),
-        new Package("org.apache.commons", "commons-math3", "[3.6,4.0)"),
-        new Package("org.apache.commons", "commons-csv", "[1.10,2.0)"),
+        new Package("org.apache.commons", "commons-lang3", "[3.12,4.0)", "org.apache.commons.lang3.StringUtils"),
+        new Package("commons-io", "commons-io", "[2.11,3.0)", "org.apache.commons.io.IOUtils"),
+        new Package("org.apache.commons", "commons-collections4", "[4.4,5.0)", "org.apache.commons.collections4.CollectionUtils"),
+        new Package("org.apache.commons", "commons-text", "[1.10,2.0)", "org.apache.commons.text.StringEscapeUtils"),
+        new Package("org.apache.commons", "commons-math3", "[3.6,4.0)", "org.apache.commons.math3.util.FastMath"),
+        new Package("org.apache.commons", "commons-csv", "[1.10,2.0)", "org.apache.commons.csv.CSVFormat"),
 
         // Logging.
-        new Package("org.slf4j", "slf4j-api", "[2.0,3.0)"),
-        new Package("ch.qos.logback", "logback-classic", "[1.4,2.0)"),
+        new Package("org.slf4j", "slf4j-api", "[2.0,3.0)", "org.slf4j.Logger"),
+        new Package("ch.qos.logback", "logback-classic", "[1.4,2.0)", "ch.qos.logback.classic.Logger"),
 
         // JSON Processing.
-        new Package("com.google.code.gson", "gson", "[2.10,3.0)"),
-        new Package("com.fasterxml.jackson.core", "jackson-databind", "[2.15,3.0)"),
+        new Package("com.google.code.gson", "gson", "[2.10,3.0)", "com.google.gson.Gson"),
+        new Package("com.fasterxml.jackson.core", "jackson-databind", "[2.15,3.0)", "com.fasterxml.jackson.databind.ObjectMapper"),
 
         // Testing.
-        new Package("org.junit.jupiter", "junit-jupiter", "[5.10,6.0)"),
-        new Package("org.mockito", "mockito-core", "[5.0,6.0)"),
-        new Package("org.assertj", "assertj-core", "[3.24,4.0)"),
+        new Package("org.junit.jupiter", "junit-jupiter", "[5.10,6.0)", "org.junit.jupiter.api.Test"),
+        new Package("org.mockito", "mockito-core", "[5.0,6.0)", "org.mockito.Mockito"),
+        new Package("org.assertj", "assertj-core", "[3.24,4.0)", "org.assertj.core.api.Assertions"),
 
         // Utilities.
-        new Package("com.google.guava", "guava", "[32.0,33.0)"),
+        new Package("com.google.guava", "guava", "[32.0,33.0)", "com.google.common.collect.ImmutableList"),
 
         // HTTP Clients.
-        new Package("org.apache.httpcomponents", "httpclient", "[4.5,5.0)"),
-        new Package("com.squareup.okhttp3", "okhttp", "[4.12,5.0)"),
+        new Package("org.apache.httpcomponents", "httpclient", "[4.5,5.0)", "org.apache.http.client.HttpClient"),
+        new Package("com.squareup.okhttp3", "okhttp", "[4.12,5.0)", "okhttp3.OkHttpClient"),
 
         // Date/Time.
-        new Package("joda-time", "joda-time", "[2.12,3.0)"),
+        new Package("joda-time", "joda-time", "[2.12,3.0)", "org.joda.time.DateTime"),
 
         // Async/Reactive.
-        new Package("io.reactivex.rxjava3", "rxjava", "[3.1,4.0)"),
+        new Package("io.reactivex.rxjava3", "rxjava", "[3.1,4.0)", "io.reactivex.rxjava3.core.Observable"),
 
         // Database.
-        new Package("com.h2database", "h2", "[2.2,3.0)"),
-        new Package("org.postgresql", "postgresql", "[42.7,43.0)"),
-        new Package("com.zaxxer", "HikariCP", "[5.1,6.0)"),
+        new Package("com.h2database", "h2", "[2.2,3.0)", "org.h2.Driver"),
+        new Package("org.postgresql", "postgresql", "[42.7,43.0)", "org.postgresql.Driver"),
+        new Package("com.zaxxer", "HikariCP", "[5.1,6.0)", "com.zaxxer.hikari.HikariDataSource"),
 
         // XML/YAML.
-        new Package("org.dom4j", "dom4j", "[2.1,3.0)"),
-        new Package("org.yaml", "snakeyaml", "[2.0,3.0)"),
+        new Package("org.dom4j", "dom4j", "[2.1,3.0)", "org.dom4j.Document"),
+        new Package("org.yaml", "snakeyaml", "[2.0,3.0)", "org.yaml.snakeyaml.Yaml"),
 
         // Dependency Injection.
-        new Package("javax.inject", "javax.inject", "[1,2)"),
-        new Package("com.google.inject", "guice", "[7.0,8.0)"),
+        new Package("javax.inject", "javax.inject", "[1,2)", "javax.inject.Inject"),
+        new Package("com.google.inject", "guice", "[7.0,8.0)", "com.google.inject.Guice"),
 
         // Validation.
-        new Package("jakarta.validation", "jakarta.validation-api", "[3.0,4.0)"),
+        new Package("jakarta.validation", "jakarta.validation-api", "[3.0,4.0)", "jakarta.validation.constraints.NotNull"),
     };
 
     // Java versions to test.
@@ -338,19 +340,29 @@ public class Experiment {
                 // Create pom.xml.
                 createPomXml(tmpDir, pkg, getJavaVersionNumber(javaVersion));
 
-                // Create a simple Main.java that uses the dependency.
+                // Create Main.java that imports and references the library.
+                Path srcDir = tmpDir.resolve("src/main/java");
+                Files.createDirectories(srcDir);
+
+                String javaCode;
                 if (pkg != null) {
-                    Path srcDir = tmpDir.resolve("src/main/java");
-                    Files.createDirectories(srcDir);
-                    String javaCode = "public class Main { public static void main(String[] args) {} }";
-                    Files.writeString(srcDir.resolve("Main.java"), javaCode);
+                    // Generate code that imports and uses the library class.
+                    javaCode = String.format(
+                        "import %s;\n\npublic class Main {\n" +
+                        "    public static void main(String[] args) {\n" +
+                        "        // Reference the class to ensure it loads\n" +
+                        "        Class<?> cls = %s.class;\n" +
+                        "    }\n" +
+                        "}",
+                        pkg.importClass,
+                        pkg.importClass
+                    );
                 } else {
                     // Control case.
-                    Path srcDir = tmpDir.resolve("src/main/java");
-                    Files.createDirectories(srcDir);
-                    String javaCode = "public class Main { public static void main(String[] args) {} }";
-                    Files.writeString(srcDir.resolve("Main.java"), javaCode);
+                    javaCode = "public class Main { public static void main(String[] args) {} }";
                 }
+
+                Files.writeString(srcDir.resolve("Main.java"), javaCode);
 
                 // Run Maven compile.
                 ProcessBuilder pb = new ProcessBuilder(
