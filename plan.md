@@ -13,6 +13,46 @@
 - [x] Test all recipes end-to-end
 - [x] Install Maven via SDKMAN
 
+## Key Findings
+
+### Java: Bytecode Distribution vs Source Distribution
+
+**Discovery:** Maven downloads pre-compiled bytecode (.class files in JARs), not source code. This is fundamentally different from Rust/Cargo, which downloads source code and recompiles for each target.
+
+**Implications:**
+- The Java experiment tests **bytecode compatibility**, not source language features
+- Libraries can compile to older Java bytecode (e.g., Java 8) even if they document newer requirements (e.g., Java 11+)
+- Runtime API usage incompatibilities cannot be detected at compile time
+- This explains why all 26 tested Java packages showed Java 8 compatibility
+
+**Critical Fix Applied:**
+Initially, the test generated an empty `Main.java` class that didn't actually import or use any library code:
+```java
+public class Main { public static void main(String[] args) {} }
+```
+
+This was fixed to generate code that imports and references library classes:
+```java
+import com.google.inject.Guice;
+
+public class Main {
+    public static void main(String[] args) {
+        Class<?> cls = com.google.inject.Guice.class;
+    }
+}
+```
+
+**Why Results Differ from Rust:**
+- **Java libraries:** Maintain aggressive backward bytecode compatibility (most compile to Java 8)
+- **Rust crates:** Often use newer language features, requiring recent MSRV
+- **Java dependency model:** Pre-compiled bytecode downloaded once, shared across projects
+- **Rust dependency model:** Source code recompiled for each project with its toolchain
+
+**Verification:**
+- Single package test confirmed: Guice 7.0 compiles successfully with Java 8 despite docs claiming Java 11+ requirement
+- The test now properly imports library classes to verify compilation compatibility
+- File: `java/src/main/java/Experiment.java:345` (testJavaVersion method)
+
 ## Next Steps
 
 ### High Priority
