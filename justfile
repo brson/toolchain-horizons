@@ -1,7 +1,7 @@
 # Dependency Toolchain Compatibility Experiment
 #
 # Reproducible experiments testing how dependencies affect
-# toolchain version compatibility across Rust, Java, Python, and Node.js
+# toolchain version compatibility across Rust, Java, Python, Node.js, and Go
 
 # Default recipe shows available commands
 default:
@@ -86,6 +86,15 @@ check-prereqs:
         missing=$((missing + 1))
     fi
 
+    # Check for Go
+    if command -v go &> /dev/null; then
+        echo "✓ go: $(go version)"
+    else
+        echo "✗ go: NOT FOUND"
+        echo "  Install: https://go.dev/doc/install"
+        missing=$((missing + 1))
+    fi
+
     echo ""
     if [[ $missing -eq 0 ]]; then
         echo "All prerequisites satisfied!"
@@ -96,7 +105,7 @@ check-prereqs:
     fi
 
 # Run all experiments sequentially
-all-experiments: rust-experiment java-experiment python-experiment node-experiment
+all-experiments: rust-experiment java-experiment python-experiment node-experiment go-experiment
     @echo ""
     @echo "All experiments completed!"
     @echo "Results written to:"
@@ -104,6 +113,7 @@ all-experiments: rust-experiment java-experiment python-experiment node-experime
     @echo "  - java/results.json"
     @echo "  - python/results.json"
     @echo "  - node/results.json"
+    @echo "  - go/results.json"
 
 # Run Rust experiment
 rust-experiment:
@@ -141,6 +151,18 @@ node-experiment:
     cd node && bash -c "source ~/.config/nvm/nvm.sh && node experiment.js"
     @echo "Node.js experiment complete: node/results.json"
 
+# Run Go experiment
+go-experiment:
+    @echo "Running Go experiment..."
+    cd go && go run experiment.go
+    @echo "Go experiment complete: go/results.json"
+
+# Run Go experiment on a single package
+go-experiment-package package_name:
+    @echo "Running Go experiment for {{ package_name }}..."
+    cd go && go run experiment.go {{ package_name }}
+    @echo "Go experiment complete: go/result-{{ package_name }}.json"
+
 # Visualize Rust results (pass 'show' to display plot window)
 visualize-rust show='':
     @echo "Generating Rust compatibility visualizations..."
@@ -156,13 +178,18 @@ visualize-node show='':
     @echo "Generating Node.js compatibility visualizations..."
     uv run visualize-node.py {{ if show == 'show' { '--show' } else { '' } }}
 
+# Visualize Go results (pass 'show' to display plot window)
+visualize-go show='':
+    @echo "Generating Go compatibility visualizations..."
+    uv run visualize-go.py {{ if show == 'show' { '--show' } else { '' } }}
+
 # Visualize all language results (cross-language comparison)
 visualize-all show='':
     @echo "Generating cross-language comparison..."
     @echo "TODO: Create visualize-all.py"
 
 # Generate all visualizations (pass 'show' to display plot windows)
-visualize show='': (visualize-rust show) (visualize-java show) (visualize-node show)
+visualize show='': (visualize-rust show) (visualize-java show) (visualize-node show) (visualize-go show)
     @echo "All visualizations generated!"
 
 # Serve the impress.js presentation on localhost:8000
@@ -177,7 +204,7 @@ open-presentation:
     xdg-open http://localhost:8000 || open http://localhost:8000 || echo "Please manually open http://localhost:8000"
 
 # Clean all results and generated files
-clean: clean-rust clean-java clean-python clean-node clean-visualizations
+clean: clean-rust clean-java clean-python clean-node clean-go clean-visualizations
     @echo "All artifacts cleaned!"
 
 # Clean Rust artifacts
@@ -208,6 +235,13 @@ clean-node:
     @echo "Cleaning Node.js artifacts..."
     rm -f node/results.json
 
+# Clean Go artifacts
+clean-go:
+    @echo "Cleaning Go artifacts..."
+    rm -f go/results.json
+    rm -f go/result-*.json
+    rm -f go/*.png
+
 # Clean visualization outputs
 clean-visualizations:
     @echo "Cleaning visualization outputs..."
@@ -223,7 +257,7 @@ validate-results:
     valid=0
     invalid=0
 
-    for result in rust/results.json java/results.json python/results.json node/results.json; do
+    for result in rust/results.json java/results.json python/results.json node/results.json go/results.json; do
         if [[ -f "$result" ]]; then
             if python3 -m json.tool "$result" > /dev/null 2>&1; then
                 echo "✓ $result: Valid JSON"
@@ -274,5 +308,12 @@ list-versions:
     if [[ -d "$HOME/.nvm" ]]; then
         echo "Node.js versions (nvm):"
         bash -c "source ~/.nvm/nvm.sh && nvm list | head -n 5"
+        echo ""
+    fi
+
+    # Go
+    if command -v go &> /dev/null; then
+        echo "Go versions:"
+        go version
         echo ""
     fi
