@@ -15,6 +15,7 @@ from datetime import datetime
 import numpy as np
 import json
 import sys
+import chart_style as cs
 
 # Check if we should show the plot window
 show_plot = '--show' in sys.argv
@@ -93,139 +94,136 @@ packages_data.sort(key=lambda x: x[3])
 baseline_total = go_versions['1.24'][1] - go_versions[baseline_version][1]
 
 # Color scheme based on impact
-color_map = {
-    "baseline": "#2E7D32",  # Green
-    "minimal": "#66BB6A",   # Light green
-    "low": "#FDD835",       # Yellow
-    "moderate": "#FFB74D",  # Orange
-    "high": "#FF7043",      # Deep orange
-    "severe": "#E53935",    # Red
-}
+color_map = cs.COLOR_MAP
 
 # Create figure
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), gridspec_kw={'height_ratios': [3, 1]})
-fig.suptitle('Go Package Toolchain Compatibility Timeline', fontsize=int(16*fs), fontweight='bold')
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=cs.FIGURE_SIZE, gridspec_kw={'height_ratios': cs.HEIGHT_RATIOS})
+fig.suptitle('Go Package Toolchain Compatibility Timeline\nGo Modules Era', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
 # Plot 1: Timeline bars
 y_pos = 0
-
-# Baseline bar
-ax1.barh(y_pos, (latest_date - baseline_date).days, left=baseline_date,
-         height=0.8, color=color_map["baseline"], label="Baseline (no deps)")
-ax1.text(baseline_date, y_pos, ' Baseline (no deps)', va='center', ha='left',
-         fontsize=int(8*fs), color='white', fontweight='bold')
-y_pos += 1
-
-# Package bars
 for package_name, oldest_ver, oldest_date_str, versions_lost, impact in packages_data:
     oldest_date = datetime.strptime(oldest_date_str, '%Y-%m-%d')
 
-    # Lost compatibility region (red/orange)
-    if versions_lost > 0:
-        ax1.barh(y_pos, (oldest_date - baseline_date).days, left=baseline_date,
-                height=0.8, color='#CCCCCC', alpha=0.3)
+    # Calculate bar position and width (numeric days)
+    bar_start = (oldest_date - baseline_date).days
+    bar_width = (latest_date - oldest_date).days
 
-    # Compatible region
-    ax1.barh(y_pos, (latest_date - oldest_date).days, left=oldest_date,
-             height=0.8, color=color_map[impact], alpha=0.7, edgecolor='black', linewidth=0.5)
+    color = color_map[impact]
 
-    # Package name
+    # Draw bar from package's min version to latest
+    ax1.barh(y_pos, bar_width, left=bar_start, height=cs.BAR_HEIGHT,
+             color=color, alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR, linewidth=cs.BAR_EDGE_WIDTH)
+
+    # Add package name (outside bar to the left)
     display_name = package_name.split('/')[-1]  # Show only last component
-    ax1.text(oldest_date, y_pos, f' {display_name}', va='center', ha='left',
-             fontsize=int(9*fs))
+    ax1.text(cs.LABEL_OFFSET_X, y_pos, display_name, ha='right', va='center',
+             fontsize=int(cs.FONT_PKG_NAME*fs), fontweight='bold')
 
-    # Version lost label
-    if versions_lost > 0:
-        mid_date = baseline_date + (oldest_date - baseline_date) / 2
-        ax1.text(mid_date, y_pos, f'-{versions_lost}', va='center', ha='center',
-                fontsize=int(7*fs), color='#666666', fontweight='bold')
+    # Add version label on the bar
+    text_x = bar_start + cs.VERSION_OFFSET_X
+    ax1.text(text_x, y_pos, f'{oldest_ver}',
+             ha='left', va='center', fontsize=int(cs.FONT_VERSION_LABEL*fs), color='black')
 
     y_pos += 1
 
-# Format timeline axis
-ax1.set_ylim(-0.5, y_pos - 0.5)
-ax1.set_xlim(baseline_date, latest_date)
-ax1.set_xlabel('Go Release Date', fontsize=int(12*fs))
+# Timeline from baseline to latest
+total_days = (latest_date - baseline_date).days
+ax1.set_xlim(0, total_days)
+ax1.set_ylim(-0.5, len(packages_data) - 0.5)
+ax1.set_xlabel('Time', fontsize=int(cs.FONT_AXIS_LABEL*fs))
 ax1.set_yticks([])
-ax1.grid(axis='x', alpha=0.3)
 
-# Add version markers
-for version, (date_str, _) in go_versions.items():
-    date = datetime.strptime(date_str, '%Y-%m-%d')
-    ax1.axvline(date, color='gray', linestyle='--', alpha=0.3, linewidth=0.5)
-    ax1.text(date, y_pos - 0.5, f'Go\n{version}',
-             ha='center', va='top', fontsize=int(7*fs), color='gray')
+# Add year markers
+year_markers = []
+for year in range(2020, 2026):
+    year_date = datetime(year, 1, 1)
+    if year_date >= baseline_date and year_date <= latest_date:
+        days_from_start = (year_date - baseline_date).days
+        ax1.axvline(days_from_start, color='gray', linestyle='--', alpha=cs.GRID_ALPHA, linewidth=cs.MARKER_LINEWIDTH)
+        year_markers.append((days_from_start, str(year)))
 
-# Legend
-impact_patches = [
-    mpatches.Patch(color=color_map["minimal"], label='Minimal impact (0 versions lost)'),
-    mpatches.Patch(color=color_map["low"], label='Low impact (1-2 versions lost)'),
-    mpatches.Patch(color=color_map["moderate"], label='Moderate impact (3-4 versions lost)'),
-    mpatches.Patch(color=color_map["high"], label='High impact (5-6 versions lost)'),
-    mpatches.Patch(color=color_map["severe"], label='Severe impact (7+ versions lost)'),
-]
-ax1.legend(handles=impact_patches, loc='upper left', fontsize=int(9*fs))
+# Set x-axis labels to years
+ax1.set_xticks([pos for pos, _ in year_markers])
+ax1.set_xticklabels([label for _, label in year_markers])
 
-# Plot 2: Versions lost distribution
-versions_lost_counts = {}
-for _, _, _, versions_lost, _ in packages_data:
-    versions_lost_counts[versions_lost] = versions_lost_counts.get(versions_lost, 0) + 1
+# Add grid
+ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
+ax1.set_title('Compatibility Window by Package\n(Each bar shows the range of supported Go versions)',
+              fontsize=int(cs.FONT_SUBTITLE*fs), pad=10)
 
-x_vals = sorted(versions_lost_counts.keys())
-y_vals = [versions_lost_counts[x] for x in x_vals]
-colors = [color_map[
-    'minimal' if x == 0 else
-    'low' if x <= 2 else
-    'moderate' if x <= 4 else
-    'high' if x <= 6 else
-    'severe'
-] for x in x_vals]
+# Add baseline indicator
+baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
 
-ax2.bar(x_vals, y_vals, color=colors, alpha=0.7, edgecolor='black', linewidth=0.5)
-ax2.set_xlabel('Go Versions Lost', fontsize=int(12*fs))
-ax2.set_ylabel('Number of Packages', fontsize=int(12*fs))
-ax2.set_title('Distribution of Compatibility Loss', fontsize=int(12*fs))
-ax2.grid(axis='y', alpha=0.3)
+# Plot 2: Impact distribution (categorical like Rust)
+impact_counts = {}
+for _, _, _, _, impact in packages_data:
+    impact_counts[impact] = impact_counts.get(impact, 0) + 1
+
+impact_order = ["minimal", "low", "moderate", "high", "severe"]
+counts = [impact_counts.get(imp, 0) for imp in impact_order]
+colors = [color_map[imp] for imp in impact_order]
+
+bars = ax2.bar(impact_order, counts, color=colors, alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR)
+ax2.set_ylabel('Number of Packages', fontsize=int(cs.FONT_SUBTITLE*fs))
+ax2.set_xlabel('Impact Level', fontsize=int(cs.FONT_SUBTITLE*fs))
+ax2.set_title('Distribution of Compatibility Impact', fontsize=int(cs.FONT_SUBTITLE*fs))
+ax2.grid(axis='y', alpha=cs.GRID_ALPHA)
 
 # Add count labels on bars
-for x, y in zip(x_vals, y_vals):
-    ax2.text(x, y + 0.1, str(y), ha='center', va='bottom', fontsize=int(9*fs), fontweight='bold')
+for bar, count in zip(bars, counts):
+    if count > 0:
+        height = bar.get_height()
+        ax2.text(bar.get_x() + bar.get_width()/2., height,
+                f'{int(count)}', ha='center', va='bottom', fontsize=int(cs.FONT_COUNT_LABEL*fs), fontweight='bold')
+
+# Create legend for impact levels
+legend_elements = [
+    mpatches.Patch(color=color_map["minimal"], label='Minimal (0 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["low"], label='Low (1-2 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["moderate"], label='Moderate (3-4 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["high"], label='High (5-6 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["severe"], label='Severe (7+ versions lost)', alpha=cs.BAR_ALPHA),
+]
+ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs), title='Impact Severity')
 
 plt.tight_layout()
+plt.savefig('compatibility-timeline-go.png', dpi=cs.DPI, bbox_inches='tight')
+print("Saved: compatibility-timeline-go.png")
 
-# Save or show
+# Create a second visualization: Lost versions chart
+fig2, ax = plt.subplots(figsize=cs.FIGURE_SIZE_SECONDARY)
+
+# Sort by versions lost (ascending, like Rust)
+package_names = [p[0].split('/')[-1] for p in packages_data]
+versions_lost_vals = [p[3] for p in packages_data]
+colors_sorted = [color_map[p[4]] for p in packages_data]
+
+# Create horizontal bar chart
+bars = ax.barh(range(len(package_names)), versions_lost_vals, color=colors_sorted,
+               alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR, linewidth=cs.BAR_EDGE_WIDTH)
+
+ax.set_yticks(range(len(package_names)))
+ax.set_yticklabels(package_names, fontsize=int(cs.FONT_PKG_NAME*fs))
+ax.set_xlabel('Number of Go Versions Lost', fontsize=int(cs.FONT_AXIS_LABEL*fs))
+ax.set_title(f'Toolchain Compatibility Loss by Package\n(Compared to no-dependency baseline of {baseline_total} versions)',
+             fontsize=int(13*fs), fontweight='bold')
+ax.grid(axis='x', alpha=cs.GRID_ALPHA)
+
+# Add percentage labels
+for i, (bar, lost) in enumerate(zip(bars, versions_lost_vals)):
+    percentage = (lost / baseline_total) * 100
+    ax.text(bar.get_width() + 0.1, bar.get_y() + bar.get_height()/2,
+            f'{int(lost)} ({percentage:.0f}%)',
+            ha='left', va='center', fontsize=int(cs.FONT_LEGEND*fs))
+
+# Add baseline reference line
+ax.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=0.5, label='Baseline (no deps)')
+
+plt.tight_layout()
+plt.savefig('versions-lost-go.png', dpi=cs.DPI, bbox_inches='tight')
+print("Saved: versions-lost-go.png")
+
+# Only show plot window if --show argument is passed
 if show_plot:
     plt.show()
-else:
-    plt.savefig('compatibility-timeline-go.png', dpi=300, bbox_inches='tight')
-    print("Saved: compatibility-timeline-go.png")
-
-    # Create second chart: versions lost
-    fig2, ax = plt.subplots(figsize=(12, 8))
-
-    # Sort packages by versions lost
-    packages_sorted = sorted(packages_data, key=lambda x: x[3], reverse=True)
-
-    package_names = [p[0].split('/')[-1] for p in packages_sorted]
-    versions_lost_vals = [p[3] for p in packages_sorted]
-    colors = [color_map[p[4]] for p in packages_sorted]
-
-    y_positions = range(len(package_names))
-    bars = ax.barh(y_positions, versions_lost_vals, color=colors, alpha=0.7, edgecolor='black', linewidth=0.5)
-
-    ax.set_yticks(y_positions)
-    ax.set_yticklabels(package_names, fontsize=int(9*fs))
-    ax.set_xlabel('Go Versions Lost from Baseline (Go 1.13)', fontsize=int(12*fs))
-    ax.set_title('Go Package Toolchain Compatibility Impact', fontsize=int(14*fs), fontweight='bold')
-    ax.grid(axis='x', alpha=0.3)
-
-    # Add value labels
-    for i, (bar, val) in enumerate(zip(bars, versions_lost_vals)):
-        ax.text(val + 0.1, i, str(val), va='center', fontsize=int(9*fs), fontweight='bold')
-
-    # Add legend
-    ax.legend(handles=impact_patches, loc='lower right', fontsize=int(9*fs))
-
-    plt.tight_layout()
-    plt.savefig('versions-lost-go.png', dpi=300, bbox_inches='tight')
-    print("Saved: versions-lost-go.png")

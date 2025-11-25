@@ -15,6 +15,7 @@ from datetime import datetime
 import numpy as np
 import json
 import sys
+import chart_style as cs
 
 # Check if we should show the plot window
 show_plot = '--show' in sys.argv
@@ -170,19 +171,11 @@ crates_data.sort(key=lambda x: x[3])
 baseline_total = rust_versions['1.90.0'][1] - rust_versions[baseline_version][1]
 
 # Color scheme based on impact
-color_map = {
-    "baseline": "#2E7D32",  # Green
-    "minimal": "#66BB6A",   # Light green
-    "low": "#FDD835",       # Yellow
-    "moderate": "#FFB74D",  # Orange
-    "high": "#FF7043",      # Deep orange
-    "severe": "#E53935",    # Red
-    "extreme": "#880E4F",   # Deep purple
-}
+color_map = cs.COLOR_MAP
 
 # Create figure
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), gridspec_kw={'height_ratios': [3, 1]})
-fig.suptitle('Rust Crate Toolchain Compatibility Timeline\nEdition 2018', fontsize=int(16*fs), fontweight='bold')
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=cs.FIGURE_SIZE, gridspec_kw={'height_ratios': cs.HEIGHT_RATIOS})
+fig.suptitle('Rust Crate Toolchain Compatibility Timeline\nEdition 2018', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
 # Plot 1: Timeline bars
 y_pos = 0
@@ -196,16 +189,16 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
     color = color_map[impact]
 
     # Draw bar from crate's min version to latest
-    ax1.barh(y_pos, bar_width, left=bar_start, height=0.8,
-             color=color, alpha=0.7, edgecolor='black', linewidth=0.5)
+    ax1.barh(y_pos, bar_width, left=bar_start, height=cs.BAR_HEIGHT,
+             color=color, alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR, linewidth=cs.BAR_EDGE_WIDTH)
 
     # Add crate name
-    ax1.text(-50, y_pos, crate_name, ha='right', va='center', fontsize=int(9*fs), fontweight='bold')
+    ax1.text(cs.LABEL_OFFSET_X, y_pos, crate_name, ha='right', va='center', fontsize=int(cs.FONT_PKG_NAME*fs), fontweight='bold')
 
     # Add version and date on the bar
-    text_x = bar_start + 30
+    text_x = bar_start + cs.VERSION_OFFSET_X
     ax1.text(text_x, y_pos, f'{rust_version}',
-             ha='left', va='center', fontsize=int(7*fs), color='black')
+             ha='left', va='center', fontsize=int(cs.FONT_VERSION_LABEL*fs), color='black')
 
     y_pos += 1
 
@@ -213,7 +206,7 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
 total_days = (latest_date - baseline_date).days
 ax1.set_xlim(0, total_days)
 ax1.set_ylim(-0.5, len(crates_data) - 0.5)
-ax1.set_xlabel('Time', fontsize=int(12*fs))
+ax1.set_xlabel('Time', fontsize=int(cs.FONT_AXIS_LABEL*fs))
 ax1.set_yticks([])
 
 # Add year markers
@@ -222,7 +215,7 @@ for year in range(2017, 2025):
     year_date = datetime(year, 1, 1)
     if year_date >= baseline_date and year_date <= latest_date:
         days_from_start = (year_date - baseline_date).days
-        ax1.axvline(days_from_start, color='gray', linestyle='--', alpha=0.3, linewidth=1)
+        ax1.axvline(days_from_start, color='gray', linestyle='--', alpha=cs.GRID_ALPHA, linewidth=cs.MARKER_LINEWIDTH)
         year_markers.append((days_from_start, str(year)))
 
 # Set x-axis labels to years
@@ -230,12 +223,12 @@ ax1.set_xticks([pos for pos, _ in year_markers])
 ax1.set_xticklabels([label for _, label in year_markers])
 
 # Add grid
-ax1.grid(axis='x', alpha=0.3)
+ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
 ax1.set_title('Compatibility Window by Crate\n(Each bar shows the range of supported Rust versions)',
-              fontsize=int(11*fs), pad=10)
+              fontsize=int(cs.FONT_SUBTITLE*fs), pad=10)
 
 # Add baseline indicator
-baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.8)
+baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
 
 # Plot 2: Impact distribution
 impact_counts = {}
@@ -247,36 +240,36 @@ impact_order = ["minimal", "low", "moderate", "high", "severe", "extreme"]
 counts = [impact_counts.get(imp, 0) for imp in impact_order]
 colors = [color_map[imp] for imp in impact_order]
 
-bars = ax2.bar(impact_order, counts, color=colors, alpha=0.7, edgecolor='black')
-ax2.set_ylabel('Number of Crates', fontsize=int(11*fs))
-ax2.set_xlabel('Impact Level', fontsize=int(11*fs))
-ax2.set_title('Distribution of Compatibility Impact', fontsize=int(11*fs))
-ax2.grid(axis='y', alpha=0.3)
+bars = ax2.bar(impact_order, counts, color=colors, alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR)
+ax2.set_ylabel('Number of Crates', fontsize=int(cs.FONT_SUBTITLE*fs))
+ax2.set_xlabel('Impact Level', fontsize=int(cs.FONT_SUBTITLE*fs))
+ax2.set_title('Distribution of Compatibility Impact', fontsize=int(cs.FONT_SUBTITLE*fs))
+ax2.grid(axis='y', alpha=cs.GRID_ALPHA)
 
 # Add count labels on bars
 for bar, count in zip(bars, counts):
     if count > 0:
         height = bar.get_height()
         ax2.text(bar.get_x() + bar.get_width()/2., height,
-                f'{int(count)}', ha='center', va='bottom', fontsize=int(10*fs), fontweight='bold')
+                f'{int(count)}', ha='center', va='bottom', fontsize=int(cs.FONT_COUNT_LABEL*fs), fontweight='bold')
 
 # Create legend for impact levels
 legend_elements = [
-    mpatches.Patch(color=color_map["minimal"], label='Minimal (<=5 versions lost)', alpha=0.7),
-    mpatches.Patch(color=color_map["low"], label='Low (6-25 versions lost)', alpha=0.7),
-    mpatches.Patch(color=color_map["moderate"], label='Moderate (26-40 versions lost)', alpha=0.7),
-    mpatches.Patch(color=color_map["high"], label='High (41-50 versions lost)', alpha=0.7),
-    mpatches.Patch(color=color_map["severe"], label='Severe (51-60 versions lost)', alpha=0.7),
-    mpatches.Patch(color=color_map["extreme"], label='Extreme (>60 versions lost)', alpha=0.7),
+    mpatches.Patch(color=color_map["minimal"], label='Minimal (<=5 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["low"], label='Low (6-25 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["moderate"], label='Moderate (26-40 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["high"], label='High (41-50 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["severe"], label='Severe (51-60 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["extreme"], label='Extreme (>60 versions lost)', alpha=cs.BAR_ALPHA),
 ]
-ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(8*fs), title='Impact Severity')
+ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs), title='Impact Severity')
 
 plt.tight_layout()
-plt.savefig('compatibility-timeline-rust.png', dpi=300, bbox_inches='tight')
+plt.savefig('compatibility-timeline-rust.png', dpi=cs.DPI, bbox_inches='tight')
 print("Visualization saved to compatibility-timeline-rust.png")
 
 # Create a second visualization: Lost versions chart
-fig2, ax = plt.subplots(figsize=(12, 8))
+fig2, ax = plt.subplots(figsize=cs.FIGURE_SIZE_SECONDARY)
 
 # Use the already sorted crates_data (CONTROL was already filtered out).
 crate_names = [d[0] for d in crates_data]
@@ -286,27 +279,27 @@ colors_sorted = [color_map[imp] for imp in impacts]
 
 # Create horizontal bar chart
 bars = ax.barh(range(len(crate_names)), versions_lost, color=colors_sorted,
-               alpha=0.7, edgecolor='black')
+               alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR, linewidth=cs.BAR_EDGE_WIDTH)
 
 ax.set_yticks(range(len(crate_names)))
-ax.set_yticklabels(crate_names, fontsize=int(9*fs))
-ax.set_xlabel('Number of Rust Versions Lost', fontsize=int(12*fs))
+ax.set_yticklabels(crate_names, fontsize=int(cs.FONT_PKG_NAME*fs))
+ax.set_xlabel('Number of Rust Versions Lost', fontsize=int(cs.FONT_AXIS_LABEL*fs))
 ax.set_title(f'Toolchain Compatibility Loss by Crate\n(Compared to no-dependency baseline of {baseline_total} versions)',
              fontsize=int(13*fs), fontweight='bold')
-ax.grid(axis='x', alpha=0.3)
+ax.grid(axis='x', alpha=cs.GRID_ALPHA)
 
 # Add percentage labels
 for i, (bar, lost) in enumerate(zip(bars, versions_lost)):
     percentage = (lost / baseline_total) * 100
     ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2,
             f'{int(lost)} ({percentage:.0f}%)',
-            ha='left', va='center', fontsize=int(8*fs))
+            ha='left', va='center', fontsize=int(cs.FONT_LEGEND*fs))
 
 # Add baseline reference line
-ax.axvline(0, color='green', linestyle='-', linewidth=2, alpha=0.5, label='Baseline (no deps)')
+ax.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=0.5, label='Baseline (no deps)')
 
 plt.tight_layout()
-plt.savefig('versions-lost-rust.png', dpi=300, bbox_inches='tight')
+plt.savefig('versions-lost-rust.png', dpi=cs.DPI, bbox_inches='tight')
 print("Visualization saved to versions-lost-rust.png")
 
 # Only show plot window if --show argument is passed
