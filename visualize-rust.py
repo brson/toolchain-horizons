@@ -224,8 +224,6 @@ ax1.set_xticklabels([label for _, label in year_markers])
 
 # Add grid
 ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
-ax1.set_title('Compatibility Window by Crate\n(Each bar shows the range of supported Rust versions)',
-              fontsize=int(cs.FONT_SUBTITLE*fs), pad=10)
 
 # Add baseline indicator
 baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
