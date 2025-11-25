@@ -162,3 +162,21 @@ img {
     0%, 100% { opacity: 0.8; }
     50% { opacity: 0.3; }
 }
+
+/* Hide speaker notes */
+.notes {
+    display: none;
+}
+
+/* Big centered callout text */
+.callout {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: 600;
+    text-align: center;
+    color: #bf360c;
+    margin: 0;
+}
