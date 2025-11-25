@@ -45,13 +45,13 @@ for package in results:
 
     versions_lost = go_versions.get(oldest, 0) - go_versions[baseline_version]
 
-    if versions_lost == 0:
+    if versions_lost <= 2:
         impact = 'minimal'
-    elif versions_lost <= 2:
-        impact = 'low'
     elif versions_lost <= 4:
-        impact = 'moderate'
+        impact = 'low'
     elif versions_lost <= 6:
+        impact = 'moderate'
+    elif versions_lost <= 8:
         impact = 'high'
     else:
         impact = 'severe'

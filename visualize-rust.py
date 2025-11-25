@@ -123,8 +123,8 @@ rust_versions = {
     '1.90.0': ('2024-12-01', 90),
 }
 
-# Baseline.
-baseline_version = '1.16.0'
+# Baseline: Edition 2018 stabilized in Rust 1.31.
+baseline_version = '1.31.1'
 baseline_date = datetime.strptime(rust_versions[baseline_version][0], '%Y-%m-%d')
 latest_date = datetime.strptime(rust_versions['1.90.0'][0], '%Y-%m-%d')
 
@@ -143,18 +143,16 @@ for crate in results:
     versions_lost = rust_versions[oldest][1] - rust_versions[baseline_version][1]
 
     # Categorize impact.
-    if versions_lost <= 5:
+    if versions_lost <= 15:
         impact = 'minimal'
-    elif versions_lost <= 25:
+    elif versions_lost <= 30:
         impact = 'low'
     elif versions_lost <= 40:
         impact = 'moderate'
     elif versions_lost <= 50:
         impact = 'high'
-    elif versions_lost <= 60:
-        impact = 'severe'
     else:
-        impact = 'extreme'
+        impact = 'severe'
 
     crates_data.append((
         crate['crate_name'],
@@ -211,7 +209,7 @@ ax1.set_yticks([])
 
 # Add year markers
 year_markers = []
-for year in range(2017, 2025):
+for year in range(2019, 2026):
     year_date = datetime(year, 1, 1)
     if year_date >= baseline_date and year_date <= latest_date:
         days_from_start = (year_date - baseline_date).days
@@ -230,12 +228,11 @@ baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELI
 
 # Create legend for impact levels
 legend_elements = [
-    mpatches.Patch(color=color_map["minimal"], label='Minimal (<=5 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["low"], label='Low (6-25 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["moderate"], label='Moderate (26-40 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["minimal"], label='Minimal (<=15 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["low"], label='Low (16-30 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["moderate"], label='Moderate (31-40 versions lost)', alpha=cs.BAR_ALPHA),
     mpatches.Patch(color=color_map["high"], label='High (41-50 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["severe"], label='Severe (51-60 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["extreme"], label='Extreme (>60 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["severe"], label='Severe (>50 versions lost)', alpha=cs.BAR_ALPHA),
 ]
 ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs), title='Impact Severity')
 

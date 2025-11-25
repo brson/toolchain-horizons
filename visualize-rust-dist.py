@@ -40,7 +40,7 @@ rust_versions = {
     '1.86.0': 86, '1.87.0': 87, '1.88.0': 88, '1.89.0': 89, '1.90.0': 90,
 }
 
-baseline_version = '1.16.0'
+baseline_version = '1.31.1'
 
 # Process data and categorize impact.
 impact_counts = {}
@@ -54,24 +54,22 @@ for crate in results:
 
     versions_lost = rust_versions.get(oldest, 0) - rust_versions[baseline_version]
 
-    if versions_lost <= 5:
+    if versions_lost <= 15:
         impact = 'minimal'
-    elif versions_lost <= 25:
+    elif versions_lost <= 30:
         impact = 'low'
     elif versions_lost <= 40:
         impact = 'moderate'
     elif versions_lost <= 50:
         impact = 'high'
-    elif versions_lost <= 60:
-        impact = 'severe'
     else:
-        impact = 'extreme'
+        impact = 'severe'
 
     impact_counts[impact] = impact_counts.get(impact, 0) + 1
 
 # Create distribution chart.
 color_map = cs.COLOR_MAP
-impact_order = ["minimal", "low", "moderate", "high", "severe", "extreme"]
+impact_order = ["minimal", "low", "moderate", "high", "severe"]
 counts = [impact_counts.get(imp, 0) for imp in impact_order]
 colors = [color_map[imp] for imp in impact_order]
 

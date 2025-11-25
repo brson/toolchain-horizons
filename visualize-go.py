@@ -67,14 +67,14 @@ for package in results:
     package_date = datetime.strptime(go_versions[oldest][0], '%Y-%m-%d')
     versions_lost = go_versions[oldest][1] - go_versions[baseline_version][1]
 
-    # Categorize impact.
-    if versions_lost == 0:
+    # Categorize impact (shifted to be comparable to Rust timescales).
+    if versions_lost <= 2:
         impact = 'minimal'
-    elif versions_lost <= 2:
-        impact = 'low'
     elif versions_lost <= 4:
-        impact = 'moderate'
+        impact = 'low'
     elif versions_lost <= 6:
+        impact = 'moderate'
+    elif versions_lost <= 8:
         impact = 'high'
     else:
         impact = 'severe'
@@ -155,11 +155,11 @@ baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELI
 
 # Create legend for impact levels
 legend_elements = [
-    mpatches.Patch(color=color_map["minimal"], label='Minimal (0 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["low"], label='Low (1-2 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["moderate"], label='Moderate (3-4 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["high"], label='High (5-6 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["severe"], label='Severe (7+ versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["minimal"], label='Minimal (0-2 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["low"], label='Low (3-4 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["moderate"], label='Moderate (5-6 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["high"], label='High (7-8 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["severe"], label='Severe (9+ versions lost)', alpha=cs.BAR_ALPHA),
 ]
 ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs), title='Impact Severity')
 
