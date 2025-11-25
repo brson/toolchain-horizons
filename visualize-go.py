@@ -37,14 +37,19 @@ go_versions = {
     '1.19': ('2022-08-02', 6),
     '1.20': ('2023-02-01', 7),
     '1.21': ('2023-08-08', 8),
+    '1.21.0': ('2023-08-08', 8),
     '1.22': ('2024-02-06', 9),
+    '1.22.0': ('2024-02-06', 9),
     '1.23': ('2024-08-13', 10),
+    '1.23.0': ('2024-08-13', 10),
+    '1.24': ('2025-02-11', 11),
+    '1.24.0': ('2025-02-11', 11),
 }
 
 # Baseline.
 baseline_version = '1.13'
 baseline_date = datetime.strptime(go_versions[baseline_version][0], '%Y-%m-%d')
-latest_date = datetime.strptime(go_versions['1.23'][0], '%Y-%m-%d')
+latest_date = datetime.strptime(go_versions['1.24'][0], '%Y-%m-%d')
 
 # Process data.
 packages_data = []
@@ -85,7 +90,7 @@ for package in results:
 packages_data.sort(key=lambda x: x[3])
 
 # Calculate total versions in baseline range.
-baseline_total = go_versions['1.23'][1] - go_versions[baseline_version][1]
+baseline_total = go_versions['1.24'][1] - go_versions[baseline_version][1]
 
 # Color scheme based on impact
 color_map = {

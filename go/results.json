@@ -3,216 +3,216 @@
     "package_name": "CONTROL",
     "dependency_spec": "none",
     "resolved_version": null,
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/gorilla/mux",
     "dependency_spec": "v1",
     "resolved_version": "v1.8.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/gin-gonic/gin",
     "dependency_spec": "v1",
     "resolved_version": "v1.11.0",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/stretchr/testify",
     "dependency_spec": "v1",
     "resolved_version": "v1.11.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.17",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/spf13/cobra",
     "dependency_spec": "v1",
     "resolved_version": "v1.10.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
-    "package_name": "github.com/urfave/cli",
+    "package_name": "github.com/urfave/cli/v2",
     "dependency_spec": "v2",
-    "resolved_version": null,
-    "oldest_compatible": null,
-    "latest_compatible": null,
-    "error": "go mod download failed: exit status 1\ngo: errors parsing go.mod:\ngo.mod:5: no matching versions for query \"v2\"\n"
+    "resolved_version": "v2.27.7",
+    "oldest_compatible": "1.18",
+    "latest_compatible": "1.24.0",
+    "error": null
   },
   {
     "package_name": "github.com/sirupsen/logrus",
     "dependency_spec": "v1",
     "resolved_version": "v1.9.3",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "go.uber.org/zap",
     "dependency_spec": "v1",
     "resolved_version": "v1.27.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.19",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
-    "package_name": "github.com/go-resty/resty",
+    "package_name": "github.com/go-resty/resty/v2",
     "dependency_spec": "v2",
-    "resolved_version": null,
-    "oldest_compatible": null,
-    "latest_compatible": null,
-    "error": "go mod download failed: exit status 1\ngo: errors parsing go.mod:\ngo.mod:5: no matching versions for query \"v2\"\n"
+    "resolved_version": "v2.17.0",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
+    "error": null
   },
   {
     "package_name": "gopkg.in/yaml.v3",
     "dependency_spec": "v3",
     "resolved_version": "v3.0.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/lib/pq",
     "dependency_spec": "v1",
     "resolved_version": "v1.10.9",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/go-sql-driver/mysql",
     "dependency_spec": "v1",
     "resolved_version": "v1.9.3",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/google/uuid",
     "dependency_spec": "v1",
     "resolved_version": "v1.6.0",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/pkg/errors",
     "dependency_spec": "v0.9",
     "resolved_version": "v0.9.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/hashicorp/go-multierror",
     "dependency_spec": "v1",
     "resolved_version": "v1.1.1",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/prometheus/client_golang",
     "dependency_spec": "v1",
     "resolved_version": "v1.23.2",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/gorilla/websocket",
     "dependency_spec": "v1",
     "resolved_version": "v1.5.3",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/julienschmidt/httprouter",
     "dependency_spec": "v1",
     "resolved_version": "v1.3.0",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "github.com/dgrijalva/jwt-go",
     "dependency_spec": "v3",
     "resolved_version": "v3.2.0+incompatible",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "golang.org/x/sync",
     "dependency_spec": "v0.10",
-    "resolved_version": "v0.10.0",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "resolved_version": "v0.18.0",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "golang.org/x/crypto",
     "dependency_spec": "v0.31",
-    "resolved_version": "v0.31.0",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "resolved_version": "v0.45.0",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
-    "package_name": "github.com/go-chi/chi",
+    "package_name": "github.com/go-chi/chi/v5",
     "dependency_spec": "v5",
-    "resolved_version": null,
-    "oldest_compatible": null,
-    "latest_compatible": null,
-    "error": "go mod download failed: exit status 1\ngo: errors parsing go.mod:\ngo.mod:5: no matching versions for query \"v5\"\n"
+    "resolved_version": "v5.2.3",
+    "oldest_compatible": "1.18",
+    "latest_compatible": "1.24.0",
+    "error": null
   },
   {
-    "package_name": "github.com/labstack/echo",
+    "package_name": "github.com/labstack/echo/v4",
     "dependency_spec": "v4",
-    "resolved_version": null,
-    "oldest_compatible": null,
-    "latest_compatible": null,
-    "error": "go mod download failed: exit status 1\ngo: errors parsing go.mod:\ngo.mod:5: no matching versions for query \"v4\"\n"
+    "resolved_version": "v4.13.4",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
+    "error": null
   },
   {
     "package_name": "github.com/gomodule/redigo",
     "dependency_spec": "v1",
     "resolved_version": "v1.9.3",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
-    "package_name": "github.com/elastic/go-elasticsearch",
+    "package_name": "github.com/elastic/go-elasticsearch/v7",
     "dependency_spec": "v7",
-    "resolved_version": null,
-    "oldest_compatible": null,
-    "latest_compatible": null,
-    "error": "go mod download failed: exit status 1\ngo: errors parsing go.mod:\ngo.mod:5: no matching versions for query \"v7\"\n"
+    "resolved_version": "v7.17.10",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
+    "error": null
   },
   {
     "package_name": "github.com/aws/aws-sdk-go",
     "dependency_spec": "v1",
     "resolved_version": "v1.55.8",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.13",
+    "latest_compatible": "1.24.0",
     "error": null
   },
   {
     "package_name": "google.golang.org/grpc",
     "dependency_spec": "v1",
     "resolved_version": "v1.77.0",
-    "oldest_compatible": "1.22",
-    "latest_compatible": "1.22",
+    "oldest_compatible": "1.21.0",
+    "latest_compatible": "1.24.0",
     "error": null
   }
 ]
