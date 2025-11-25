@@ -127,12 +127,12 @@ for package_name, oldest_ver, oldest_date_str, versions_lost, impact in packages
 
     # Compatible region
     ax1.barh(y_pos, (latest_date - oldest_date).days, left=oldest_date,
-             height=0.8, color=color_map[impact])
+             height=0.8, color=color_map[impact], alpha=0.7, edgecolor='black', linewidth=0.5)
 
     # Package name
     display_name = package_name.split('/')[-1]  # Show only last component
     ax1.text(oldest_date, y_pos, f' {display_name}', va='center', ha='left',
-             fontsize=int(7*fs))
+             fontsize=int(9*fs))
 
     # Version lost label
     if versions_lost > 0:
@@ -181,7 +181,7 @@ colors = [color_map[
     'severe'
 ] for x in x_vals]
 
-ax2.bar(x_vals, y_vals, color=colors, alpha=0.8, edgecolor='black')
+ax2.bar(x_vals, y_vals, color=colors, alpha=0.7, edgecolor='black', linewidth=0.5)
 ax2.set_xlabel('Go Versions Lost', fontsize=int(12*fs))
 ax2.set_ylabel('Number of Packages', fontsize=int(12*fs))
 ax2.set_title('Distribution of Compatibility Loss', fontsize=int(12*fs))
@@ -197,7 +197,7 @@ plt.tight_layout()
 if show_plot:
     plt.show()
 else:
-    plt.savefig('compatibility-timeline-go.png', dpi=150, bbox_inches='tight')
+    plt.savefig('compatibility-timeline-go.png', dpi=300, bbox_inches='tight')
     print("Saved: compatibility-timeline-go.png")
 
     # Create second chart: versions lost
@@ -211,7 +211,7 @@ else:
     colors = [color_map[p[4]] for p in packages_sorted]
 
     y_positions = range(len(package_names))
-    bars = ax.barh(y_positions, versions_lost_vals, color=colors, alpha=0.8, edgecolor='black')
+    bars = ax.barh(y_positions, versions_lost_vals, color=colors, alpha=0.7, edgecolor='black', linewidth=0.5)
 
     ax.set_yticks(y_positions)
     ax.set_yticklabels(package_names, fontsize=int(9*fs))
@@ -227,5 +227,5 @@ else:
     ax.legend(handles=impact_patches, loc='lower right', fontsize=int(9*fs))
 
     plt.tight_layout()
-    plt.savefig('versions-lost-go.png', dpi=150, bbox_inches='tight')
+    plt.savefig('versions-lost-go.png', dpi=300, bbox_inches='tight')
     print("Saved: versions-lost-go.png")

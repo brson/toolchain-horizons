@@ -230,7 +230,7 @@ ax1.set_xticks([pos for pos, _ in year_markers])
 ax1.set_xticklabels([label for _, label in year_markers])
 
 # Add grid
-ax1.grid(axis='x', alpha=0.2)
+ax1.grid(axis='x', alpha=0.3)
 ax1.set_title('Compatibility Window by Crate\n(Each bar shows the range of supported Rust versions)',
               fontsize=int(11*fs), pad=10)
 
@@ -251,7 +251,7 @@ bars = ax2.bar(impact_order, counts, color=colors, alpha=0.7, edgecolor='black')
 ax2.set_ylabel('Number of Crates', fontsize=int(11*fs))
 ax2.set_xlabel('Impact Level', fontsize=int(11*fs))
 ax2.set_title('Distribution of Compatibility Impact', fontsize=int(11*fs))
-ax2.grid(axis='y', alpha=0.2)
+ax2.grid(axis='y', alpha=0.3)
 
 # Add count labels on bars
 for bar, count in zip(bars, counts):
@@ -293,7 +293,7 @@ ax.set_yticklabels(crate_names, fontsize=int(9*fs))
 ax.set_xlabel('Number of Rust Versions Lost', fontsize=int(12*fs))
 ax.set_title(f'Toolchain Compatibility Loss by Crate\n(Compared to no-dependency baseline of {baseline_total} versions)',
              fontsize=int(13*fs), fontweight='bold')
-ax.grid(axis='x', alpha=0.2)
+ax.grid(axis='x', alpha=0.3)
 
 # Add percentage labels
 for i, (bar, lost) in enumerate(zip(bars, versions_lost)):
