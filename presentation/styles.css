@@ -47,13 +47,14 @@ body {
 /* White content area */
 .slide-content {
     flex: 1;
+    min-height: 0;
     background-color: #fff;
     border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
                 inset 0 0 0 3px rgba(0, 0, 0, 0.08);
     padding: 40px;
     box-sizing: border-box;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .step h1 {
@@ -143,6 +144,11 @@ img {
     max-width: 100%;
     height: auto;
     border-radius: 5px;
+}
+
+.slide-content img {
+    max-height: 100%;
+    object-fit: contain;
 }
 
 /* Stars for night sky */
