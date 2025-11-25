@@ -98,7 +98,7 @@ color_map = cs.COLOR_MAP
 
 # Create figure
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=cs.FIGURE_SIZE, gridspec_kw={'height_ratios': cs.HEIGHT_RATIOS})
-fig.suptitle('Go Package Toolchain Compatibility Timeline\nGo Modules Era', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
+fig.suptitle('Go Toolchain Horizons - Modules Era', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
 # Plot 1: Timeline bars
 y_pos = 0

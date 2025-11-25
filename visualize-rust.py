@@ -175,7 +175,7 @@ color_map = cs.COLOR_MAP
 
 # Create figure
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=cs.FIGURE_SIZE, gridspec_kw={'height_ratios': cs.HEIGHT_RATIOS})
-fig.suptitle('Rust Crate Toolchain Compatibility Timeline\nEdition 2018', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
+fig.suptitle('Rust Toolchain Horizons - Edition 2018', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
 # Plot 1: Timeline bars
 y_pos = 0
