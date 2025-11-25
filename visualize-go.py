@@ -97,10 +97,10 @@ baseline_total = go_versions['1.24'][1] - go_versions[baseline_version][1]
 color_map = cs.COLOR_MAP
 
 # Create figure
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=cs.FIGURE_SIZE, gridspec_kw={'height_ratios': cs.HEIGHT_RATIOS})
+fig, ax1 = plt.subplots(figsize=cs.FIGURE_SIZE)
 fig.suptitle('Go Toolchain Horizons - Modules Era', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
-# Plot 1: Timeline bars
+# Timeline bars
 y_pos = 0
 for package_name, oldest_ver, oldest_date_str, versions_lost, impact in packages_data:
     oldest_date = datetime.strptime(oldest_date_str, '%Y-%m-%d')
@@ -152,28 +152,6 @@ ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
 
 # Add baseline indicator
 baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
-
-# Plot 2: Impact distribution (categorical like Rust)
-impact_counts = {}
-for _, _, _, _, impact in packages_data:
-    impact_counts[impact] = impact_counts.get(impact, 0) + 1
-
-impact_order = ["minimal", "low", "moderate", "high", "severe"]
-counts = [impact_counts.get(imp, 0) for imp in impact_order]
-colors = [color_map[imp] for imp in impact_order]
-
-bars = ax2.bar(impact_order, counts, color=colors, alpha=cs.BAR_ALPHA, edgecolor=cs.BAR_EDGE_COLOR)
-ax2.set_ylabel('Number of Packages', fontsize=int(cs.FONT_SUBTITLE*fs))
-ax2.set_xlabel('Impact Level', fontsize=int(cs.FONT_SUBTITLE*fs))
-ax2.set_title('Distribution of Compatibility Impact', fontsize=int(cs.FONT_SUBTITLE*fs))
-ax2.grid(axis='y', alpha=cs.GRID_ALPHA)
-
-# Add count labels on bars
-for bar, count in zip(bars, counts):
-    if count > 0:
-        height = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2., height,
-                f'{int(count)}', ha='center', va='bottom', fontsize=int(cs.FONT_COUNT_LABEL*fs), fontweight='bold')
 
 # Create legend for impact levels
 legend_elements = [
