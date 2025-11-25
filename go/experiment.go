@@ -47,11 +47,112 @@ var packages = []Package{
 	{"google.golang.org/grpc", "v1", "google.golang.org/grpc"},
 }
 
-// Go versions to test (major releases from 1.13 to 1.23).
-// Go 1.13+ required for go.mod features we rely on.
+// Go versions to test.
+// The golang.org/dl naming changed around 1.21 to include patch version.
 var goVersions = []string{
 	"1.13", "1.14", "1.15", "1.16", "1.17", "1.18",
-	"1.19", "1.20", "1.21", "1.22", "1.23",
+	"1.19", "1.20", "1.21.0", "1.22.0", "1.23.0", "1.24.0",
+}
+
+// Get the Go binary path for a version.
+func goBinPath(version string) string {
+	gopath := os.Getenv("GOPATH")
+	if gopath == "" {
+		home, _ := os.UserHomeDir()
+		gopath = filepath.Join(home, "go")
+	}
+	return filepath.Join(gopath, "bin", fmt.Sprintf("go%s", version))
+}
+
+// Check if a Go version wrapper is installed.
+func goVersionInstalled(version string) bool {
+	binPath := goBinPath(version)
+	_, err := os.Stat(binPath)
+	return err == nil
+}
+
+// Install a Go version wrapper via golang.org/dl.
+func installGoWrapper(version string) error {
+	dlPath := fmt.Sprintf("golang.org/dl/go%s@latest", version)
+	cmd := exec.Command("go", "install", dlPath)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return fmt.Errorf("install wrapper: %v: %s", err, output)
+	}
+	return nil
+}
+
+// Ensure a Go version is installed and downloaded.
+func ensureGoVersion(version string) error {
+	if !goVersionInstalled(version) {
+		fmt.Printf("    Installing Go %s wrapper...\n", version)
+		if err := installGoWrapper(version); err != nil {
+			return err
+		}
+	}
+
+	// Always try download - it's fast if already present.
+	binPath := goBinPath(version)
+	cmd := exec.Command(binPath, "download")
+	cmd.Stdout = nil
+	cmd.Stderr = nil
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("download SDK: %v", err)
+	}
+
+	return nil
+}
+
+// Update go.mod to use a specific Go version directive.
+func updateGoModVersion(tmpDir, version string) error {
+	goModPath := filepath.Join(tmpDir, "go.mod")
+	content, err := os.ReadFile(goModPath)
+	if err != nil {
+		return err
+	}
+
+	lines := strings.Split(string(content), "\n")
+	for i, line := range lines {
+		if strings.HasPrefix(strings.TrimSpace(line), "go ") {
+			lines[i] = fmt.Sprintf("go %s", version)
+			break
+		}
+	}
+
+	return os.WriteFile(goModPath, []byte(strings.Join(lines, "\n")), 0644)
+}
+
+// Test if a project compiles with a specific Go version.
+func testGoVersion(tmpDir, version string) (bool, error) {
+	// Ensure toolchain is installed and downloaded.
+	if err := ensureGoVersion(version); err != nil {
+		return false, err
+	}
+
+	binPath := goBinPath(version)
+
+	// Clean go.sum to allow fresh resolution.
+	os.Remove(filepath.Join(tmpDir, "go.sum"))
+
+	// Update go.mod to match the version being tested.
+	if err := updateGoModVersion(tmpDir, version); err != nil {
+		return false, err
+	}
+
+	// Try mod tidy with this version.
+	tidyCmd := exec.Command(binPath, "mod", "tidy")
+	tidyCmd.Dir = tmpDir
+	if _, err := tidyCmd.CombinedOutput(); err != nil {
+		return false, nil
+	}
+
+	// Try build.
+	buildCmd := exec.Command(binPath, "build", ".")
+	buildCmd.Dir = tmpDir
+	if err := buildCmd.Run(); err != nil {
+		return false, nil
+	}
+
+	return true, nil
 }
 
 // ExperimentResult stores the result for a single package test.
@@ -213,12 +314,13 @@ func main() {
 	}
 
 	oldest := findOldestCompatible(tmpDir, Package{})
+	latest := stringPtr(goVersions[len(goVersions)-1])
 
 	return ExperimentResult{
 		PackageName:      "CONTROL",
 		DependencySpec:   "none",
 		OldestCompatible: oldest,
-		LatestCompatible: oldest, // Same as oldest since we only test current version
+		LatestCompatible: latest,
 	}, nil
 }
 
@@ -272,13 +374,14 @@ func main() {
 	}
 
 	oldest := findOldestCompatible(tmpDir, pkg)
+	latest := stringPtr(goVersions[len(goVersions)-1])
 
 	return ExperimentResult{
 		PackageName:      pkg.ImportPath,
 		DependencySpec:   pkg.VersionSpec,
 		ResolvedVersion:  &resolvedVersion,
 		OldestCompatible: oldest,
-		LatestCompatible: oldest, // Same as oldest since we only test current version
+		LatestCompatible: latest,
 	}, nil
 }
 
@@ -308,50 +411,51 @@ func getResolvedVersion(tmpDir, importPath string) (string, error) {
 	return "", fmt.Errorf("could not parse version from go list output")
 }
 
+// Find the oldest compatible Go version using binary search.
 func findOldestCompatible(tmpDir string, pkg Package) *string {
-	// Simplified: test with current Go version only
-	// Testing multiple Go versions requires pre-installed Go toolchains
-	// or a Go version manager like gvm
+	left := 0
+	right := len(goVersions)
+	var oldest *string
 
-	fmt.Println("  Testing with current Go version")
+	for left < right {
+		mid := left + (right-left)/2
+		version := goVersions[mid]
 
-	// Download and tidy dependencies to generate go.sum
-	tidyCmd := exec.Command("go", "mod", "tidy")
-	tidyCmd.Dir = tmpDir
-	tidyCmd.Stdout = nil
-	tidyCmd.Stderr = nil
-	if err := tidyCmd.Run(); err != nil {
-		return nil
-	}
+		fmt.Printf("  Testing Go %s\n", version)
 
-	// Test if project builds with current Go
-	buildCmd := exec.Command("go", "build", ".")
-	buildCmd.Dir = tmpDir
-	buildCmd.Stdout = nil
-	buildCmd.Stderr = nil
-
-	if buildCmd.Run() == nil {
-		// Get current Go version
-		versionCmd := exec.Command("go", "version")
-		output, err := versionCmd.Output()
+		works, err := testGoVersion(tmpDir, version)
 		if err != nil {
-			return nil
+			fmt.Printf("    Error: %v\n", err)
+			left = mid + 1
+			continue
 		}
 
-		// Parse "go version go1.22.2 linux/amd64" to extract "1.22"
-		versionStr := string(output)
-		parts := strings.Fields(versionStr)
-		if len(parts) >= 3 {
-			fullVer := strings.TrimPrefix(parts[2], "go")
-			// Extract major.minor (e.g., "1.22" from "1.22.2")
-			verParts := strings.Split(fullVer, ".")
-			if len(verParts) >= 2 {
-				shortVer := verParts[0] + "." + verParts[1]
-				return stringPtr(shortVer)
-			}
+		if works {
+			fmt.Printf("    OK\n")
+			oldest = stringPtr(version)
+			right = mid
+		} else {
+			fmt.Printf("    Failed\n")
+			left = mid + 1
 		}
 	}
 
+	return oldest
+}
+
+// Find the latest compatible Go version.
+func findLatestCompatible(tmpDir string) *string {
+	// Start from newest and work backward.
+	for i := len(goVersions) - 1; i >= 0; i-- {
+		version := goVersions[i]
+		works, err := testGoVersion(tmpDir, version)
+		if err != nil {
+			continue
+		}
+		if works {
+			return stringPtr(version)
+		}
+	}
 	return nil
 }
 
