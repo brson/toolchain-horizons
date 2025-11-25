@@ -34,45 +34,55 @@ body {
 
 /* Slide styles */
 .step {
-    width: 1000px;
-    height: 700px;
-    padding: 60px;
-    background-color: #fff;
-    border-radius: 0;
-    border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
-                inset 0 0 0 3px rgba(0, 0, 0, 0.08);
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
     font-size: 24px;
     line-height: 1.5;
     box-sizing: border-box;
     position: relative;
 }
 
+/* White content area */
+.slide-content {
+    flex: 1;
+    background-color: #fff;
+    border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+                inset 0 0 0 3px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
 .step h1 {
     font-size: 72px;
-    margin: 0;
-    color: #d84315;
+    margin: 0 0 20px 0;
+    color: #fff;
     font-weight: 700;
     text-align: center;
     letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .step .subtitle {
     font-size: 36px;
-    color: #e65100;
+    color: rgba(255, 255, 255, 0.9);
     text-align: center;
-    margin-top: 20px;
+    margin-top: 0;
+    margin-bottom: 20px;
     font-weight: 400;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .step h2 {
     font-size: 48px;
-    margin: 0 0 30px 0;
-    color: #bf360c;
-    border-bottom: 3px solid #ff6e40;
-    padding-bottom: 10px;
+    margin: 0 0 20px 0;
+    color: #fff;
     font-weight: 600;
     letter-spacing: -0.01em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .step p {
@@ -169,11 +179,13 @@ img {
 }
 
 /* Big centered callout text */
+.slide-content:has(.callout) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .callout {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     font-size: 48px;
     font-weight: 600;
     text-align: center;
