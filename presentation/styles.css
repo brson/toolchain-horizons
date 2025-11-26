@@ -63,6 +63,13 @@ body {
     align-items: center;
 }
 
+/* H2 slides (no slide-content) - vertically center */
+.step:has(h2):not(:has(.slide-content)) {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 .step:has(h1):not(:has(.slide-content)) h1 {
     font-size: 8vw;
 }
