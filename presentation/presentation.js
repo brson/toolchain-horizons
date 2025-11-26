@@ -206,3 +206,13 @@ document.addEventListener('impress:stepenter', updateBackground);
 // Initialize
 createStars();
 updateBackground();
+
+// Home/End key navigation
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'Home') {
+        api.goto(0);
+    } else if (event.key === 'End') {
+        var steps = document.querySelectorAll('.step');
+        api.goto(steps.length - 1);
+    }
+});
