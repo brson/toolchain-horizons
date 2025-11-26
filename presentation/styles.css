@@ -219,3 +219,17 @@ img {
     color: #bf360c;
     margin: 0;
 }
+
+/* Side-by-side images */
+.slide-content.side-by-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+}
+
+.slide-content.side-by-side img {
+    max-width: 40%;
+    max-height: 80%;
+    object-fit: contain;
+}
