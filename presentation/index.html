@@ -69,13 +69,38 @@
 
   <div class="step" data-x="3600" data-y="0">
     <h2>TigerBeetle Clients</h2>
-    <div class="slide-content">
-      <p>Present: Java, Python, Node, Go.</p>
-      <p>~Present: Also Rust</p>
-      <p>Future: Ruby probably</p>
+    <div class="slide-content client-arch">
+      <div class="client-arch-diagram">
+        <!-- SVG arrows pointing to center -->
+        <svg class="client-arch-arrows" viewBox="0 0 600 600">
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+            </marker>
+          </defs>
+          <!-- Arrows from each node to center -->
+          <line x1="300" y1="80" x2="300" y2="220" stroke="#666" stroke-width="3" marker-end="url(#arrowhead)"/>
+          <line x1="520" y1="130" x2="380" y2="250" stroke="#666" stroke-width="3" marker-end="url(#arrowhead)"/>
+          <line x1="520" y1="470" x2="380" y2="350" stroke="#666" stroke-width="3" marker-end="url(#arrowhead)"/>
+          <line x1="300" y1="520" x2="300" y2="380" stroke="#666" stroke-width="3" marker-end="url(#arrowhead)"/>
+          <line x1="80" y1="470" x2="220" y2="350" stroke="#666" stroke-width="3" marker-end="url(#arrowhead)"/>
+          <line x1="80" y1="130" x2="220" y2="250" stroke="#666" stroke-width="3" marker-end="url(#arrowhead)"/>
+        </svg>
+        <!-- Outer client nodes -->
+        <div class="client-arch-node"><img src="assets/python.svg" alt="Python"></div>
+        <div class="client-arch-node"><img src="assets/java.svg" alt="Java"></div>
+        <div class="client-arch-node"><img src="assets/go.svg" alt="Go"></div>
+        <div class="client-arch-node"><img src="assets/nodejs.svg" alt="Node.js"></div>
+        <div class="client-arch-node"><img src="assets/dotnet.svg" alt=".NET"></div>
+        <div class="client-arch-node"><img src="assets/rust.png" alt="Rust"></div>
+        <!-- Center Zig node -->
+        <div class="client-arch-center">
+          <img src="assets/zig.svg" alt="Zig">
+        </div>
+      </div>
     </div>
     <aside class="notes">
-      todo
+      All clients depend on tb_client, written in Zig.
     </aside>
   </div>
 

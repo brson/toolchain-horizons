@@ -261,3 +261,85 @@ img {
 .slide-content.side-by-side figcaption a:hover {
     text-decoration: underline;
 }
+
+/* Client architecture radial diagram */
+.client-arch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.client-arch-diagram {
+    position: relative;
+    width: 600px;
+    height: 600px;
+}
+
+.client-arch-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+}
+
+.client-arch-center img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.client-arch-center .label {
+    display: block;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2d2d2d;
+}
+
+.client-arch-node {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.client-arch-node img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
+/* Position nodes in a circle around center (starts at 2 because SVG is child 1) */
+.client-arch-node:nth-child(2) { top: 0; left: 50%; transform: translateX(-50%); }
+.client-arch-node:nth-child(3) { top: 13%; right: 5%; }
+.client-arch-node:nth-child(4) { bottom: 13%; right: 5%; }
+.client-arch-node:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); }
+.client-arch-node:nth-child(6) { bottom: 13%; left: 5%; }
+.client-arch-node:nth-child(7) { top: 13%; left: 5%; }
+
+/* Arrows pointing to center */
+.client-arch-arrow {
+    position: absolute;
+    stroke: #666;
+    stroke-width: 3;
+    fill: none;
+}
+
+.client-arch-arrow-head {
+    fill: #666;
+}
+
+.client-arch-arrows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
