@@ -73,6 +73,7 @@ body {
 
 .step:has(h1):not(:has(.slide-content)) a {
     font-size: 2vw;
+    text-decoration: none;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
