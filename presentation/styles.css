@@ -63,8 +63,9 @@ body {
     align-items: center;
 }
 
-/* H2 slides (no slide-content) - vertically center */
-.step:has(h2):not(:has(.slide-content)) {
+/* H2 or callout slides (no slide-content) - vertically center */
+.step:has(h2):not(:has(.slide-content)),
+.step:has(.callout):not(:has(.slide-content)) {
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -225,6 +226,12 @@ img {
     text-align: center;
     color: #bf360c;
     margin: 0;
+}
+
+/* Callout outside slide-content - white text on gradient */
+.step:not(:has(.slide-content)) .callout {
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Side-by-side images */
