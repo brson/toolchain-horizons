@@ -123,36 +123,70 @@
 
   <div class="step" data-x="4800" data-y="0">
     <h2>The TigerBeetle Rust Client</h2>
+    <div class="slide-content split-horizontal code-split">
+      <div class="split-panel">
+        <p>Rust</p>
+        <pre><code>pub fn lookup_transfers(
+    &self,
+    events: &[u128],
+) -> impl Future&lt;...&gt; {
+    let (packet, rx) = create_packet(
+        TB_OPERATION_LOOKUP_TRANSFERS,
+        events,
+    );
+
+    unsafe {
+        tb_client_submit(
+            self.client,
+            Box::into_raw(packet),
+        );
+    }
+
+    async {
+        let msg = rx.await?;
+        let responses = handle_message(&msg)?;
+        Ok(Vec::from(responses))
+    }
+}</code></pre>
+      </div>
+      <div class="split-panel">
+        <p>Zig</p>
+        <pre><code>pub fn submit(
+    client: *ClientInterface,
+    packet: *Packet.Extern,
+) Error!void {
+    if (client.magic_number != beetle)
+        return Error.ClientInvalid;
+
+    client.locker.lock();
+    defer client.locker.unlock();
+
+    const context = client.context.ptr
+        orelse return Error.ClientInvalid;
+
+    client.vtable.ptr.submit_fn(
+        context,
+        packet,
+    );
+}</code></pre>
+      </div>
+    </div>
+
+    <aside class="notes">
+      &lt; 2 kloc <br>
+      async / await <br>
+      mostly unsafe <br>
+      partial codegen <br>
+    </aside>
+  </div>
+
+  <div class="step" data-x="8400" data-y="0">
+    <h2>Establishing a<br>Minimum Supported Rust Version</h2>
     <div class="slide-content">
       <p>Content placeholder</p>
     </div>
     <aside class="notes">
       todo
-    </aside>
-  </div>
-
-  <div class="step" data-x="6000" data-y="0">
-    <h2>Rust Client Dependencies</h2>
-    <div class="slide-content">
-      <h3>Cargo.toml</h3>
-      <pre>
-
-      [dependencies]
-      bitflags = "2.6.0"
-      futures = "0.3.31"
-      thiserror = "2.0.3"
-
-      [build-dependencies]
-      anyhow = "1.0.93"
-      ignore = "0.4.23"
-
-      [dev-dependencies]
-      anyhow = "1.0.93"
-      tempfile = "3.15.0"
-      </pre>
-    </div>
-    <aside class="notes">
-      What version of Rust was this compatible with? (next)
     </aside>
   </div>
 
@@ -176,17 +210,34 @@
       <p>Content placeholder</p>
     </div>
     <aside class="notes">
-      todo
+      Interlude.
     </aside>
   </div>
 
-  <div class="step" data-x="8400" data-y="0">
-    <h2>Establishing an MSVR</h2>
+  <div class="step" data-x="6000" data-y="0">
+    <h2>Rust Client Dependencies</h2>
     <div class="slide-content">
-      <p>Content placeholder</p>
+      <h3>Cargo.toml</h3>
+      <pre>
+
+      [dependencies]
+      bitflags = "2.6.0"
+      futures = "0.3.31"
+      thiserror = "2.0.3"
+
+      [build-dependencies]
+      anyhow = "1.0.93"
+      ignore = "0.4.23"
+
+      [dev-dependencies]
+      anyhow = "1.0.93"
+      tempfile = "3.15.0"
+      </pre>
+
+      <p><a>todo link to pr</a></p>
     </div>
     <aside class="notes">
-      todo
+      What version of Rust was this compatible with? (next)
     </aside>
   </div>
 
@@ -313,3 +364,10 @@
 
 </body>
 </html>
+
+<!--
+
+    msvr slide in wrong place
+    name feature epochs in rust chart
+    
+    -->

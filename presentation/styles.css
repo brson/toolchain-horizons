@@ -228,8 +228,9 @@ img {
     margin: 0;
 }
 
-/* Callout outside slide-content - white text on gradient */
+/* Callout outside slide-content - white text on gradient, large viewport-relative size */
 .step:not(:has(.slide-content)) .callout {
+    font-size: 12vh;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -389,4 +390,23 @@ img {
     font-weight: 600;
     color: #424242;
     margin: 24px 0 0 0;
+}
+
+/* Code split layout */
+.slide-content.code-split .split-panel {
+    justify-content: flex-start;
+}
+
+.slide-content.code-split .split-panel p {
+    margin: 0 0 16px 0;
+    font-size: 24px;
+}
+
+.slide-content.code-split pre {
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
 }
