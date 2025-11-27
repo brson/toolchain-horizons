@@ -261,7 +261,44 @@
   <div class="step" data-x="9600" data-y="0">
     <h2>The Rust <code>futures</code> Dependency Problem</h2>
     <div class="slide-content">
-      <p>todo futures dep tree</p>
+      <pre class="small-code">tigerbeetle v0.1.0
+├── bitflags v2.6.0
+├── futures v0.3.31
+│   ├── futures-channel v0.3.31
+│   │   ├── futures-core v0.3.31
+│   │   └── futures-sink v0.3.31
+│   ├── futures-core v0.3.31
+│   ├── futures-executor v0.3.31
+│   │   ├── futures-core v0.3.31
+│   │   ├── futures-task v0.3.31
+│   │   └── futures-util v0.3.31
+│   │       ├── futures-channel v0.3.31 (*)
+│   │       ├── futures-core v0.3.31
+│   │       ├── futures-io v0.3.31
+│   │       ├── futures-macro v0.3.31 (proc-macro)
+│   │       │   ├── proc-macro2 v1.0.90
+│   │       │   │   └── unicode-ident v1.0.14
+│   │       │   ├── quote v1.0.37
+│   │       │   │   └── proc-macro2 v1.0.90 (*)
+│   │       │   └── <b>syn v2.0.88</b>
+│   │       │       ├── proc-macro2 v1.0.90 (*)
+│   │       │       ├── quote v1.0.37 (*)
+│   │       │       └── unicode-ident v1.0.14
+│   │       ├── futures-sink v0.3.31
+│   │       ├── futures-task v0.3.31
+│   │       ├── memchr v2.7.4
+│   │       ├── pin-project-lite v0.2.15
+│   │       ├── pin-utils v0.1.0
+│   │       └── slab v0.4.9
+│   ├── futures-io v0.3.31
+│   ├── futures-sink v0.3.31
+│   ├── futures-task v0.3.31
+│   └── futures-util v0.3.31 (*)
+└── thiserror v2.0.3
+    └── thiserror-impl v2.0.3 (proc-macro)
+        ├── proc-macro2 v1.0.90 (*)
+        ├── quote v1.0.37 (*)
+        └── <b>syn v2.0.88</b> (*)</pre>
     </div>
     <aside class="notes">
       Fundamental crate.
@@ -305,12 +342,20 @@
 
 
   <div class="step" data-x="13200" data-y="0">
-    <h2>A TigerBeetle Rust Client Compatibility Adventure</h2>
+    <h2><i>A TigerBeetle Rust Client Compatibility Quest!</i></h2>
+    <aside class="notes">
+      Personal quest.<br>
+      Some in-tree, some not.<br>
+    </aside>
+  </div>
+
+  <div class="step" data-x="9600" data-y="0">
+    <h2>Compatibility Quest Timeline</h2>
     <div class="slide-content">
-      <p>Content placeholder</p>
+      <p>todo a diagram/timeline of all the steps we took</p>
     </div>
     <aside class="notes">
-      todo
+      
     </aside>
   </div>
 
@@ -330,7 +375,7 @@
       <p>Content placeholder</p>
     </div>
     <aside class="notes">
-      todo
+      Can't use tokio in examples or docs.
     </aside>
   </div>
 
