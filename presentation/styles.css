@@ -1,6 +1,18 @@
 /* Base styles */
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --title-font-size: 72px;
+    --section-font-size: 5vw;
+    --subtitle-font-size: 36px;
+    --body-large-font-size: 32px;
+    --body-font-size: 24px;
+    --label-font-size: 20px;
+    --code-font-size: 18px;
+    --code-small-font-size: 14px;
+    --code-fullscreen-font-size: 1.8vh;
+    --title-slide-h1-font-size: 7vw;
+    --title-slide-subtitle-font-size: 4vw;
+    --title-slide-link-font-size: 3vw;
     --bg-transition-duration: 30s;
     --bg-r1: 255; --bg-g1: 107; --bg-b1: 53;
     --bg-r2: 247; --bg-g2: 147; --bg-b2: 30;
@@ -38,7 +50,7 @@ body {
     height: 90vh;
     display: flex;
     flex-direction: column;
-    font-size: 24px;
+    font-size: var(--body-font-size);
     line-height: 1.5;
     box-sizing: border-box;
     position: relative;
@@ -64,15 +76,15 @@ body {
 }
 
 .step.slide-title h1 {
-    font-size: 8vw;
+    font-size: var(--title-slide-h1-font-size);
 }
 
 .step.slide-title .subtitle {
-    font-size: 4vw;
+    font-size: var(--title-slide-subtitle-font-size);
 }
 
 .step.slide-title a {
-    font-size: 2vw;
+    font-size: var(--title-slide-link-font-size);
     text-decoration: none;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -105,7 +117,7 @@ body {
 }
 
 .step h1 {
-    font-size: 72px;
+    font-size: var(--title-font-size);
     margin: 0 0 20px 0;
     color: #fff;
     font-weight: 700;
@@ -115,7 +127,7 @@ body {
 }
 
 .step .subtitle {
-    font-size: 36px;
+    font-size: var(--subtitle-font-size);
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
     margin-top: 0;
@@ -125,7 +137,7 @@ body {
 }
 
 .step h2 {
-    font-size: 48px;
+    font-size: var(--section-font-size);
     margin: 0 0 20px 0;
     color: #fff;
     font-weight: 600;
@@ -173,7 +185,7 @@ pre {
     border-left: 4px solid #ff6e40;
     padding: 15px;
     overflow: hidden;
-    font-size: 18px;
+    font-size: var(--code-font-size);
     border-radius: 6px;
     color: #f5f5f5;
     position: relative;
@@ -245,7 +257,7 @@ img {
 
 /* Callout text styling */
 .callout {
-    font-size: 48px;
+    font-size: var(--section-font-size);
     font-weight: 600;
     text-align: center;
     color: #bf360c;
@@ -254,7 +266,6 @@ img {
 
 /* Callout in slide-callout type - white text on gradient */
 .step.slide-callout .callout {
-    font-size: 48px;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -289,7 +300,7 @@ img {
 
 .slide-content.side-by-side figcaption {
     margin-top: 16px;
-    font-size: 24px;
+    font-size: var(--body-font-size);
 }
 
 .slide-content.side-by-side figcaption a {
@@ -334,7 +345,7 @@ img {
     display: block;
     margin-top: 8px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 20px;
+    font-size: var(--label-font-size);
     font-weight: 600;
     color: #2d2d2d;
 }
@@ -410,7 +421,7 @@ img {
 }
 
 .split-panel p {
-    font-size: 32px;
+    font-size: var(--body-large-font-size);
     font-weight: 600;
     color: #424242;
     margin: 24px 0 0 0;
@@ -423,12 +434,12 @@ img {
 
 .slide-content.code-split .split-panel p {
     margin: 0 0 16px 0;
-    font-size: 24px;
+    font-size: var(--body-font-size);
 }
 
 .slide-content.code-split pre {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--code-small-font-size);
     flex: 1;
     min-height: 0;
     text-align: left;
@@ -441,7 +452,7 @@ img {
     min-height: 0;
     margin: 0;
     padding: 40px;
-    font-size: 1.8vh;
+    font-size: var(--code-fullscreen-font-size);
     line-height: 1.4;
     border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
