@@ -410,3 +410,20 @@ img {
     min-height: 0;
     overflow: auto;
 }
+
+/* Pre directly in step (no slide-content wrapper) */
+.step > pre {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 40px;
+    font-size: 1.8vh;
+    line-height: 1.4;
+    overflow: auto;
+    border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    box-sizing: border-box;
+    text-align: left;
+}
