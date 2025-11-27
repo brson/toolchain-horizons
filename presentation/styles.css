@@ -57,33 +57,51 @@ body {
     overflow: hidden;
 }
 
-/* H1 slides (no slide-content) - vertically center */
-.step:has(h1):not(:has(.slide-content)) {
+/* Slide type: title (h1 centered on gradient) */
+.step.slide-title {
     justify-content: center;
     align-items: center;
 }
 
-/* H2 or callout slides (no slide-content) - vertically center */
-.step:has(h2):not(:has(.slide-content)),
-.step:has(.callout):not(:has(.slide-content)) {
+.step.slide-title h1 {
+    font-size: 8vw;
+}
+
+.step.slide-title .subtitle {
+    font-size: 4vw;
+}
+
+.step.slide-title a {
+    font-size: 2vw;
+    text-decoration: none;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Slide type: section (h2 centered on gradient) */
+.step.slide-section {
     justify-content: center;
     align-items: center;
     text-align: center;
 }
 
-.step:has(h1):not(:has(.slide-content)) h1 {
-    font-size: 8vw;
+/* Slide type: callout (big text centered on gradient) */
+.step.slide-callout {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-.step:has(h1):not(:has(.slide-content)) .subtitle {
-    font-size: 4vw;
+/* Slide type: code (h2 + pre filling space) */
+.step.slide-code {
+    /* h2 left-aligned, pre fills remaining space */
 }
 
-.step:has(h1):not(:has(.slide-content)) a {
-    font-size: 2vw;
-    text-decoration: none;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+/* Slide type: image (white box with full image) */
+.step.slide-image .slide-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .step h1 {
@@ -213,13 +231,7 @@ img {
     display: none;
 }
 
-/* Big centered callout text */
-.slide-content:has(.callout) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
+/* Callout text styling */
 .callout {
     font-size: 48px;
     font-weight: 600;
@@ -228,8 +240,8 @@ img {
     margin: 0;
 }
 
-/* Callout outside slide-content - white text on gradient, large viewport-relative size */
-.step:not(:has(.slide-content)) .callout {
+/* Callout in slide-callout type - white text on gradient, large viewport-relative size */
+.step.slide-callout .callout {
     font-size: 12vh;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
