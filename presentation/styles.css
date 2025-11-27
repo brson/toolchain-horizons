@@ -252,9 +252,9 @@ img {
     margin: 0;
 }
 
-/* Callout in slide-callout type - white text on gradient, large viewport-relative size */
+/* Callout in slide-callout type - white text on gradient */
 .step.slide-callout .callout {
-    font-size: 12vh;
+    font-size: 48px;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
