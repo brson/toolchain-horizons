@@ -172,10 +172,22 @@ pre {
     background-color: #2b2b2b;
     border-left: 4px solid #ff6e40;
     padding: 15px;
-    overflow-x: auto;
+    overflow: hidden;
     font-size: 18px;
     border-radius: 6px;
     color: #f5f5f5;
+    position: relative;
+}
+
+pre::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3em;
+    background: linear-gradient(transparent, #2b2b2b);
+    pointer-events: none;
 }
 
 code {
@@ -420,7 +432,7 @@ img {
     text-align: left;
     flex: 1;
     min-height: 0;
-    overflow: auto;
+    overflow: hidden;
 }
 
 /* Pre directly in step (no slide-content wrapper) */
@@ -432,7 +444,7 @@ img {
     padding: 40px;
     font-size: 1.8vh;
     line-height: 1.4;
-    overflow: auto;
+    overflow: hidden;
     border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     border-radius: 6px;
