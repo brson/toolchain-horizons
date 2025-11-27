@@ -429,13 +429,11 @@ img {
 .slide-content.code-split pre {
     margin: 0;
     font-size: 14px;
-    text-align: left;
     flex: 1;
     min-height: 0;
-    overflow: hidden;
 }
 
-/* Pre directly in step (no slide-content wrapper) */
+/* Pre directly in step (no slide-content wrapper) - styled like slide-content */
 .step > pre {
     flex: 1;
     width: 100%;
@@ -444,12 +442,9 @@ img {
     padding: 40px;
     font-size: 1.8vh;
     line-height: 1.4;
-    overflow: hidden;
     border: 6px solid rgb(var(--border-r), var(--border-g), var(--border-b));
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
     box-sizing: border-box;
-    text-align: left;
 }
 
 /* Mobile responsive */
