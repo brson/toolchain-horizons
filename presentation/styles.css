@@ -439,3 +439,15 @@ img {
     box-sizing: border-box;
     text-align: left;
 }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .step {
+        width: 98vw;
+        height: 98vh;
+    }
+
+    .slide-content {
+        padding: 16px;
+    }
+}
