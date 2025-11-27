@@ -431,6 +431,7 @@ img {
     font-size: 14px;
     flex: 1;
     min-height: 0;
+    text-align: left;
 }
 
 /* Pre directly in step (no slide-content wrapper) - styled like slide-content */
