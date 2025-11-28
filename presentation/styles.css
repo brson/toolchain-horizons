@@ -157,7 +157,9 @@ body {
 
 .step ul {
     margin: 20px 0;
-    padding-left: 40px;
+    padding-left: 0;
+    list-style: none;
+    text-align: left;
 }
 
 .step li {
@@ -213,6 +215,14 @@ code {
     color: #f5f5f5;
     padding: 2px 6px;
     border-radius: 3px;
+}
+
+.slide-content pre code {
+    color: #f5f5f5;
+}
+.slide-content code {
+    color: #2d2d2d;
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 /* Images */
@@ -416,6 +426,10 @@ img {
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+
+.split-panel ul {
+    align-self: flex-start;
 }
 
 .split-panel img {

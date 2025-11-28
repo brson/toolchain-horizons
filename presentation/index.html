@@ -137,7 +137,14 @@
     <h2>The TigerBeetle Rust Client</h2>
     <div class="slide-content split-horizontal code-split">
       <div class="split-panel">
-        <p>Rust</p>
+        <ul>
+          <li>Small &mdash; &lt; 2 kloc.
+          <li><code>async</code> / <code>await</code>
+          <li>FFI &mdash; mostly unsafe.
+          <li>Partially code-generated.
+        </ul>
+      </div>
+      <div class="split-panel">
         <pre><code>pub fn lookup_transfers(
     &self,
     events: &[u128],
@@ -161,31 +168,10 @@
     }
 }</code></pre>
       </div>
-      <div class="split-panel">
-        <p>Zig</p>
-        <pre><code>pub fn submit(
-    client: *ClientInterface,
-    packet: *Packet.Extern,
-) Error!void {
-    if (client.magic_number != beetle)
-        return Error.ClientInvalid;
-
-    client.locker.lock();
-    defer client.locker.unlock();
-
-    const context = client.context.ptr
-        orelse return Error.ClientInvalid;
-
-    client.vtable.ptr.submit_fn(
-        context,
-        packet,
-    );
-}</code></pre>
-      </div>
     </div>
 
     <aside class="notes">
-      Code isn't important.<br>
+      Code on slide isn't important.<br>
       &lt; 2 kloc <br>
       async / await <br>
       mostly unsafe <br>
