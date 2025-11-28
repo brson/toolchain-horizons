@@ -543,6 +543,13 @@ img {
     transform: translateX(-50%);
 }
 
+/* Step 4: left, centered vertically */
+.msrv-step-4 {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
 .msrv-label {
     line-height: 1.3;
 }
