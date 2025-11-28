@@ -461,6 +461,20 @@ img {
     margin: 1.5em 0;
 }
 
+/* Experiment slide */
+.step.slide-experiment h2 {
+    text-align: center;
+    color: #4caf50;
+}
+
+.step.slide-experiment .split-panel ul {
+    font-size: var(--body-large-font-size);
+}
+
+.step.slide-experiment .split-panel li {
+    margin: 1.5em 0;
+}
+
 .split-panel img {
     max-width: 100%;
     max-height: 50vh;
