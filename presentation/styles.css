@@ -464,7 +464,9 @@ img {
 /* Experiment slide */
 .step.slide-experiment h2 {
     text-align: center;
-    color: #4caf50;
+    color: #39ff14;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.05em;
 }
 
 .step.slide-experiment .split-panel img {
