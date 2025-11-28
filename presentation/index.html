@@ -230,9 +230,12 @@
       yikes
     </p>
     <aside class="notes">
+      Expected.
       Build script fs::exists, stabilized in 1.81.<br>
       Cargo lockfile v4, May 2024, todo what rust version?<br>
       This was in June 2025, 9 months later.<br>
+      <b>NEXT TASK: Increase version compatibility.</b><br>
+      Removing language features and dependencies.<br>
     </aside>
   </div>
 
@@ -247,7 +250,8 @@
     <aside class="notes">
       Interlude.<br>
       TigerBeetle strict <b>software development</b> guidelines<br>
-      <b>TIGER STYLE</b><br>
+      safety, performance, dev ux<br>
+      no dependencies
     </aside>
   </div>
 
@@ -271,10 +275,17 @@
       tempfile = "3.15.0"
       </pre>
 
-      <p><a>todo link to pr</a></p>
+      <br>
+      <p style="text-align:center;"><a>https://github.com/tigerbeetle/tigerbeetle/pull/3254</a></p>
     </div>
     <aside class="notes">
-      What version of Rust was this compatible with? (next)
+      Back to the Rust client.
+      Again: Initial Rust client, June 2025<br>
+      Again: Rust 1.81, September 2024.<br>
+      Exact deps not important.<br>
+      Remember: TigerStyle says no dependencies.<br>
+      <b>Need to remove most/all of them.</b><br>
+      Easy ones first.<br>
     </aside>
   </div>
 
@@ -313,20 +324,36 @@
 └── futures-util v0.3.31 (*)
     </pre>
     <aside class="notes">
-      Fundamental crate.
+      Dependency tree for the futures crate.<br>
+      Fundamental crate.<br>
+      We don't use in public API.<br>
       We use: channels, block_on executor, Stream.<br>
-      Not in public API.<br>
       Point out syn crate.<br>
+      <br>
+      This crate is hard to get rid of.
     </aside>
   </div>
 
   <div class="step" data-x="10800" data-y="0">
+    <!-- blank -->
+    <aside class="notes">
+      STORY ABOUT SYN BEING UPDATED.<br>
+      Was going to leave the futures dependency.<br>
+      This was the moment that I got mad.<br>
+    </aside>
+  </div>
+
+    <div class="step" data-x="10800" data-y="0">
     <h2>The Experiment</h2>
     <div class="slide-content">
-      <p>Content placeholder</p>
+      <ul>
+        <li>Pick <b>~30 popular Rust crates</b>.
+        <li>Compile each of them against <b>~every Rust toolchain</b>.
+        <li>Report the toolchain version and date.
+      </ul>
     </div>
     <aside class="notes">
-      todo
+
     </aside>
   </div>
 
