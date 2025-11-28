@@ -445,6 +445,22 @@ img {
     align-self: flex-start;
 }
 
+/* Centered list layout */
+.slide-content.centered-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 15%;
+}
+
+.slide-content.centered-list ul {
+    font-size: var(--body-large-font-size);
+}
+
+.slide-content.centered-list li {
+    margin: 1.5em 0;
+}
+
 .split-panel img {
     max-width: 100%;
     max-height: 50vh;
