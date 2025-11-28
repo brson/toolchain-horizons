@@ -107,6 +107,11 @@ body {
     margin-top: 20px;
 }
 
+.step.slide-section p {
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 /* Slide type: callout (big text centered on gradient) */
 .step.slide-callout {
     justify-content: center;
