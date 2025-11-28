@@ -183,11 +183,36 @@
 
   <div class="step" data-x="8400" data-y="0">
     <h2>Establishing a<br>Minimum Supported Rust Version</h2>
-    <div class="slide-content">
-      <p>todo illustration</p>
+    <div class="slide-content msrv-cycle">
+      <div class="msrv-cycle-diagram">
+        <svg class="msrv-cycle-arrows" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <marker id="msrv-arrow" markerWidth="4" markerHeight="3" refX="3.5" refY="1.5" orient="auto">
+              <polygon points="0 0, 4 1.5, 0 3" fill="#666"/>
+            </marker>
+          </defs>
+          <!-- Arrow from step 1 (bottom) to step 2 (left) -->
+          <path d="M 68 18 Q 98 18 98 38" stroke="#666" stroke-width="1" fill="none" marker-end="url(#msrv-arrow)"/>
+          <!-- Arrow from step 2 (bottom) to step 3 (right) -->
+          <path d="M 98 62 Q 98 82 68 82" stroke="#666" stroke-width="1" fill="none" marker-end="url(#msrv-arrow)"/>
+          <!-- Arrow from step 3 (left) back to step 1 (left) -->
+          <path d="M 32 82 Q 2 82 2 50 Q 2 18 32 18" stroke="#666" stroke-width="1" fill="none" marker-end="url(#msrv-arrow)"/>
+        </svg>
+        <div class="msrv-step msrv-step-1">
+          <span class="msrv-label">"We support<br>Rust version N!"</span>
+        </div>
+        <div class="msrv-step msrv-step-2">
+          <code>cargo +N-1 check</code>
+        </div>
+        <div class="msrv-step msrv-step-3">
+          <span class="msrv-label">Fix build*</span>
+        </div>
+      </div>
     </div>
     <aside class="notes">
       "We support version N!" -> `cargo +"N-1" test` -> Fix build* -> (back)<br>
+      <br>
+      * what kind of fixes?
       <br>
     </aside>
   </div>
