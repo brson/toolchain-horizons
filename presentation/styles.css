@@ -606,6 +606,22 @@ img {
     line-height: 1.3;
 }
 
+/* Horizons list slide */
+.step.slide-horizons-list .slide-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step.slide-horizons-list ul {
+    font-size: var(--body-large-font-size);
+    text-align: center;
+}
+
+.step.slide-horizons-list li {
+    margin: 0.8em 0;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .step {
