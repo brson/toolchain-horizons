@@ -622,6 +622,19 @@ img {
     margin: 0.8em 0;
 }
 
+/* Timeline list */
+.timeline-list {
+    padding-left: 0;
+}
+
+.timeline-list li {
+    margin: 0.4em 0;
+}
+
+.slide-content.centered-list:has(.timeline-list) {
+    padding: 40px 5%;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .step {
