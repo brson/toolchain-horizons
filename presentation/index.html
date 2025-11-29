@@ -467,13 +467,86 @@
     </aside>
   </div>
 
-  <div class="step" data-x="9600" data-y="0">
-    <h2>Removing the <code>futures</code> Dependency</h2>
+  <div class="step slide-code" data-x="9600" data-y="0">
+    <h2>Step 1: Break Out Sub-crates</h2>
+    <p class="commit-sha"><code>f7cc94b53</code></p>
     <div class="slide-content">
-      <p>Content placeholder</p>
+      <pre><code class="language-toml"># Before
+[dependencies]
+futures = "0.3.31"
+
+# After
+[dependencies]
+futures-channel = "0.3.31"
+
+[dev-dependencies]
+futures-executor = "0.3.31"
+futures-util = "0.3.31"</code></pre>
     </div>
     <aside class="notes">
-      todo
+      First step: identify what we actually use.<br>
+      Runtime: only oneshot channels.<br>
+      Dev: block_on executor, Stream utilities.<br>
+    </aside>
+  </div>
+
+  <div class="step slide-code" data-x="9600" data-y="0">
+    <h2>Step 2: Polyfill <code>block_on</code></h2>
+    <p class="commit-sha"><code>abd5b9774</code></p>
+    <div class="slide-content">
+      <pre><code class="language-rust">// Before: 1 line
+futures::executor::block_on(my_future)
+
+// After: 88 lines including:
+// - Parker struct with Mutex&lt;bool&gt; + Condvar
+// - RawWakerVTable with 4 unsafe functions
+// - Manual Arc reference counting</code></pre>
+    </div>
+    <aside class="notes">
+      Remove futures-executor.<br>
+      RawWaker API is gnarly - raw pointers, manual vtable.<br>
+      clone/wake/wake_by_ref/drop - all unsafe.<br>
+      Must manually prevent Arc double-free.<br>
+    </aside>
+  </div>
+
+  <div class="step slide-code" data-x="9600" data-y="0">
+    <h2>Step 3: Polyfill Stream Utilities</h2>
+    <p class="commit-sha"><code>632b5ed6d</code></p>
+    <div class="slide-content">
+      <pre><code class="language-rust">// Reimplemented from futures-util:
+pub trait Stream { ... }           // 8 lines
+pub trait StreamExt { ... }        // 12 lines
+pub struct Next&lt;'a, S&gt; { ... }     // 15 lines
+pub fn unfold&lt;T, F, Fut, Item&gt;     // 45 lines
+pub struct Unfold&lt;T, F, Fut&gt;       // 35 lines
+macro_rules! pin_mut! { ... }      // 10 lines</code></pre>
+    </div>
+    <aside class="notes">
+      Remove futures-util.<br>
+      Stream trait not in std yet.<br>
+      unfold is a state machine - manual poll_next.<br>
+      +120 lines total.
+    </aside>
+  </div>
+
+  <div class="step slide-code" data-x="9600" data-y="0">
+    <h2>Step 4: Polyfill Oneshot Channel</h2>
+    <p class="commit-sha"><code>381de6c81</code> &mdash; final runtime dependency!</p>
+    <div class="slide-content">
+      <pre><code class="language-rust">struct OneshotFuture&lt;T&gt; { shared: Arc&lt;OneshotShared&lt;T&gt;&gt; }
+struct OneshotShared&lt;T&gt; { waker: Mutex&lt;Option&lt;Waker&gt;&gt;,
+                          value: Mutex&lt;Option&lt;T&gt;&gt; }
+struct OneshotSender&lt;T&gt; { shared: Arc&lt;OneshotShared&lt;T&gt;&gt; }
+
+impl&lt;T&gt; Future for OneshotFuture&lt;T&gt; { /* 12 lines */ }
+impl&lt;T&gt; OneshotSender&lt;T&gt; { fn send(self, value: T) { /* 10 lines */ } }</code></pre>
+    </div>
+    <aside class="notes">
+      Remove futures-channel.<br>
+      This was the last runtime dependency!<br>
+      Now zero runtime deps from futures ecosystem.<br>
+      Total polyfill: ~270 lines.
     </aside>
   </div>
 

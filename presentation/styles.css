@@ -124,6 +124,18 @@ body {
     /* h2 left-aligned, pre fills remaining space */
 }
 
+.step.slide-code .commit-sha {
+    font-size: var(--label-font-size);
+    color: rgba(255, 255, 255, 0.8);
+    margin: -10px 0 15px 0;
+}
+
+.step.slide-code .commit-sha code {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
 /* Slide type: image (white box with full image) */
 .step.slide-image .slide-content {
     display: flex;
