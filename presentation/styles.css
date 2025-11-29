@@ -710,6 +710,88 @@ img {
     padding: 40px 5%;
 }
 
+/* 1000x World Tour slide - dark theme with neon accents */
+.step.slide-1000x {
+    background: #000;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Radial glow effect behind content */
+.step.slide-1000x::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(196, 240, 66, 0.15) 0%,
+        rgba(138, 232, 255, 0.08) 30%,
+        rgba(158, 140, 252, 0.05) 50%,
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+.slide-1000x-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4vw;
+    z-index: 1;
+}
+
+.slide-1000x-mascot {
+    width: 35vw;
+    max-width: 500px;
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(196, 240, 66, 0.4))
+            drop-shadow(0 0 60px rgba(138, 232, 255, 0.2));
+}
+
+.slide-1000x-text {
+    text-align: left;
+}
+
+.step.slide-1000x h1 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: 20vw;
+    margin: 0;
+    line-height: 0.85;
+    background: linear-gradient(
+        135deg,
+        #ffef5c 0%,
+        #c4f042 25%,
+        #93fdb5 50%,
+        #8ae8ff 75%,
+        #9e8cfc 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 40px rgba(196, 240, 66, 0.5));
+}
+
+.slide-1000x-subtitle {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 6vw;
+    color: #fff;
+    margin: 0.2em 0 0 0;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .step {
@@ -719,5 +801,18 @@ img {
 
     .slide-content {
         padding: 16px;
+    }
+
+    .slide-1000x-content {
+        flex-direction: column;
+        gap: 2vh;
+    }
+
+    .slide-1000x-mascot {
+        width: 50vw;
+    }
+
+    .slide-1000x-text {
+        text-align: center;
     }
 }
