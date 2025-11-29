@@ -623,6 +623,18 @@ img {
     text-align: left;
 }
 
+.slide-content.code-split .split-panel:first-child {
+    justify-content: center;
+}
+
+.slide-content.code-split .split-panel ul {
+    align-self: center;
+}
+
+.slide-content.code-split .split-panel li {
+    margin: 0.8em 0;
+}
+
 /* Pre directly in step (no slide-content wrapper) - styled like slide-content */
 .step > pre {
     flex: 1;
