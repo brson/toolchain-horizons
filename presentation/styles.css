@@ -717,6 +717,7 @@ img {
     background: #000;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .slide-1000x-banner {
@@ -726,10 +727,11 @@ img {
     object-position: center;
 }
 
-/* When viewport is narrower than 3:4, switch to contain to preserve sides */
+/* When viewport is narrower than 4:3, switch to contain to preserve sides */
 @media (max-aspect-ratio: 4/3) {
     .slide-1000x-banner {
         object-fit: contain;
+        transform: scale(1.2);
     }
 }
 
