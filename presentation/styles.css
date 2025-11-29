@@ -131,6 +131,15 @@ body {
     justify-content: center;
 }
 
+/* Image directly in slide-image (no slide-content wrapper) */
+.step.slide-image > img {
+    flex: 1;
+    min-height: 0;
+    object-fit: contain;
+    border-radius: 8px;
+    margin: 2em;
+}
+
 .step h1 {
     font-size: var(--title-font-size);
     margin: 0 0 20px 0;
