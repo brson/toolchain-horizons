@@ -126,7 +126,7 @@ rust_versions = {
 # Baseline: Edition 2018 stabilized in Rust 1.31.
 baseline_version = '1.31.1'
 baseline_date = datetime.strptime(rust_versions[baseline_version][0], '%Y-%m-%d')
-latest_date = datetime.strptime(rust_versions['1.90.0'][0], '%Y-%m-%d')
+latest_date = datetime(2026, 1, 1)
 
 # Process data.
 crates_data = []
@@ -204,7 +204,7 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
 total_days = (latest_date - baseline_date).days
 ax1.set_xlim(0, total_days)
 ax1.set_ylim(-0.5, len(crates_data) - 0.5)
-ax1.set_xlabel('Time', fontsize=int(cs.FONT_AXIS_LABEL*fs))
+ax1.set_xlabel('')
 ax1.set_yticks([])
 
 # Add year markers
@@ -218,7 +218,7 @@ for year in range(2019, 2026):
 
 # Set x-axis labels to years
 ax1.set_xticks([pos for pos, _ in year_markers])
-ax1.set_xticklabels([label for _, label in year_markers])
+ax1.set_xticklabels([label for _, label in year_markers], fontsize=int(cs.FONT_XTICK*fs))
 
 # Add grid
 ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
@@ -234,7 +234,8 @@ legend_elements = [
     mpatches.Patch(color=color_map["high"], label='High (41-50 versions lost)', alpha=cs.BAR_ALPHA),
     mpatches.Patch(color=color_map["severe"], label='Severe (>50 versions lost)', alpha=cs.BAR_ALPHA),
 ]
-ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs), title='Impact Severity')
+ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs),
+           title='Impact Severity', title_fontsize=int(cs.FONT_LEGEND_TITLE*fs))
 
 plt.tight_layout()
 plt.savefig('compatibility-timeline-rust.png', dpi=cs.DPI, bbox_inches='tight')

@@ -50,7 +50,7 @@ go_versions = {
 # Baseline.
 baseline_version = '1.13'
 baseline_date = datetime.strptime(go_versions[baseline_version][0], '%Y-%m-%d')
-latest_date = datetime.strptime(go_versions['1.24'][0], '%Y-%m-%d')
+latest_date = datetime(2026, 1, 1)
 
 # Process data.
 packages_data = []
@@ -131,7 +131,7 @@ for package_name, oldest_ver, oldest_date_str, versions_lost, impact in packages
 total_days = (latest_date - baseline_date).days
 ax1.set_xlim(0, total_days)
 ax1.set_ylim(-0.5, len(packages_data) - 0.5)
-ax1.set_xlabel('Time', fontsize=int(cs.FONT_AXIS_LABEL*fs))
+ax1.set_xlabel('')
 ax1.set_yticks([])
 
 # Add year markers
@@ -145,7 +145,7 @@ for year in range(2020, 2026):
 
 # Set x-axis labels to years
 ax1.set_xticks([pos for pos, _ in year_markers])
-ax1.set_xticklabels([label for _, label in year_markers])
+ax1.set_xticklabels([label for _, label in year_markers], fontsize=int(cs.FONT_XTICK*fs))
 
 # Add grid
 ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
@@ -161,7 +161,8 @@ legend_elements = [
     mpatches.Patch(color=color_map["high"], label='High (7-8 versions lost)', alpha=cs.BAR_ALPHA),
     mpatches.Patch(color=color_map["severe"], label='Severe (9+ versions lost)', alpha=cs.BAR_ALPHA),
 ]
-ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs), title='Impact Severity')
+ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs),
+           title='Impact Severity', title_fontsize=int(cs.FONT_LEGEND_TITLE*fs))
 
 plt.tight_layout()
 plt.savefig('compatibility-timeline-go.png', dpi=cs.DPI, bbox_inches='tight')
