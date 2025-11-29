@@ -11,3 +11,7 @@
 ## quest-hiker.jpg
 - Source: https://unsplash.com/photos/photo-1551632811-561732d1e306
 - License: Unsplash License (free for commercial and non-commercial use)
+
+## taking-out-trash.jpg
+- Source: https://unsplash.com/s/photos/trash-bag
+- License: Unsplash License (free for commercial and non-commercial use)
