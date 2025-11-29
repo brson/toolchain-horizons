@@ -6,7 +6,7 @@ body {
     /* sections - usually the only slide content */
     --section-font-size: 5vw;
     --subtitle-font-size: 36px;
-    --body-large-font-size: 32px;
+    --body-large-font-size: 3vh;
     --body-font-size: 24px;
     --label-font-size: 20px;
     --code-font-size: 18px;
