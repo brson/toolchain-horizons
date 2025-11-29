@@ -225,11 +225,21 @@ pre {
     background-color: #2b2b2b;
     border-left: 4px solid #ff6e40;
     padding: 15px;
-    overflow: hidden;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
     font-size: var(--code-font-size);
     border-radius: 6px;
     color: #f5f5f5;
     position: relative;
+}
+
+pre code,
+pre code.hljs {
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    display: block;
 }
 
 pre::after {
@@ -251,8 +261,13 @@ code {
     border-radius: 3px;
 }
 
+.slide-content pre {
+    overflow: hidden !important;
+}
+
 .slide-content pre code {
     color: #f5f5f5;
+    overflow: hidden !important;
 }
 .slide-content code {
     color: #2d2d2d;
