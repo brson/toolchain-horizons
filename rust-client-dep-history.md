@@ -293,13 +293,165 @@ pub trait Flags: Sized + Copy {
 
 **Impact**: 3 files changed, 421 insertions(+), 3 deletions(-)
 
-**Note**: While this was added after achieving zero runtime deps, it demonstrates the commitment to dependency minimization even for well-established crates.
+---
+
+## MSRV Reduction History
+
+After achieving zero dependencies, further work reduced the Minimum Supported Rust Version.
+
+### 10. Support Rust 1.56 (fcc17d9f6)
+
+**Commit**: `fcc17d9f6a5315538a03dea90266c641693c264d`
+**Author**: Brian Anderson
+**Date**: Fri Nov 21 14:27:03 2025 -0700
+
+**MSRV**: 1.63 → 1.56
+
+**Rust Features Removed**:
+- Captured identifiers in format strings (`{variable}` → `{}, variable`) - stabilized 1.58
+- `Path::try_exists()` → `Path::exists()` - `try_exists` stabilized 1.63
+- `const Mutex::new()` → `Once` + `MaybeUninit` pattern - const Mutex::new stabilized 1.63
+
+---
+
+### 11. Remove rust-version (db933c48e)
+
+**Commit**: `db933c48eba9bbb23b869d1d1acdaf7c7d5a20ad`
+**Author**: Brian Anderson
+**Date**: Fri Nov 21 14:11:06 2025 -0700
+
+**Technical Summary**: Remove `rust-version` field from Cargo.toml to allow building on older toolchains.
+
+---
+
+### 12. Edition 2018 (71b5aa071)
+
+**Commit**: `71b5aa07165f206e2223350087c47ce38675ec0e`
+**Author**: Brian Anderson
+**Date**: Fri Nov 21 15:34:11 2025 -0700
+
+**MSRV**: 1.56 → 1.31
+
+**Technical Summary**: Change edition from 2021 to 2018.
+
+**Changes**:
+- Edition 2021 → 2018
+- Add explicit `use std::convert::TryFrom` (in prelude for 2021, not 2018)
+
+---
+
+### 13. Don't use CARGO_TARGET_TMPDIR (dad28699b)
+
+**Commit**: `dad28699b80382104ab92eda2afd5ebf83d521e0`
+**Author**: Brian Anderson
+**Date**: Fri Nov 21 16:30:10 2025 -0700
+
+**MSRV**: Enables 1.53
+
+**Rust Feature Removed**: `CARGO_TARGET_TMPDIR` env var - stabilized 1.54
+
+**Changes**:
+- Replace `env!("CARGO_TARGET_TMPDIR")` with `format!("{}/target/tmp", manifest_dir)`
+
+---
+
+### 14. Support Rust 1.51 (c459efc97)
+
+**Commit**: `c459efc97a0125d9559bedf3447f11b48adb3895`
+**Author**: Brian Anderson
+**Date**: Fri Nov 21 16:40:06 2025 -0700
+
+**MSRV**: Enables 1.51
+
+**Rust Feature Removed**: `IntoIterator` for arrays - stabilized 1.53
+
+**Changes**:
+- Change `.args([...])` to `.args(&[...])` for Command
+
+---
+
+### 15. Support Rust 1.50 (ff9cc6c39)
+
+**Commit**: `ff9cc6c393bc0ae651e7ab02d877d35551bd6577`
+**Author**: Brian Anderson
+**Date**: Mon Nov 24 14:15:15 2025 -0700
+
+**MSRV**: Enables 1.50
+
+**Rust Feature Removed**: Const generics (min_const_generics) - stabilized 1.51
+
+**Changes**:
+- Replace `Reserved<N>` const generic type with specific `Reserved4`, `Reserved6`, etc.
+- Use macro to generate each reserved type
+
+---
+
+### 16. Support Rust 1.45 (76d588f28)
+
+**Commit**: `76d588f28e5eb887c1e8faf4f2bfd3d035500726`
+**Author**: Brian Anderson
+**Date**: Mon Nov 24 14:46:54 2025 -0700
+
+**MSRV**: Enables 1.45
+
+**Rust Feature Removed**: Array trait impls for lengths > 32 - extended in 1.47
+
+**Changes**:
+- Manual `Debug`, `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` impls for Reserved types
+- Update Zig bindings generator to emit manual Debug impls for structs with large arrays
+
+---
+
+### 17. Support Rust 1.42 (f0db34be3)
+
+**Commit**: `f0db34be3fa268059d4cc0e016cf107b44cda947`
+**Author**: Brian Anderson
+**Date**: Mon Nov 24 15:01:29 2025 -0700
+
+**MSRV**: Enables 1.42
+
+**Rust Feature Removed**: Associated constants on primitives - `u64::MAX` stabilized 1.43
+
+**Changes**:
+- Replace `u64::MAX` with `core::u64::MAX`
+
+---
+
+### 18. Support Rust 1.41 (f3ac2dd2a)
+
+**Commit**: `f3ac2dd2af5f7caddf70974c866639f9baca58ce`
+**Author**: Brian Anderson
+**Date**: Mon Nov 24 15:11:59 2025 -0700
+
+**MSRV**: Enables 1.41
+
+**Rust Feature Removed**: `matches!` macro - stabilized 1.42
+
+**Changes**:
+- Replace `matches!(expr, pattern)` with `match expr { pattern => true, _ => false }`
+
+---
+
+### 19. Support Rust 1.39 (02a82dfa1)
+
+**Commit**: `02a82dfa135cbd6c294835c5b53c6442518ff9e6`
+**Author**: Brian Anderson
+**Date**: Mon Nov 24 15:27:39 2025 -0700
+
+**MSRV**: 1.41 → 1.39 (async/await minimum)
+
+**Rust Features Removed**:
+- `todo!` macro → `unimplemented!` - `todo!` stabilized 1.40
+- `mem::take` → `mem::replace(&mut x, None)` - `mem::take` stabilized 1.40
+- `#[non_exhaustive]` attribute - stabilized 1.40
 
 ---
 
 ## Summary
 
-The TigerBeetle Rust client dependency removal was executed in a systematic progression:
+The TigerBeetle Rust client compatibility work was executed in two phases:
+
+### Phase 1: Dependency Removal (MSRV 1.81 → 1.63)
 
 1. **Error handling** (thiserror) - Manual trait implementations
 2. **Build tooling** (ignore, walkdir) - Replaced with git and stdlib
@@ -307,4 +459,20 @@ The TigerBeetle Rust client dependency removal was executed in a systematic prog
 4. **Async runtime** (futures-*) - Custom polyfills with raw waker API
 5. **Bitflags** (bitflags) - Complete macro reimplementation
 
-The client went from 6 runtime dependencies to **zero**, achieving maximum compatibility across Rust toolchain versions while maintaining full functionality.
+### Phase 2: MSRV Reduction (1.63 → 1.39)
+
+| Version | Date | Feature Removed |
+|---------|------|-----------------|
+| 1.63 | Aug 2022 | `const Mutex::new()`, `try_exists()` |
+| 1.58 | Jan 2022 | Captured format identifiers |
+| 1.56 | Oct 2021 | Edition 2021 |
+| 1.54 | Jul 2021 | `CARGO_TARGET_TMPDIR` |
+| 1.53 | Jun 2021 | `IntoIterator` for arrays |
+| 1.51 | Mar 2021 | Const generics |
+| 1.47 | Oct 2020 | Array trait impls > 32 |
+| 1.43 | Apr 2020 | `u64::MAX` associated const |
+| 1.42 | Mar 2020 | `matches!` macro |
+| 1.40 | Dec 2019 | `todo!`, `mem::take`, `#[non_exhaustive]` |
+| 1.39 | Nov 2019 | async/await (minimum) |
+
+The client went from **MSRV 1.81 (Sep 2024)** to **MSRV 1.39 (Nov 2019)** — nearly **5 years** of backwards compatibility.
