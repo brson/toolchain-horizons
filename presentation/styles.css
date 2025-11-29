@@ -647,6 +647,38 @@ img {
     margin: 0.8em 0;
 }
 
+/* Impact level colors (from chart_style.py) */
+.impact-min {
+    background-color: #66BB6A;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.impact-low {
+    background-color: #FDD835;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.impact-moderate {
+    background-color: #FFB74D;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.impact-high {
+    background-color: #FF7043;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.impact-severe {
+    background-color: #E53935;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #fff;
+}
+
 /* Timeline list */
 .timeline-list {
     padding-left: 0;
