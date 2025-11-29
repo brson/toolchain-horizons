@@ -366,18 +366,15 @@
     </aside>
   </div>
 
-  <div class="step slide-horizons-list" data-x="12000" data-y="0">
+  <div class="step slide-horizons-table" data-x="12000" data-y="0">
     <h2>Toolchain Horizons: Rust</h2>
     <div class="slide-content">
-      <ul>
-        <li>serde
-        <li>anyhow
-        <li><b>futures</b>
-        <li><b>syn</b>
-        <li>rayon
-        <li>walkdir
-        <li>etc.
-      </ul>
+      <table>
+        <tr><td>serde</td><td></td><td>anyhow</td><td></td></tr>
+        <tr><td><b>futures</b></td><td></td><td><b>syn</b></td><td></td></tr>
+        <tr><td>rayon</td><td></td><td>walkdir</td><td></td></tr>
+        <tr><td colspan="4">etc.</td></tr>
+      </table>
     </div>
     <aside class="notes">
       Some of the crates being tested.
@@ -396,18 +393,14 @@
     </aside>
   </div>
 
-  <div class="step slide-horizons-list" data-x="12000" data-y="0">
+  <div class="step slide-horizons-table" data-x="12000" data-y="0">
     <h2>Toolchain Horizons: Rust</h2>
     <div class="slide-content">
-      <ul>
-        <li>serde - <span class="impact-min">1.31</span>
-        <li>anyhow - <span class="impact-min">1.38</span>
-        <li><b>futures</b> - <span class="impact-moderate">1.68</span>
-        <li><b>syn</b> - <span class="impact-moderate">1.68</span>
-        <li>rayon - <span class="impact-high">1.80</span>
-        <li>walkdir - <span class="impact-min">1.31</span>
-        <li>etc.
-      </ul>
+      <table>
+        <tr><td>serde</td><td class="impact-min">1.31</td><td>anyhow</td><td class="impact-min">1.38</td></tr>
+        <tr><td><b>futures</b></td><td class="impact-moderate">1.68</td><td><b>syn</b></td><td class="impact-moderate">1.68</td></tr>
+        <tr><td>rayon</td><td class="impact-high">1.80</td><td>walkdir</td><td class="impact-min">1.31</td></tr>
+      </table>
     </div>
     <aside class="notes">
       Some of the crates being tested.
