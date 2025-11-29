@@ -721,8 +721,16 @@ img {
 
 .slide-1000x-banner {
     width: 100%;
-    height: auto;
-    max-height: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* When viewport is narrower than 3:4, switch to contain to preserve sides */
+@media (max-aspect-ratio: 4/3) {
+    .slide-1000x-banner {
+        object-fit: contain;
+    }
 }
 
 /* Mobile responsive */
