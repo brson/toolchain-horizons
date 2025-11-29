@@ -415,18 +415,23 @@
     <div class="slide-content">
       <ul class="timeline-list">
         <li><b>1.81</b> (Sep 2024) &mdash; Initial MSRV &mdash; <code>fs::exists</code></li>
-        <li><b>1.63</b> (Aug 2022) &mdash; remove deps &mdash; <code>const Mutex::new</code>, <code>try_exists</code></li>
-        <li><b>1.58</b> (Jan 2022) &mdash; format strings &mdash; <code>{variable}</code> captures</li>
+        <li><b>1.70</b> (Jun 2023) &mdash; <code>ignore</code> &mdash; <code>IsTerminal</code> trait</li>
+        <li><b>1.63</b> (Aug 2022) &mdash; <code>futures</code>, <code>bitflags</code> &mdash; <code>const Mutex::new</code></li>
+        <li><b>1.58</b> (Jan 2022) &mdash; <code>thiserror</code>, <code>anyhow</code> &mdash; <code>{variable}</code> captures</li>
         <li><b>1.56</b> (Oct 2021) &mdash; edition 2018 &mdash; Edition 2021</li>
-        <li><b>1.51</b> (Mar 2021) &mdash; reserved types &mdash; const generics</li>
-        <li><b>1.47</b> (Oct 2020) &mdash; manual impls &mdash; array traits &gt; 32</li>
-        <li><b>1.42</b> (Mar 2020) &mdash; stdlib &mdash; <code>matches!</code>, <code>u64::MAX</code></li>
-        <li><b>1.39</b> (Nov 2019) &mdash; minimum &mdash; <code>async</code>/<code>await</code></li>
+        <li><b>1.51</b> (Mar 2021) &mdash; const generics</li>
+        <li><b>1.47</b> (Oct 2020) &mdash; array traits &gt; 32</li>
+        <li><b>1.42</b> (Mar 2020) &mdash; <code>matches!</code>, <code>u64::MAX</code></li>
+        <li><b>1.39</b> (Nov 2019) &mdash; <code>async</code>/<code>await</code> minimum</li>
       </ul>
       <p style="margin-top: 1em;"><b>Result: 1.39 (Nov 2019) &mdash; 5 years of compatibility</b></p>
     </div>
     <aside class="notes">
       Phase 1: Remove dependencies (1.81 -> 1.63)<br>
+      - thiserror, anyhow: proc-macro deps with newer MSRV<br>
+      - ignore: IsTerminal trait (1.70)<br>
+      - futures: const Mutex::new (1.63)<br>
+      - bitflags: also const Mutex::new<br>
       Phase 2: Remove language features (1.63 -> 1.39)<br>
       Final MSRV: 1.39, November 2019.<br>
       5 years of compatibility vs 9 months initially.
