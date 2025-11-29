@@ -829,6 +829,13 @@ img {
     }
 }
 
+/* When viewport is very wide (ultra-wide monitors), use letterboxing instead of cropping */
+@media (min-aspect-ratio: 2/1) {
+    .slide-1000x-banner {
+        object-fit: contain;
+    }
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .step {
