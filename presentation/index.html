@@ -469,19 +469,21 @@
 
   <div class="step slide-code" data-x="9600" data-y="0">
     <h2>Step 1: Break Out Sub-crates</h2>
-    <p class="commit-sha"><code>f7cc94b53</code></p>
-    <div class="slide-content">
-      <pre><code class="language-toml"># Before
-[dependencies]
-futures = "0.3.31"
-
-# After
-[dependencies]
+    <div class="slide-content before-after">
+      <div class="before">
+        <h3>Before</h3>
+        <pre><code class="language-toml">[dependencies]
+futures = "0.3.31"</code></pre>
+      </div>
+      <div class="after">
+        <h3>After</h3>
+        <pre><code class="language-toml">[dependencies]
 futures-channel = "0.3.31"
 
 [dev-dependencies]
 futures-executor = "0.3.31"
 futures-util = "0.3.31"</code></pre>
+      </div>
     </div>
     <aside class="notes">
       First step: identify what we actually use.<br>
@@ -492,27 +494,33 @@ futures-util = "0.3.31"</code></pre>
 
   <div class="step slide-code" data-x="9600" data-y="0">
     <h2>Step 2: Polyfill <code>block_on</code></h2>
-    <p class="commit-sha"><code>abd5b9774</code></p>
     <div class="slide-content">
-      <pre><code class="language-rust">// Before: 1 line
-futures::executor::block_on(my_future)
+      <pre><code class="language-rust">pub fn block_on&lt;F: Future&gt;(future: F) -&gt; F::Output {
+    let mut future = Box::pin(future);
+    let parker = Arc::new(Parker::new());
+    let waker = parker_into_waker(parker.clone());
+    let mut context = Context::from_waker(&amp;waker);
 
-// After: 88 lines including:
-// - Parker struct with Mutex&lt;bool&gt; + Condvar
-// - RawWakerVTable with 4 unsafe functions
-// - Manual Arc reference counting</code></pre>
+    loop {
+        match future.as_mut().poll(&amp;mut context) {
+            Poll::Ready(result) =&gt; return result,
+            Poll::Pending =&gt; parker.park(),
+        }
+    }
+}</code></pre>
     </div>
     <aside class="notes">
       Remove futures-executor.<br>
-      RawWaker API is gnarly - raw pointers, manual vtable.<br>
+      This is just block_on - 88 lines total.<br>
+      Also need: Parker struct with Mutex + Condvar.<br>
+      RawWakerVTable with 4 unsafe functions.<br>
       clone/wake/wake_by_ref/drop - all unsafe.<br>
-      Must manually prevent Arc double-free.<br>
+      Manual Arc reference counting to prevent double-free.<br>
     </aside>
   </div>
 
   <div class="step slide-code" data-x="9600" data-y="0">
     <h2>Step 3: Polyfill Stream Utilities</h2>
-    <p class="commit-sha"><code>632b5ed6d</code></p>
     <div class="slide-content">
       <pre><code class="language-rust">// Reimplemented from futures-util:
 pub trait Stream { ... }           // 8 lines
@@ -532,7 +540,6 @@ macro_rules! pin_mut! { ... }      // 10 lines</code></pre>
 
   <div class="step slide-code" data-x="9600" data-y="0">
     <h2>Step 4: Polyfill Oneshot Channel</h2>
-    <p class="commit-sha"><code>381de6c81</code> &mdash; final runtime dependency!</p>
     <div class="slide-content">
       <pre><code class="language-rust">struct OneshotFuture&lt;T&gt; { shared: Arc&lt;OneshotShared&lt;T&gt;&gt; }
 struct OneshotShared&lt;T&gt; { waker: Mutex&lt;Option&lt;Waker&gt;&gt;,
