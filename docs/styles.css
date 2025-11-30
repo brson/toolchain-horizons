@@ -461,8 +461,8 @@ img {
 
 .client-arch-diagram {
     position: relative;
-    width: 600px;
-    height: 600px;
+    width: 780px;
+    height: 780px;
 }
 
 .client-arch-center {
@@ -475,8 +475,8 @@ img {
 }
 
 .client-arch-center img {
-    width: 120px;
-    height: 120px;
+    width: 156px;
+    height: 156px;
     object-fit: contain;
 }
 
@@ -491,16 +491,16 @@ img {
 
 .client-arch-node {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 104px;
+    height: 104px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .client-arch-node img {
-    width: 90px;
-    height: 90px;
+    width: 117px;
+    height: 117px;
     object-fit: contain;
 }
 

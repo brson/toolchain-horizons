@@ -53,6 +53,19 @@ window.open = function(url, target, features) {
                             }
                         }, true);
 
+                        // Home/End key navigation
+                        document.addEventListener('keyup', function(e) {
+                            if (window.opener && !window.opener.closed && window.opener.impress) {
+                                var api = window.opener.impress();
+                                if (e.key === 'Home') {
+                                    api.goto(0);
+                                } else if (e.key === 'End') {
+                                    var steps = window.opener.document.querySelectorAll('.step');
+                                    api.goto(steps.length - 1);
+                                }
+                            }
+                        });
+
                         // Fallback: beforeunload warning
                         window.addEventListener('beforeunload', function(e) {
                             e.preventDefault();
