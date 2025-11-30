@@ -167,7 +167,7 @@ go-experiment-package package_name:
 visualize-rust show='':
     @echo "Generating Rust compatibility visualizations..."
     uv run visualize-rust.py {{ if show == 'show' { '--show' } else { '' } }}
-    cp compatibility-timeline-rust.png presentation/assets/
+    cp compatibility-timeline-rust.png docs/assets/
 
 # Visualize Java results (pass 'show' to display plot window)
 visualize-java show='':
@@ -183,7 +183,7 @@ visualize-node show='':
 visualize-go show='':
     @echo "Generating Go compatibility visualizations..."
     uv run visualize-go.py {{ if show == 'show' { '--show' } else { '' } }}
-    cp compatibility-timeline-go.png presentation/assets/
+    cp compatibility-timeline-go.png docs/assets/
 
 # Visualize all language results (cross-language comparison)
 visualize-all show='':
@@ -198,7 +198,7 @@ visualize show='': (visualize-rust show) (visualize-java show) (visualize-node s
 serve-presentation:
     @echo "Starting presentation server on http://localhost:8000"
     @echo "Press Ctrl+C to stop"
-    cd presentation && python3 -m http.server 8000
+    cd docs && python3 -m http.server 8000
 
 # Open the presentation in the default browser
 open-presentation:
