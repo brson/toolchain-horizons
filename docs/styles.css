@@ -538,8 +538,18 @@ img {
     display: flex;
     align-items: stretch;
     justify-content: center;
-    gap: 40px;
+    gap: 10px;
     padding: 40px;
+}
+
+.slide-content.split-horizontal.split-igotmad div:first-child {
+    margin-left: 50px;
+    margin-right: -50px;
+}
+
+.slide-content.split-horizontal.split-igotmad div:not(first-child) {
+    margin-right: 50px;
+    margin-left: -50px;
 }
 
 .split-panel {
