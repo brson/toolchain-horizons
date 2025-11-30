@@ -608,6 +608,11 @@ img {
     /*transform: zoom(2);*/
 }
 
+.split-panel img.frame-narrow {
+    max-width: 70%;
+    object-fit: contain;
+}
+
 .split-panel p {
     font-size: var(--body-large-font-size);
     font-weight: 600;
