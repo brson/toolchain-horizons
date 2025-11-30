@@ -1,10 +1,58 @@
 // Override window.open to make speaker console open in a popup window
+// and inject refresh protection
 var originalWindowOpen = window.open;
 window.open = function(url, target, features) {
     if (target === 'impressConsole' && !features) {
         features = 'width=1024,height=768';
     }
-    return originalWindowOpen.call(window, url, target, features);
+    var win = originalWindowOpen.call(window, url, target, features);
+
+    // Inject refresh protection for the speaker console
+    if (target === 'impressConsole' && win) {
+        var checkReady = setInterval(function() {
+            try {
+                // Wait until impress.js has populated the window
+                if (win.document && win.document.body && win.document.body.innerHTML.length > 100) {
+                    clearInterval(checkReady);
+
+                    // Inject refresh prevention script
+                    var script = win.document.createElement('script');
+                    script.textContent = '(' + function() {
+                        // Block refresh keys
+                        document.addEventListener('keydown', function(e) {
+                            var isRefresh = e.key === 'F5' ||
+                                ((e.ctrlKey || e.metaKey) && e.key === 'r');
+                            if (isRefresh) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                // Show brief feedback
+                                var msg = document.createElement('div');
+                                msg.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);' +
+                                    'background:#333;color:#fff;padding:8px 16px;border-radius:4px;' +
+                                    'font-size:14px;z-index:99999;opacity:1;transition:opacity 0.5s';
+                                msg.textContent = 'Refresh disabled in speaker notes';
+                                document.body.appendChild(msg);
+                                setTimeout(function() { msg.style.opacity = '0'; }, 1500);
+                                setTimeout(function() { msg.remove(); }, 2000);
+                            }
+                        }, true);
+
+                        // Fallback: beforeunload warning
+                        window.addEventListener('beforeunload', function(e) {
+                            e.preventDefault();
+                            e.returnValue = '';
+                        });
+                    }.toString() + ')();';
+                    win.document.body.appendChild(script);
+                }
+            } catch (e) {
+                // Window closed or cross-origin, stop polling
+                clearInterval(checkReady);
+            }
+        }, 100);
+    }
+
+    return win;
 };
 
 var api = impress();
