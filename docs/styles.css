@@ -433,10 +433,6 @@ img {
     object-fit: cover;
 }
 
-.slide-content.side-by-side img.frame-down-left {
-    object-position: 30% 70%;
-}
-
 .slide-content.side-by-side figcaption {
     margin-top: 16px;
     font-size: var(--body-font-size);
@@ -600,11 +596,6 @@ img {
     height: 540px;
     object-fit: cover;
     border-radius: 8px;
-}
-
-.split-panel img.frame-zoom-out {
-    object-fit: contain;
-    background: #f5f5f5;
 }
 
 .split-panel p {
