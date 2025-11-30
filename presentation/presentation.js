@@ -18,22 +18,38 @@ window.open = function(url, target, features) {
                     // Inject refresh prevention script
                     var script = win.document.createElement('script');
                     script.textContent = '(' + function() {
-                        // Block refresh keys
+                        function showMessage(text) {
+                            var msg = document.createElement('div');
+                            msg.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);' +
+                                'background:#333;color:#fff;padding:8px 16px;border-radius:4px;' +
+                                'font-size:14px;z-index:99999;opacity:1;transition:opacity 0.5s';
+                            msg.textContent = text;
+                            document.body.appendChild(msg);
+                            setTimeout(function() { msg.style.opacity = '0'; }, 1500);
+                            setTimeout(function() { msg.remove(); }, 2000);
+                        }
+
                         document.addEventListener('keydown', function(e) {
+                            // Shift+R: refresh the deck from console
+                            if (e.shiftKey && e.key === 'R' && !e.ctrlKey && !e.metaKey) {
+                                e.preventDefault();
+                                if (window.opener && !window.opener.closed) {
+                                    sessionStorage.setItem('reopenConsole', 'true');
+                                    showMessage('Refreshing deck...');
+                                    setTimeout(function() {
+                                        window.opener.location.reload();
+                                    }, 300);
+                                }
+                                return;
+                            }
+
+                            // Block normal refresh keys
                             var isRefresh = e.key === 'F5' ||
                                 ((e.ctrlKey || e.metaKey) && e.key === 'r');
                             if (isRefresh) {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                // Show brief feedback
-                                var msg = document.createElement('div');
-                                msg.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);' +
-                                    'background:#333;color:#fff;padding:8px 16px;border-radius:4px;' +
-                                    'font-size:14px;z-index:99999;opacity:1;transition:opacity 0.5s';
-                                msg.textContent = 'Refresh disabled in speaker notes';
-                                document.body.appendChild(msg);
-                                setTimeout(function() { msg.style.opacity = '0'; }, 1500);
-                                setTimeout(function() { msg.remove(); }, 2000);
+                                showMessage('Refresh disabled - use Shift+R to refresh deck');
                             }
                         }, true);
 
@@ -273,3 +289,14 @@ document.addEventListener('keyup', function(event) {
         api.goto(steps.length - 1);
     }
 });
+
+// Reopen console if it was open before refresh (triggered by Shift+R in console)
+if (sessionStorage.getItem('reopenConsole') === 'true') {
+    sessionStorage.removeItem('reopenConsole');
+    // Small delay to let impress.js fully initialize
+    setTimeout(function() {
+        document.getElementById('impress').dispatchEvent(
+            new CustomEvent('impress:console:open', { bubbles: true })
+        );
+    }, 500);
+}
