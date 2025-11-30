@@ -73,6 +73,11 @@ window.open = function(url, target, features) {
                         });
                     }.toString() + ')();';
                     win.document.body.appendChild(script);
+
+                    // Inject style override for larger notes text
+                    var style = win.document.createElement('style');
+                    style.textContent = '#notes { font-size: 1.5em; }';
+                    win.document.head.appendChild(style);
                 }
             } catch (e) {
                 // Window closed or cross-origin, stop polling
