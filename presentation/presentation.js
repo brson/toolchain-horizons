@@ -1,3 +1,12 @@
+// Override window.open to make speaker console open in a popup window
+var originalWindowOpen = window.open;
+window.open = function(url, target, features) {
+    if (target === 'impressConsole' && !features) {
+        features = 'width=1024,height=768';
+    }
+    return originalWindowOpen.call(window, url, target, features);
+};
+
 var api = impress();
 api.init();
 
