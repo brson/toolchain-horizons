@@ -2,19 +2,19 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     /* normal title slides */
-    --title-font-size: 5vh;
+    --title-font-size: 54px;
     /* sections - usually the only slide content */
-    --section-font-size: 5vw;
+    --section-font-size: 96px;
     --subtitle-font-size: 36px;
-    --body-large-font-size: 3vh;
+    --body-large-font-size: 32px;
     --body-font-size: 24px;
     --label-font-size: 20px;
     --code-font-size: 18px;
     --code-small-font-size: 14px;
-    --code-fullscreen-font-size: 1.8vh;
-    --title-slide-h1-font-size: 7vw;
-    --title-slide-subtitle-font-size: 4vw;
-    --title-slide-link-font-size: 3vw;
+    --code-fullscreen-font-size: 19px;
+    --title-slide-h1-font-size: 134px;
+    --title-slide-subtitle-font-size: 77px;
+    --title-slide-link-font-size: 58px;
     --bg-transition-duration: 30s;
     --bg-r1: 255; --bg-g1: 107; --bg-b1: 53;
     --bg-r2: 247; --bg-g2: 147; --bg-b2: 30;
@@ -48,8 +48,8 @@ body {
 
 /* Slide styles */
 .step {
-    width: 90vw;
-    height: 90vh;
+    width: 1728px;
+    height: 972px;
     display: flex;
     flex-direction: column;
     font-size: var(--body-font-size);
@@ -100,8 +100,8 @@ body {
 }
 
 .step.slide-section .section-image {
-    max-height: 50vh;
-    max-width: 60vw;
+    max-height: 540px;
+    max-width: 1152px;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     margin-top: 20px;
@@ -395,7 +395,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 10vw;
+    padding-right: 192px;
 }
 
 .step.slide-epoch p {
@@ -416,12 +416,12 @@ img {
 .slide-content.side-by-side figure {
     margin: 0;
     text-align: center;
-    width: 35vw;
+    width: 672px;
 }
 
 .slide-content.side-by-side .img-container {
-    width: 35vw;
-    height: 35vw;
+    width: 672px;
+    height: 672px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -593,7 +593,7 @@ img {
 
 .split-panel img {
     max-width: 100%;
-    max-height: 50vh;
+    max-height: 540px;
     object-fit: contain;
     border-radius: 8px;
 }
@@ -806,8 +806,8 @@ img {
 
 /* 1000x World Tour slide */
 .step.slide-1000x {
-    width: 100vw;
-    height: 100vh;
+    width: 1920px;
+    height: 1080px;
     background: #000;
     justify-content: center;
     align-items: center;
@@ -836,14 +836,3 @@ img {
     }
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-    .step {
-        width: 98vw;
-        height: 98vh;
-    }
-
-    .slide-content {
-        padding: 16px;
-    }
-}
