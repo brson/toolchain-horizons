@@ -863,7 +863,8 @@ img {
 
 /* Section slides with smaller font, larger image */
 #slide-compat-quest h2,
-#slide-tigerstyle h2 {
+#slide-tigerstyle h2,
+#slide-initial-msrv .callout {
     font-size: 64px;
 }
 
