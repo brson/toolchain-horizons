@@ -861,3 +861,13 @@ img {
     }
 }
 
+/* Compatibility Quest slide - smaller font, larger image */
+#slide-compat-quest h2 {
+    font-size: 64px;
+}
+
+#slide-compat-quest .section-image {
+    max-height: 680px;
+    max-width: 1400px;
+}
+
