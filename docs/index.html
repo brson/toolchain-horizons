@@ -48,7 +48,8 @@
     <p><a href="https://github.com/brson/toolchain-horizons">github.com/brson/toolchain-horizons</a></p>
 
     <aside class="notes">
-      TigerBeetle 100x world tour in San Francisco.<br>
+      This is a talk about software dependencies and programming language toolchains.<br>
+      Materials are at this link<br>
     </aside>
   </div>
 
@@ -233,10 +234,13 @@
       </div>
     </div>
     <aside class="notes">
+      <b>Why?</b>. Self-Knowledge. User-Courtesy.<br>
       "We support version N!" -> `cargo +"N-1" test` -> Fix build* -> (back)<br>
       <br>
       Use CI.<br>
-      Language and dependency fixes.<br>
+      <br>
+      Initial PR: whatever dependencies<br>
+      WHAT WAS THE INITIAL MSRV?
     </aside>
   </div>
 
@@ -355,6 +359,10 @@
     <aside class="notes">
       STORY ABOUT SYN BEING UPDATED.<br>
       Was going to leave the futures dependency.<br>
+      <br>
+      1.63: August 2022<br>
+      1.68: March 2023<br>
+      <br>
       This was the moment that I got mad.<br>
     </aside>
   </div>
@@ -408,6 +416,10 @@
       Hard to read; visual<br>
       NB: Start: 2019, 1.31<br>
       NB: End: 2026 (now), 1.91<br>
+      <br>
+      1.63: minor library stabilizations<br>
+      1.68: minor library stabilizations, pin! macro<br>
+      <b>It's not even obvious why</b><br>
     </aside>
   </div>
 
@@ -536,10 +548,7 @@ futures-util = "0.3.31"</code></pre>
     <aside class="notes">
       Remove futures-executor.<br>
       This is just block_on - 88 lines total.<br>
-      Also need: Parker struct with Mutex + Condvar.<br>
-      RawWakerVTable with 4 unsafe functions.<br>
-      clone/wake/wake_by_ref/drop - all unsafe.<br>
-      Manual Arc reference counting to prevent double-free.<br>
+      Parkers and wakers<br>
     </aside>
   </div>
 
@@ -585,7 +594,12 @@ impl&lt;T&gt; OneshotSender&lt;T&gt; { fn send(self, value: T) { /* 10 lines */ 
     <h2>Should I Even Try?</h2>
     <img src="assets/IMG_1192.jpg" alt="Does it even matter?">
     <aside class="notes">
-      Can't use tokio in examples or docs.
+      After all this I felt <b>despondant</b><br>
+      Swept up in the futures dependency wave<br>
+      Negative: Maintenance<br>
+      Negative: Can't use tokio in tests, examples or docs.<br>
+      Negative: uglier APIs that look old<br>
+      No conclusion<br>
     </aside>
   </div>
 
