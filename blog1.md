@@ -14,7 +14,19 @@ support in the Rust dependency landscape.
 
 
 
+
 ## Background: TigerBeetle clients
+
+TigerBeetle has a client-server architecture,
+and provides client libraries for most popular languages:
+Python, Java, Go, Node, .NET, and now Rust.
+
+Each of these is a bindings/FFI project that binds
+to the single `tb_client` library, written in Zig,
+exposing a C ABI;
+and wraps it in the idioms of the appropriate language.
+
+
 
 
 ## Background: MSRV discovery
