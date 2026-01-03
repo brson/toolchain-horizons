@@ -2,11 +2,9 @@
 
 Last year I created the Rust client for [TigerBeetle],
 the double-entry financial accounting database.
-
 While landing the code and establishing the minimum
-supported Rust version I had multiple
-surprises about how few Rust versions were supported by common crates (libraries).
-
+supported Rust version I encountered multiple
+surprises about how common Rust crates manage their toolchain dependencies.
 So I did an experiment to learn more about toolchain
 support in the Rust dependency landscape.
 
@@ -18,7 +16,6 @@ support in the Rust dependency landscape.
 TigerBeetle has a client-server architecture,
 and provides client libraries for most popular languages:
 Python, Java, Go, Node, .NET, and now Rust.
-
 Each of these is a bindings/FFI project that binds
 to the single `tb_client` library, written in Zig,
 exposing a C ABI,
@@ -43,20 +40,19 @@ Some crates encode this information in
 their `Cargo.toml` manifest's optional
 [`rust-version`](https://doc.rust-lang.org/cargo/reference/rust-version.html)
 field.
-
 It is a best practice for crate maintainers
 to know and document their minimum supported Rust version
 and test against that version in their CI.
 
 When I do the initial development of a new Rust crate,
 I don't worry about the minimum Rust version;
-I save that work for just before publication.
-
-The process typically proceeds thusly:
+I save that work for just before publication,
+a process like:
 
 1. Start with the oldest version I know I support.
 2. Test against the previous version.
 3. Fix the build.
+
    This usually involves removing or replacing dependencies,
    and replacing newer language features with older ones
    or dependencies that fill that role.
@@ -69,27 +65,40 @@ the Rust TigerBeetle client in June 2025,
 I had not done this yet,
 and expected our minimum supported Rust version to be a recent one.
 Without any effort to support older releases,
-the client's
-initial MSRV was Rust 1.81, published September 5, 2024.
+the client's initial MSRV was Rust 1.81,
+published September 5, 2024.
 
 About 9 months of supported toolchains.
-Not satisfactory, but expected.
+Not satisfactory, but not surprising.
 
 
 
 
 ## TigerStyle and dependencies
 
-TigerBeetle somewhat notoriously has a set of strict and opinionated
-coding guidelines, branded [TigerStyle].
-
-The guidelines are focused on three pillars:
+TigerBeetle has a set of strict and opinionated
+coding guidelines,
+[TigerStyle](https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/TIGER_STYLE.md).
+They are focused on three pillars:
 safety, performance, and developer UX.
+
+TigerStyle emphasizes fully understanding and owning your code
+and radically reducing dependencies.
+
+It has this to say about dependencies:
+
+> TigerBeetle has a “zero dependencies” policy,
+  apart from the Zig toolchain.
+  Dependencies, in general, inevitably lead to supply chain attacks,
+  safety and performance risk, and slow install times.
+  For foundational infrastructure in particular,
+  the cost of any dependency is further amplified throughout the rest of the stack.
 
 
 
 
 ## TigerBeetle Rust client dependencies
+
 
 
 
@@ -103,9 +112,13 @@ safety, performance, and developer UX.
 
 
 
-## Conclusion
+## Why support older Rust version?
 
 
 
+## And does it matter that we can't?
 
-## Appendix: other languages' toolchain horizons
+Probably not.
+
+
+So what about TigerBeetle's zero-dependency policy?
