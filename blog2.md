@@ -1,2 +1,21 @@
 # How To: Remove every dependency from the TigerBeetle Rust client
 
+- Step 1: Remove `thiserror` dependency.
+- Step 2: Remove `ignore` dependency.
+- Step 3: Remove `walkdir` dependency.
+- Step 4: Remove `anyhow` dependency.
+- Step 5: Split `futures` dependency into `futures-channel`, `futures-executor` and `futures-util`.
+- Step 6: Polyfill `futures-executor` dependency.
+- Step 7: Polyfill `futures-utils` dependency.
+- Step 8: Polyfill `futures-channel` dependency.
+- Step 9: Polyfill `bitflags` dependency.
+- Step 10: 1.56: Rework format string captures, `Path::try_exists`, `const` `Mutex::new`.
+- Step 11: ?: Remove `rust-version` from manifest.
+- Step 12: ?: Rework Edition 2024 -> 2018, explicit import `use std::convert::TryFrom` (removed from prelude).
+- Step 13: 1.53: Replace `CARGO_TARGET_TMPDIR`.
+- Step 14: 1.51: Rework `IntoIterator` for arrays, introduced 1.53.
+- Step 15: 1.50: Rework `const` generics, introduced 1.51.
+- Step 16: 1.45: Rework `Array` impl for lengths > 32, extended in 1.47.
+- Step 17: 1.42: Replace associated constants on primitives, `u64::MAX`, introduced 1.43.
+- Step 19: 1.41: Replace `matches!`, stabilized 1.42.
+- Step 20: 1.39: Rework `todo!`, `mem::take`, `#[non_exhaustive]`, stabilized 1.40.
