@@ -6,15 +6,15 @@ it is [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no
 
 | Step | Rust | Commit   | Action   | Features                                                          |
 |------|------|----------|----------|-------------------------------------------------------------------|
-| 1    | 1.63 | [`65d9`] | Remove   | `thiserror`                                                       |
+| 1    | 1.63 | [`65d9`] | Remove   | `thiserror` (MSRV 1.61)                                           |
 | 2    | 1.63 | [`4c85`] | Remove   | `ignore`                                                          |
 | 3    | 1.63 | [`e67f`] | Remove   | `walkdir`                                                         |
-| 4    | 1.63 | [`4bef`] | Remove   | `anyhow`                                                          |
-| 5    | 1.63 | [`f7cc`] | Split    | `futures` → `futures-channel`, `futures-executor`, `futures-util` |
-| 6    | 1.63 | [`abd5`] | Polyfill | `futures-executor`                                                |
-| 7    | 1.63 | [`632b`] | Polyfill | `futures-utils`                                                   |
-| 8    | 1.63 | [`381d`] | Polyfill | `futures-channel`                                                 |
-| 9    | 1.63 | [`46bf`] | Polyfill | `bitflags`                                                        |
+| 4    | 1.63 | [`4bef`] | Remove   | `anyhow` (MSRV 1.39)                                              |
+| 5    | 1.63 | [`f7cc`] | Split    | `futures` (MSRV 1.56) → `futures-channel`, `-executor`, `-util`   |
+| 6    | 1.63 | [`abd5`] | Polyfill | `futures-executor` (MSRV 1.56)                                    |
+| 7    | 1.63 | [`632b`] | Polyfill | `futures-utils` (MSRV 1.56)                                       |
+| 8    | 1.63 | [`381d`] | Polyfill | `futures-channel` (MSRV 1.56)                                     |
+| 9    | 1.63 | [`46bf`] | Polyfill | `bitflags` (MSRV 1.56)                                            |
 | 10   | 1.56 | [`fcc1`] | Rework   | format string captures, `Path::try_exists`, `const Mutex::new`    |
 | 11   | 1.56 | [`db93`] | Remove   | `rust-version` (manifest)                                         |
 | 12   | 1.31 | [`71b5`] | Rework   | Edition 2021→2018, `use std::convert::TryFrom`                    |
