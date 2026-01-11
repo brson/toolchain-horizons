@@ -5,9 +5,14 @@ to help me understand how depending on Rust crates
 affected my own ability to support prior Rust toolchain versions
 in the [TigerBeetle] Rust client.
 
+[TigerBeetle]: https://github.com/tigerbeetle/tigerbeetle
+
 As part of that experiment I removed every dependency,
 and also pushed back the minimum supported Rust version as far
-as I could, to version 1.39 (from todo date).
+as I could, to version 1.39 (released todo date).
+Supporting earlier toolchains requires not using
+the `async` / `await` syntax,
+which I think is too burdensome to consider.
 
 This followup describes in detail each step I took
 to establish a very early MSVR on a very small Rust project.
@@ -47,7 +52,7 @@ how I enabled compatibility with that version.
 
 > *: `ignore` and `walkdir` are highly compatible back to Edition 2018 (Rust 1.31),
   and neither declares a `rust-version`.
-  I removed them anyway as part of this exercise.
+  I removed them anyway as a matter of [TigerStyle](https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/TIGER_STYLE.md).
 
 [`65d9`]: https://github.com/brson/tigerbeetle/commit/65d9b96fa
 [`4c85`]: https://github.com/brson/tigerbeetle/commit/4c85201a2
