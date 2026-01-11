@@ -19,7 +19,8 @@ to establish a very early MSVR on a very small Rust project.
 As an exploration of Rust's language evolution
 it may be interesting to some Rust programmers.
 
-> Not all this work is in mainline TigerBeetle;
+> Much of this work is not in mainline TigerBeetle
+  as the benefits and tradeoffs are not clear;
   it is [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
 
 The below table shows what I had to do to support progressively
@@ -451,16 +452,120 @@ unsafe fn drop(ptr: *const ()) {
 
 
 
-## Step 7: Polyfill `futures-utils`
+## Step 7: Polyfill `futures-util`
 
-Extended `futures_polyfills.rs` with `join` and `select` utilities for tests.
+We use the `unfold` method of the `Stream` trait
+specifically to write one test case and one doc-comment example,
+both specifically needing to demonstate usage of the `unfold` method.
+So we need to polyfill `unfold` in a way that reads plausibly like the real `unfold`.
+
+`unfold`'s function signature looks like this:
+
+```rust
+pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>where
+    F: FnMut(T) -> Fut,
+    Fut: Future<Output = Option<(Item, T)>>,
+```
+
+It's a lot to understand and implement,
+but what it does is convert repeated calls to a future-returning closure
+into a stream of futures.
+It's like a closure-to-iterator adapter but for streams.
+
+Here's how to implement it:
+
+```rust
+pub trait Stream {
+    type Item;
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>;
+}
+
+pub trait StreamExt: Stream {
+    fn next(&mut self) -> Next<'_, Self> where Self: Unpin {
+        Next { stream: self }
+    }
+}
+
+impl<T: Stream + ?Sized> StreamExt for T {}
+
+pub struct Next<'a, S: ?Sized> {
+    stream: &'a mut S,
+}
+
+impl<S: Stream + Unpin + ?Sized> Future for Next<'_, S> {
+    type Output = Option<S::Item>;
+
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        Pin::new(&mut *self.stream).poll_next(cx)
+    }
+}
+
+pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>
+where
+    F: FnMut(T) -> Fut,
+    Fut: Future<Output = Option<(Item, T)>>,
+{
+    Unfold { state: Some(init), f, fut: None }
+}
+
+pub struct Unfold<T, F, Fut> {
+    state: Option<T>,
+    f: F,
+    fut: Option<Fut>,
+}
+
+impl<T, F, Fut> Unpin for Unfold<T, F, Fut> {}
+
+impl<T, F, Fut, Item> Stream for Unfold<T, F, Fut>
+where
+    F: FnMut(T) -> Fut,
+    Fut: Future<Output = Option<(Item, T)>>,
+{
+    type Item = Item;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = unsafe { self.get_unchecked_mut() };
+
+        loop {
+            if let Some(fut) = &mut this.fut {
+                let fut = unsafe { Pin::new_unchecked(fut) };
+                match fut.poll(cx) {
+                    Poll::Ready(Some((item, next_state))) => {
+                        this.fut = None;
+                        this.state = Some(next_state);
+                        return Poll::Ready(Some(item));
+                    }
+                    Poll::Ready(None) => {
+                        this.fut = None;
+                        this.state = None;
+                        return Poll::Ready(None);
+                    }
+                    Poll::Pending => return Poll::Pending,
+                }
+            }
+
+            if let Some(state) = this.state.take() {
+                this.fut = Some((this.f)(state));
+            } else {
+                return Poll::Ready(None);
+            }
+        }
+    }
+}
+```
 
 
 
-## Step 8: Polyfill futures-channel
 
-Implemented custom oneshot channel using `Arc`, `Mutex`, and `Waker`.
-This was the **final runtime dependency**.
+## Step 8: Polyfill `futures-channel`
+
+We needed [`oneshot`] channels.
+This is actually used in the production code path, not just tests,
+so we need to be confident about it.
+
+The following is the naive safe implementation I went with.
+The real implementation uses atomics directly and is the kind of code one
+should consider with extreme suspicion before writing it themselves in production code.
 
 ```rust
 struct OneshotShared<T> {
@@ -498,9 +603,14 @@ impl<T> Future for OneshotFuture<T> {
 }
 ```
 
-## Step 9: Polyfill bitflags
 
-Implemented a complete `bitflags!` macro (418 lines) compatible with bitflags 2.6 API:
+
+
+## Step 9: Polyfill `bitflags`
+
+`bitflags` fills a Rust language gap for bit-addressible scalar values or bitfields.
+The TigerBeetle client has a bitfield in the public API,
+so polyfilling it requires a lot of work.
 
 ```rust
 pub trait Flags: Sized + Copy {
@@ -536,6 +646,9 @@ pub trait Bits: Copy + PartialEq
 impl Bits for u16 { const EMPTY: Self = 0; }
 // ... plus macro to generate flag types
 ```
+
+
+
 
 ## Step 10: Support Rust 1.56
 
