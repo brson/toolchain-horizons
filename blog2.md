@@ -142,6 +142,35 @@ The `ignore` crate is for walking the file system
 while following `.gitignore` rules.
 An easy approximation can be written with the simpler `walkdir` crate.
 
+```rust
+// Before: ignore crate handles .gitignore automatically
+use ignore::Walk;
+
+for entry in Walk::new(&tigerbeetle_root) {
+    let entry = entry?;
+    // ...
+}
+```
+
+```rust
+// After: walkdir with manual hidden-file filtering
+use walkdir::{DirEntry, WalkDir};
+
+fn is_hidden(entry: &DirEntry) -> bool {
+    entry.file_name().to_str()
+        .map(|s| s.starts_with('.'))
+        .unwrap_or(false)
+}
+
+for entry in WalkDir::new(&tigerbeetle_root)
+    .into_iter()
+    .filter_entry(|e| !is_hidden(e))
+    .filter_map(|e| e.ok())
+{
+    // ...
+}
+```
+
 
 
 
@@ -175,7 +204,9 @@ for entry in WalkDir::new(&tigerbeetle_root)
         }
     }
 }
+```
 
+```rust
 // After: shell out to git
 let output = std::process::Command::new("git")
     .args(["ls-files", "-z"])
@@ -207,14 +238,17 @@ I replaced `anyhow::Result` with `Result<T, Box<dyn std::error::Error>>`:
 fn main() -> anyhow::Result<()> { ... }
 fn test_client() -> anyhow::Result<tb::Client> { ... }
 fn smoke() -> anyhow::Result<()> { ... }
+```
 
+```rust
 // After
 fn main() -> Result<(), Box<dyn std::error::Error>> { ... }
 fn test_client() -> Result<tb::Client, Box<dyn std::error::Error>> { ... }
 fn smoke() -> Result<(), Box<dyn std::error::Error>> { ... }
 ```
 
-The resulting types are unpleasant to read,
+The resulting types are unpleasant to read
+(especially for code that needs to account for `Send`, `Sync`, and `'static` bounds),
 so this isn't a transformation I favor for anything other
 than small codebases.
 
@@ -248,7 +282,9 @@ pub enum CreateAccountResult {
     IdMustNotBeZero,
     // ... 20+ more variants
 }
+```
 
+```rust
 // After: manual impls
 #[derive(Debug, Copy, Clone)]
 #[non_exhaustive]
@@ -305,14 +341,41 @@ futures-util = "0.3.31"
 
 
 
-## Step 6: Polyfill futures-executor
+## Step 6: Polyfill `futures-executor`
 
-Implemented a minimal `block_on` executor (88 lines) using raw waker API and condition variables:
+From `futures-executor`,
+`block_on` is a simple async executor
+useful for non-I/O async tasks,
+and for writing runtime-agnostic test-cases.
+
+Impleminting the most basic Rust executor is not super hard,
+but involves some unsafe code with careful semantics.
+
 
 ```rust
-// Usage change
-// Before: futures::executor::block_on(main_async())
-// After:  tb::futures_polyfills::block_on(main_async())
+// Before
+futures::executor::block_on(main_async());
+```
+
+```
+// After
+tigerbeetle::futures_polyfills::block_on(main_async());
+
+// where the implementation looks like this:
+
+pub fn block_on<F: Future>(future: F) -> F::Output {
+    let mut future = Box::pin(future);
+    let parker = Arc::new(Parker::new());
+    let waker = parker_into_waker(parker.clone());
+    let mut context = Context::from_waker(&waker);
+
+    loop {
+        match future.as_mut().poll(&mut context) {
+            Poll::Ready(result) => return result,
+            Poll::Pending => parker.park(),
+        }
+    }
+}
 
 struct Parker {
     mutex: Mutex<bool>,
@@ -337,27 +400,62 @@ impl Parker {
         *notified = false;
     }
 }
-
-pub fn block_on<F: Future>(future: F) -> F::Output {
-    let mut future = Box::pin(future);
-    let parker = Arc::new(Parker::new());
-    let waker = parker_into_waker(parker.clone());
-    let mut context = Context::from_waker(&waker);
-
-    loop {
-        match future.as_mut().poll(&mut context) {
-            Poll::Ready(result) => return result,
-            Poll::Pending => parker.park(),
-        }
-    }
-}
-
-// Plus raw waker vtable implementation for clone/wake/wake_by_ref/drop
 ```
 
-## Step 7: Polyfill futures-utils
+---
+
+&nbsp;
+
+**That was the easy part. Then there's this unsafe goop:**
+
+&nbsp;
+
+---
+
+
+```rust
+fn parker_into_waker(parker: Arc<Parker>) -> Waker {
+    let raw_waker = parker_into_raw_waker(parker);
+    unsafe { Waker::from_raw(raw_waker) }
+}
+
+fn parker_into_raw_waker(parker: Arc<Parker>) -> RawWaker {
+    RawWaker::new(Arc::into_raw(parker) as *const (), &VTABLE)
+}
+
+const VTABLE: RawWakerVTable = RawWakerVTable::new(clone, wake, wake_by_ref, drop);
+
+unsafe fn clone(ptr: *const ()) -> RawWaker {
+    let parker = Arc::from_raw(ptr as *const Parker);
+    let cloned = parker.clone();
+    let _ = Arc::into_raw(parker); // don't drop the original
+    parker_into_raw_waker(cloned)
+}
+
+unsafe fn wake(ptr: *const ()) {
+    let parker = Arc::from_raw(ptr as *const Parker);
+    parker.unpark();
+}
+
+unsafe fn wake_by_ref(ptr: *const ()) {
+    let parker = Arc::from_raw(ptr as *const Parker);
+    parker.unpark();
+    let _ = Arc::into_raw(parker); // don't drop
+}
+
+unsafe fn drop(ptr: *const ()) {
+    let _ = Arc::from_raw(ptr as *const Parker);
+}
+```
+
+
+
+
+## Step 7: Polyfill `futures-utils`
 
 Extended `futures_polyfills.rs` with `join` and `select` utilities for tests.
+
+
 
 ## Step 8: Polyfill futures-channel
 
