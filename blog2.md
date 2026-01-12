@@ -583,7 +583,7 @@ unsafe fn drop(ptr: *const ()) {
 
 ## Step 8: Polyfill `futures-util`
 
-We use the `unfold` method of the `Stream` trait
+We use the [`unfold`] method of the [`Stream`] trait
 specifically to write one test case and one doc-comment example,
 both specifically needing to demonstate usage of the `unfold` method.
 So we need to polyfill `unfold` in a way that reads plausibly like the real `unfold`.
@@ -737,7 +737,7 @@ impl<T> Future for OneshotFuture<T> {
 
 ## Step 10: Polyfill `bitflags`
 
-`bitflags` fills a Rust language gap for bit-addressable scalar values or bitfields.
+[`bitflags`] fills a Rust language gap for bit-addressable scalar values or bitfields.
 The TigerBeetle client has a bitfield in the public API,
 so polyfilling it is a fairly big task.
 
@@ -1013,7 +1013,7 @@ introduced in [Rust 1.56].
 rust-version = "1.63"
 ```
 
-I think previous toolchains ignore or warn when they see this field.
+nI think previous toolchains ignore or warn when they see this field.
 
 
 ## Step 13: Support [Rust 1.55] - Edition 2021
@@ -1035,7 +1035,7 @@ let x: u32 = value.try_into()?;
 
 ## Step 14: Support [Rust 1.53] - `CARGO_TARGET_TMPDIR`
 
-Modern `cargo` provides a temporary directory in its `target` directory
+Modern `cargo` [provides a temporary directory] in its `target` directory
 for build scripts to use for their own purpose.
 The fix was just to hardcode that same path (`target/tmp`).
 
