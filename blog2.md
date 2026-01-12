@@ -19,10 +19,9 @@ to establish a very early MSVR on a very small Rust project.
 As an exploration of Rust's language evolution
 it may be interesting to some Rust programmers.
 
-> Much of this work is not in mainline TigerBeetle
-  as the benefits and tradeoffs are not clear;
-  it is [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
-
+Much of this work is not in mainline TigerBeetle
+as the benefits and tradeoffs are not clear;
+lined commits are [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
 
 My starting `Cargo.toml` was
 
@@ -73,7 +72,7 @@ exactly what I did.
 | [8]  | 1.56 | [`381d`] | Polyfill | [`futures-channel`]                                                   |
 | [9]  | 1.56 | [`46bf`] | Polyfill | [`bitflags`]                                                          |
 | [10] | 1.56 | [`fcc1`] | Rework   | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
-| [11] | 1.56 | [`db93`] | Remove   | [`rust-version`] (manifest)                                           |
+| [11] | 1.55 | [`db93`] | Remove   | [`rust-version`] (stabilized 1.56)                                    |
 | [12] | 1.55 | [`71b5`] | Rework   | [Edition 2021]→2018, [`TryFrom`]                                      |
 | [13] | 1.53 | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`] (stabilized 1.54)                             |
 | [14] | 1.51 | [`c459`] | Rework   | [`IntoIterator` for arrays] (stabilized 1.53)                         |
@@ -633,9 +632,9 @@ impl<T> Future for OneshotFuture<T> {
 
 ## Step 9: Polyfill `bitflags`
 
-`bitflags` fills a Rust language gap for bit-addressible scalar values or bitfields.
+`bitflags` fills a Rust language gap for bit-addressable scalar values or bitfields.
 The TigerBeetle client has a bitfield in the public API,
-so polyfilling it requires a lot of work.
+so polyfilling it is a fairly big task.
 
 ```rust
 pub trait Flags: Sized + Copy {
@@ -643,33 +642,216 @@ pub trait Flags: Sized + Copy {
 
     fn bits(&self) -> Self::Bits;
     fn from_bits_retain(bits: Self::Bits) -> Self;
-    fn empty() -> Self { Self::from_bits_retain(Self::Bits::EMPTY) }
+
+    fn empty() -> Self {
+        Self::from_bits_retain(Self::Bits::EMPTY)
+    }
+
     fn all() -> Self;
-    fn from_bits(bits: Self::Bits) -> Option<Self>;
-    fn from_bits_truncate(bits: Self::Bits) -> Self;
-    fn is_empty(&self) -> bool { self.bits() == Self::Bits::EMPTY }
-    fn is_all(&self) -> bool;
-    fn intersects(&self, other: Self) -> bool;
-    fn contains(&self, other: Self) -> bool;
-    fn insert(&mut self, other: Self);
-    fn remove(&mut self, other: Self);
-    fn toggle(&mut self, other: Self);
-    fn intersection(self, other: Self) -> Self;
-    fn union(self, other: Self) -> Self;
-    fn difference(self, other: Self) -> Self;
-    fn symmetric_difference(self, other: Self) -> Self;
-    fn complement(self) -> Self;
+
+    fn from_bits(bits: Self::Bits) -> Option<Self> {
+        if bits & !Self::all().bits() == Self::Bits::EMPTY {
+            Some(Self::from_bits_retain(bits))
+        } else {
+            None
+        }
+    }
+
+    fn from_bits_truncate(bits: Self::Bits) -> Self {
+        Self::from_bits_retain(bits & Self::all().bits())
+    }
+
+    fn is_empty(&self) -> bool {
+        self.bits() == Self::Bits::EMPTY
+    }
+
+    fn is_all(&self) -> bool {
+        (self.bits() & Self::all().bits()) == Self::all().bits()
+    }
+
+    fn intersects(&self, other: Self) -> bool {
+        (self.bits() & other.bits()) != Self::Bits::EMPTY
+    }
+
+    fn contains(&self, other: Self) -> bool {
+        (self.bits() & other.bits()) == other.bits()
+    }
+
+    fn insert(&mut self, other: Self) {
+        *self = Self::from_bits_retain(self.bits() | other.bits());
+    }
+
+    fn remove(&mut self, other: Self) {
+        *self = Self::from_bits_retain(self.bits() & !other.bits());
+    }
+
+    fn toggle(&mut self, other: Self) {
+        *self = Self::from_bits_retain(self.bits() ^ other.bits());
+    }
+
+    fn set(&mut self, other: Self, value: bool) {
+        if value { self.insert(other); } else { self.remove(other); }
+    }
+
+    fn intersection(self, other: Self) -> Self {
+        Self::from_bits_retain(self.bits() & other.bits())
+    }
+
+    fn union(self, other: Self) -> Self {
+        Self::from_bits_retain(self.bits() | other.bits())
+    }
+
+    fn difference(self, other: Self) -> Self {
+        Self::from_bits_retain(self.bits() & !other.bits())
+    }
+
+    fn symmetric_difference(self, other: Self) -> Self {
+        Self::from_bits_retain(self.bits() ^ other.bits())
+    }
+
+    fn complement(self) -> Self {
+        Self::from_bits_truncate(!self.bits())
+    }
 }
 
-pub trait Bits: Copy + PartialEq
+pub trait Bits:
+    Copy + PartialEq
     + BitAnd<Output = Self> + BitOr<Output = Self>
     + BitXor<Output = Self> + Not<Output = Self>
 {
     const EMPTY: Self;
 }
 
+impl Bits for u8 { const EMPTY: Self = 0; }
 impl Bits for u16 { const EMPTY: Self = 0; }
-// ... plus macro to generate flag types
+impl Bits for u32 { const EMPTY: Self = 0; }
+impl Bits for u64 { const EMPTY: Self = 0; }
+```
+
+Then the macro that generates the actual flag types:
+
+```rust
+macro_rules! bitflags {
+    (
+        $(#[$outer:meta])*
+        $vis:vis struct $name:ident: $repr:ty {
+            $(
+                $(#[$flag_meta:meta])*
+                const $flag:ident = $value:expr;
+            )*
+        }
+    ) => {
+        $(#[$outer])*
+        $vis struct $name($repr);
+
+        #[allow(non_upper_case_globals)]
+        impl $name {
+            $(
+                $(#[$flag_meta])*
+                pub const $flag: Self = Self($value);
+            )*
+
+            pub const fn bits(&self) -> $repr { self.0 }
+            pub const fn empty() -> Self { Self(0) }
+            pub const fn all() -> Self { Self(0 $(| $value)*) }
+
+            pub fn from_bits(bits: $repr) -> Option<Self> {
+                <Self as Flags>::from_bits(bits)
+            }
+
+            pub const fn from_bits_truncate(bits: $repr) -> Self {
+                Self(bits & Self::all().bits())
+            }
+
+            pub const fn from_bits_retain(bits: $repr) -> Self { Self(bits) }
+            pub const fn is_empty(&self) -> bool { self.0 == 0 }
+            pub const fn is_all(&self) -> bool {
+                (self.0 & Self::all().bits()) == Self::all().bits()
+            }
+            pub const fn intersects(&self, other: Self) -> bool {
+                (self.0 & other.0) != 0
+            }
+            pub const fn contains(&self, other: Self) -> bool {
+                (self.0 & other.0) == other.0
+            }
+
+            pub fn insert(&mut self, other: Self) { self.0 |= other.0; }
+            pub fn remove(&mut self, other: Self) { self.0 &= !other.0; }
+            pub fn toggle(&mut self, other: Self) { self.0 ^= other.0; }
+            pub fn set(&mut self, other: Self, value: bool) {
+                if value { self.insert(other); } else { self.remove(other); }
+            }
+
+            pub const fn intersection(self, other: Self) -> Self { Self(self.0 & other.0) }
+            pub const fn union(self, other: Self) -> Self { Self(self.0 | other.0) }
+            pub const fn difference(self, other: Self) -> Self { Self(self.0 & !other.0) }
+            pub const fn symmetric_difference(self, other: Self) -> Self { Self(self.0 ^ other.0) }
+            pub const fn complement(self) -> Self { Self(!self.0 & Self::all().bits()) }
+        }
+
+        impl Flags for $name {
+            type Bits = $repr;
+            fn bits(&self) -> Self::Bits { self.0 }
+            fn from_bits_retain(bits: Self::Bits) -> Self { Self(bits) }
+            fn all() -> Self { Self(0 $(| $value)*) }
+        }
+
+        impl ::core::ops::BitOr for $name {
+            type Output = Self;
+            fn bitor(self, other: Self) -> Self { self.union(other) }
+        }
+
+        impl ::core::ops::BitOrAssign for $name {
+            fn bitor_assign(&mut self, other: Self) { self.insert(other); }
+        }
+
+        impl ::core::ops::BitAnd for $name {
+            type Output = Self;
+            fn bitand(self, other: Self) -> Self { self.intersection(other) }
+        }
+
+        impl ::core::ops::BitAndAssign for $name {
+            fn bitand_assign(&mut self, other: Self) { *self = self.intersection(other); }
+        }
+
+        impl ::core::ops::BitXor for $name {
+            type Output = Self;
+            fn bitxor(self, other: Self) -> Self { self.symmetric_difference(other) }
+        }
+
+        impl ::core::ops::BitXorAssign for $name {
+            fn bitxor_assign(&mut self, other: Self) { self.toggle(other); }
+        }
+
+        impl ::core::ops::Sub for $name {
+            type Output = Self;
+            fn sub(self, other: Self) -> Self { self.difference(other) }
+        }
+
+        impl ::core::ops::SubAssign for $name {
+            fn sub_assign(&mut self, other: Self) { self.remove(other); }
+        }
+
+        impl ::core::ops::Not for $name {
+            type Output = Self;
+            fn not(self) -> Self { self.complement() }
+        }
+
+        impl ::core::iter::Extend<$name> for $name {
+            fn extend<T: ::core::iter::IntoIterator<Item = $name>>(&mut self, iter: T) {
+                for item in iter { self.insert(item); }
+            }
+        }
+
+        impl ::core::iter::FromIterator<$name> for $name {
+            fn from_iter<T: ::core::iter::IntoIterator<Item = $name>>(iter: T) -> Self {
+                let mut result = Self::empty();
+                result.extend(iter);
+                result
+            }
+        }
+    };
+}
 ```
 
 
@@ -677,22 +859,33 @@ impl Bits for u16 { const EMPTY: Self = 0; }
 
 ## Step 10: Support Rust 1.56
 
+Can't use [`format` captures] anymore.
+
 ```rust
-// Captured identifiers (stabilized 1.58)
 // Before
 panic!("Unknown CreateAccountResult: {v}");
+
 // After
 panic!("Unknown CreateAccountResult: {}", v);
+```
 
-// Path::try_exists (stabilized 1.63)
+Replace [`Path::try_exists`] with [`Path:::exists`].
+`try_exists` is more precise about error handling.
+
+```rust
 // Before
 if !Path::new(&format!("{cargo_manifest_dir}/assets/tb_client.h")).try_exists()? {
 // After
 if !Path::new(&format!("{}/assets/tb_client.h", cargo_manifest_dir)).exists() {
+```
 
-// const Mutex::new (stabilized 1.63)
+Can`t use [`Mutex`] in `static`s because `Mutex` isn`t `const`.
+Need to use [`Once`] or the [`lazy_static`] crate.
+
+```rust
 // Before
 static GLOBAL_GENERATOR: Mutex<Option<TbidGenerator>> = Mutex::new(None);
+
 // After
 static ONCE: Once = Once::new();
 static mut GLOBAL_GENERATOR: MaybeUninit<Mutex<TbidGenerator>> = MaybeUninit::uninit();
@@ -702,22 +895,30 @@ ONCE.call_once(|| unsafe {
 });
 ```
 
-## Step 11: Remove rust-version
+
+## Step 11: Remove `rust-version`
+
+`cargo` uses [`rust-version`] manifest field to
+verify whether modules are compatible with the Rust toolchain,
+introduced in Rust 1.56.
 
 ```toml
 # Before
 [package]
 rust-version = "1.63"
-
-# After: field removed entirely
 ```
+
+I think previous toolchains ignore or warn when they see this field.
+
 
 ## Step 12: Edition 2018
 
-```rust
-// Cargo.toml: edition = "2021" → edition = "2018"
+Rust Edition 2018 was stabilized in Rust 1.56.
+The only significant fallout for the TigerBeetle client
+was that the [`TryFrom`] trait was not part of the
+prelude in the 2018 edition.
 
-// TryFrom is in the 2021 prelude but not 2018
+```rust
 // Before (implicit)
 let x: u32 = value.try_into()?;
 
@@ -726,10 +927,15 @@ use std::convert::TryFrom;
 let x: u32 = value.try_into()?;
 ```
 
-## Step 13: Replace CARGO_TARGET_TMPDIR
+
+## Step 13: Replace `CARGO_TARGET_TMPDIR`
+
+Modern `cargo` provides a temporary directory in its `target` directory
+for build scripts to use for their own purpose.
+The fix was just to hardcode that same path (`target/tmp`).
 
 ```rust
-// Before (stabilized 1.54)
+// Before
 let tmp_dir = env!("CARGO_TARGET_TMPDIR");
 
 // After
@@ -737,10 +943,20 @@ let manifest_dir = env!("CARGO_MANIFEST_DIR");
 let tmp_dir = format!("{}/target/tmp", manifest_dir);
 ```
 
+This fix may not be correct for workspace-based projects
+since the `target` directory will not be directly
+under the manifest directory.
+
+
 ## Step 14: Support Rust 1.51
 
+The `IntoIterator` trait that enables coercion
+from containers to iterators wasn't always defined for arrays.
+
+The only fallout from this was that I needed
+to make this one argument a slice instead of array:
+
 ```rust
-// IntoIterator for arrays (stabilized 1.53)
 // Before
 .args(["ls-files", "-z"])
 
@@ -748,15 +964,24 @@ let tmp_dir = format!("{}/target/tmp", manifest_dir);
 .args(&["ls-files", "-z"])
 ```
 
+
 ## Step 15: Support Rust 1.50
 
+[`const` generics] were stabilized in Rust 1.51.
+This is the ability to make types and functions
+generic over integers.
+
+We use this to make a generic type that holds
+an arbitrary number of reserved bytes.
+
 ```rust
-// Const generics (stabilized 1.51)
 // Before
 pub struct Reserved<const N: usize>([u8; N]);
 pub reserved: Reserved<4>,
 pub reserved: Reserved<58>,
+```
 
+```rust
 // After: macro-generated specific types
 macro_rules! reserved_type {
     ($name:ident, $size:expr) => {
@@ -776,10 +1001,13 @@ reserved_type!(Reserved56, 56);
 reserved_type!(Reserved58, 58);
 ```
 
+
 ## Step 16: Support Rust 1.45
 
-Array trait impls for lengths > 32 were extended in 1.47.
-For types containing large arrays, manual trait impls are needed:
+Various trait impls for arrays of lengths > 32 were added in 1.47.
+Prior to that for types containing large arrays manual trait impls are needed.
+We had a `Reserved58` type that contained a `[u: 58]`,
+so all the traits `Reserved58` derived could no longer derive.
 
 ```rust
 // The Reserved58 type contains [u8; 58], which didn't have
@@ -790,6 +1018,7 @@ impl Debug for Reserved58 {
     }
 }
 ```
+
 
 ## Step 17: Support Rust 1.42
 
