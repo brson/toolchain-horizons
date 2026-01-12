@@ -1005,16 +1005,62 @@ reserved_type!(Reserved58, 58);
 ## Step 16: Support Rust 1.45
 
 Various trait impls for arrays of lengths > 32 were added in 1.47.
-Prior to that for types containing large arrays manual trait impls are needed.
-We had a `Reserved58` type that contained a `[u: 58]`,
-so all the traits `Reserved58` derived could no longer derive.
+Prior to that, types containing large arrays need manual trait impls.
+We had `Reserved` types containing `[u8; 56]`, `[u8; 58]`, etc.,
+so derive macros no longer work.
 
 ```rust
-// The Reserved58 type contains [u8; 58], which didn't have
-// automatic Debug/Copy/Clone/etc impls before 1.47
-impl Debug for Reserved58 {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_tuple("Reserved58").field(&&self.0[..]).finish()
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct Reserved58([u8; 58]);
+```
+
+```rust
+// After: manual impls required for arrays > 32 elements
+pub struct Reserved58([u8; 58]);
+
+impl Copy for Reserved58 {}
+
+impl Clone for Reserved58 {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+impl Default for Reserved58 {
+    fn default() -> Self {
+        Self([0; 58])
+    }
+}
+
+impl core::fmt::Debug for Reserved58 {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_tuple("Reserved58").field(&"...").finish()
+    }
+}
+
+impl Eq for Reserved58 {}
+
+impl PartialEq for Reserved58 {
+    fn eq(&self, other: &Self) -> bool {
+        self.0[..] == other.0[..]
+    }
+}
+
+impl Ord for Reserved58 {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+        self.0[..].cmp(&other.0[..])
+    }
+}
+
+impl PartialOrd for Reserved58 {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl core::hash::Hash for Reserved58 {
+    fn hash<H: core::hash::Hasher>(&self, state: &mut H) {
+        self.0[..].hash(state);
     }
 }
 ```
