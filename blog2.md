@@ -857,7 +857,7 @@ macro_rules! bitflags {
 
 
 
-## Step 10: Support Rust 1.56
+## Step 10: Support Rust 1.56 - `format` captures
 
 Can't use [`format` captures] anymore.
 
@@ -911,7 +911,7 @@ rust-version = "1.63"
 I think previous toolchains ignore or warn when they see this field.
 
 
-## Step 12: Edition 2018
+## Step 12: Support Rust 1.55 - Edition 2021
 
 Rust Edition 2018 was stabilized in Rust 1.56.
 The only significant fallout for the TigerBeetle client
@@ -928,7 +928,7 @@ let x: u32 = value.try_into()?;
 ```
 
 
-## Step 13: Replace `CARGO_TARGET_TMPDIR`
+## Step 13: Support Rust 1.51 - `CARGO_TARGET_TMPDIR`
 
 Modern `cargo` provides a temporary directory in its `target` directory
 for build scripts to use for their own purpose.
@@ -948,7 +948,7 @@ since the `target` directory will not be directly
 under the manifest directory.
 
 
-## Step 14: Support Rust 1.51
+## Step 14: Support Rust 1.51 - `IntoIterator` for arrays.
 
 The `IntoIterator` trait that enables coercion
 from containers to iterators wasn't always defined for arrays.
@@ -965,9 +965,9 @@ to make this one argument a slice instead of array:
 ```
 
 
-## Step 15: Support Rust 1.50
+## Step 15: Support Rust 1.50 - Const generics
 
-[`const` generics] were stabilized in Rust 1.51.
+[Const generics] were stabilized in Rust 1.51.
 This is the ability to make types and functions
 generic over integers.
 
@@ -1002,7 +1002,7 @@ reserved_type!(Reserved58, 58);
 ```
 
 
-## Step 16: Support Rust 1.45
+## Step 16: Support Rust 1.45 - Trait impls on large arrays.
 
 Various trait impls for arrays of lengths > 32 were added in 1.47.
 Prior to that, types containing large arrays need manual trait impls.
@@ -1066,21 +1066,24 @@ impl core::hash::Hash for Reserved58 {
 ```
 
 
-## Step 17: Support Rust 1.42
+## Step 17: Support Rust 1.42 - Associated constants on primitives.
+
+[Associated constants on primitives].
 
 ```rust
-// Associated constants on primitives (stabilized 1.43)
-// Before
+// Before - this is an associated constant on the `u64` primitive type.
 u64::MAX
 
-// After
+// After - this is a constant in the `u64` module.
 core::u64::MAX
 ```
 
-## Step 18: Support Rust 1.41
+
+## Step 18: Support Rust 1.41 - `matches!` macro
+
+[`matches!`] was stabilized in Rust 1.42.
 
 ```rust
-// matches! macro (stabilized 1.42)
 // Before
 assert!(matches!(client, Err(tb::InitStatus::AddressInvalid)));
 
@@ -1088,25 +1091,33 @@ assert!(matches!(client, Err(tb::InitStatus::AddressInvalid)));
 assert!(match client { Err(tb::InitStatus::AddressInvalid) => true, _ => false });
 ```
 
+
+
 ## Step 19: Support Rust 1.39
 
+The [`todo!`] macro, [`mem::take`],
+and the [`non_exhaustive`] attribute,
+all [Rust 1.40].
+
 ```rust
-// todo! macro (stabilized 1.40)
 // Before
 _ => todo!(),
 // After
 _ => unimplemented!(),
+```
 
-// mem::take (stabilized 1.40)
+```rust
 // Before
 let server_stdout = mem::take(&mut server.stdout).unwrap();
 // After
 let server_stdout = mem::replace(&mut server.stdout, None).unwrap();
+```
 
-// #[non_exhaustive] attribute (stabilized 1.40)
+```rust
 // Before
 #[non_exhaustive]
 pub enum CreateAccountResult { ... }
+
 // After: attribute removed (breaking change for downstream)
 pub enum CreateAccountResult { ... }
 ```
