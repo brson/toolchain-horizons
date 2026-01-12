@@ -78,22 +78,23 @@ exactly what I did.
 | [1]  | *      | [`4c85`] | Remove   | [`ignore`]                                                            |
 | [2]  | *      | [`e67f`] | Remove   | [`walkdir`]                                                           |
 | [3]  | *      | [`4bef`] | Remove   | [`anyhow`]                                                            |
-| [4]  | [1.61] | [`65d9`] | Remove   | [`thiserror`]                                                         |
-| [5]  | [1.56] | [`f7cc`] | Split    | [`futures`] → `-channel`, `-executor`, `-util`                        |
-| [6]  | [1.56] | [`abd5`] | Polyfill | [`futures-executor`]                                                  |
-| [7]  | [1.56] | [`632b`] | Polyfill | [`futures-util`]                                                      |
-| [8]  | [1.56] | [`381d`] | Polyfill | [`futures-channel`]                                                   |
-| [9]  | [1.56] | [`46bf`] | Polyfill | [`bitflags`]                                                          |
-| [10] | [1.56] | [`fcc1`] | Rework   | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
-| [11] | [1.55] | [`db93`] | Remove   | [`rust-version`] (stabilized [1.56])                                  |
-| [12] | [1.55] | [`71b5`] | Rework   | [Edition 2021]→2018, [`TryFrom`]                                      |
-| [13] | [1.53] | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`] (stabilized [1.54])                           |
-| [14] | [1.51] | [`c459`] | Rework   | [`IntoIterator` for arrays] (stabilized [1.53])                       |
-| [15] | [1.50] | [`ff9c`] | Rework   | [const generics] (stabilized [1.51])                                  |
-| [16] | [1.45] | [`76d5`] | Rework   | [array impls] for lengths > 32 (stabilized [1.47])                    |
-| [17] | [1.42] | [`f0db`] | Replace  | [associated constants] ([`u64::MAX`]) (stabilized [1.43])             |
-| [18] | [1.41] | [`f3ac`] | Replace  | [`matches!`] (stabilized [1.42])                                      |
-| [19] | [1.39] | [`02a8`] | Rework   | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40])      |
+| [4]  | *      | [`1433`] | Remove   | [`tempfile`]                                                          |
+| [5]  | [1.61] | [`65d9`] | Remove   | [`thiserror`]                                                         |
+| [6]  | [1.56] | [`f7cc`] | Split    | [`futures`] → `-channel`, `-executor`, `-util`                        |
+| [7]  | [1.56] | [`abd5`] | Polyfill | [`futures-executor`]                                                  |
+| [8]  | [1.56] | [`632b`] | Polyfill | [`futures-util`]                                                      |
+| [9]  | [1.56] | [`381d`] | Polyfill | [`futures-channel`]                                                   |
+| [10] | [1.56] | [`46bf`] | Polyfill | [`bitflags`]                                                          |
+| [11] | [1.56] | [`fcc1`] | Rework   | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
+| [12] | [1.55] | [`db93`] | Remove   | [`rust-version`] (stabilized [1.56])                                  |
+| [13] | [1.55] | [`71b5`] | Rework   | [Edition 2021]→2018, [`TryFrom`]                                      |
+| [14] | [1.53] | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`] (stabilized [1.54])                           |
+| [15] | [1.51] | [`c459`] | Rework   | [`IntoIterator` for arrays] (stabilized [1.53])                       |
+| [16] | [1.50] | [`ff9c`] | Rework   | [const generics] (stabilized [1.51])                                  |
+| [17] | [1.45] | [`76d5`] | Rework   | [array impls] for lengths > 32 (stabilized [1.47])                    |
+| [18] | [1.42] | [`f0db`] | Replace  | [associated constants] ([`u64::MAX`]) (stabilized [1.43])             |
+| [19] | [1.41] | [`f3ac`] | Replace  | [`matches!`] (stabilized [1.42])                                      |
+| [20] | [1.39] | [`02a8`] | Rework   | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40])      |
 
 > *: `ignore` and `walkdir` are highly compatible back to Edition 2018 (Rust 1.31),
   and neither declares a `rust-version`.
@@ -106,6 +107,7 @@ exactly what I did.
 [`4c85`]: https://github.com/brson/tigerbeetle/commit/4c85201a2
 [`e67f`]: https://github.com/brson/tigerbeetle/commit/e67f1867f
 [`4bef`]: https://github.com/brson/tigerbeetle/commit/4befa9de6
+[`1433`]: https://github.com/brson/tigerbeetle/commit/14338f6ff
 [`f7cc`]: https://github.com/brson/tigerbeetle/commit/f7cc94b53
 [`abd5`]: https://github.com/brson/tigerbeetle/commit/abd5b9774
 [`632b`]: https://github.com/brson/tigerbeetle/commit/632b5ed6d
@@ -125,22 +127,23 @@ exactly what I did.
 [1]: #user-content-step-1-remove-ignore
 [2]: #user-content-step-2-remove-walkdir
 [3]: #user-content-step-3-remove-anyhow
-[4]: #user-content-step-4-remove-thiserror
-[5]: #user-content-step-5-split-futures
-[6]: #user-content-step-6-polyfill-futures-executor
-[7]: #user-content-step-7-polyfill-futures-utils
-[8]: #user-content-step-8-polyfill-futures-channel
-[9]: #user-content-step-9-polyfill-bitflags
-[10]: #user-content-step-10-support-rust-156
-[11]: #user-content-step-11-remove-rust-version
-[12]: #user-content-step-12-edition-2018
-[13]: #user-content-step-13-replace-cargo_target_tmpdir
-[14]: #user-content-step-14-support-rust-151
-[15]: #user-content-step-15-support-rust-150
-[16]: #user-content-step-16-support-rust-145
-[17]: #user-content-step-17-support-rust-142
-[18]: #user-content-step-18-support-rust-141
-[19]: #user-content-step-19-support-rust-139
+[4]: #user-content-step-4-remove-tempfile
+[5]: #user-content-step-5-remove-thiserror
+[6]: #user-content-step-6-split-futures
+[7]: #user-content-step-7-polyfill-futures-executor
+[8]: #user-content-step-8-polyfill-futures-util
+[9]: #user-content-step-9-polyfill-futures-channel
+[10]: #user-content-step-10-polyfill-bitflags
+[11]: #user-content-step-11-support-rust-156
+[12]: #user-content-step-12-remove-rust-version
+[13]: #user-content-step-13-support-rust-155
+[14]: #user-content-step-14-support-rust-153
+[15]: #user-content-step-15-support-rust-151
+[16]: #user-content-step-16-support-rust-150
+[17]: #user-content-step-17-support-rust-145
+[18]: #user-content-step-18-support-rust-142
+[19]: #user-content-step-19-support-rust-141
+[20]: #user-content-step-20-support-rust-139
 
 [`ignore`]: https://crates.io/crates/ignore
 [`walkdir`]: https://crates.io/crates/walkdir
@@ -151,6 +154,7 @@ exactly what I did.
 [`futures-util`]: https://crates.io/crates/futures-util
 [`futures-channel`]: https://crates.io/crates/futures-channel
 [`bitflags`]: https://crates.io/crates/bitflags
+[`rand`]: https://crates.io/crates/rand
 
 [format string captures]: https://blog.rust-lang.org/2022/01/13/Rust-1.58.0.html#captured-identifiers-in-format-strings
 [`Path::try_exists`]: https://doc.rust-lang.org/std/path/struct.Path.html#method.try_exists
@@ -336,7 +340,52 @@ fn smoke() -> Result<(), Box<dyn std::error::Error>> { ... }
 
 
 
-## Step 4: Remove `thiserror`
+## Step 4: Remove `tempfile`
+
+The [`tempfile`] crate creates temporary directories that are
+automatically cleaned up when dropped.
+We used this in tests to store a temporary database.
+
+```rust
+// Before
+use tempfile::TempDir;
+let temp_dir = TempDir::with_prefix_in(name, &work_dir)?;
+```
+
+Replaced with manual temp directory creation using a random seed:
+
+```
+// After
+fn random_seed() -> u64 {
+    std::hash::Hasher::finish(&std::hash::BuildHasher::build_hasher(
+        &std::collections::hash_map::RandomState::new(),
+    ))
+}
+
+let test_dir = format!("test-{name}-{}", random_seed());
+let temp_dir = PathBuf::from(format!("{work_dir}/{test_dir}"));
+std::fs::create_dir_all(&temp_dir)?;
+```
+
+This also shows the trick for getting random numbers
+from the standard library without depending on the [`rand`] crate.
+
+Cleanup is handled by the related
+`TestHarness`'s `Drop` function:
+
+```rust
+impl Drop for TestHarness {
+    fn drop(&mut self) {
+        // ... stop server ...
+        let _ = std::fs::remove_dir_all(&self.temp_dir);
+    }
+}
+```
+
+
+
+
+## Step 5: Remove `thiserror`
 
 The [`thiserror`] crate makes it easy to maintain _precise_ error types.
 Using `thiserror` requires significant metadata annotations,
@@ -393,7 +442,7 @@ impl core::fmt::Display for CreateAccountResult {
 
 
 
-## Step 5: Split futures
+## Step 6: Split futures
 
 The [`futures`] crate is a façade that minimally-wraps
 other crates.
@@ -422,7 +471,7 @@ futures-util = "0.3.31"
 
 
 
-## Step 6: Polyfill `futures-executor`
+## Step 7: Polyfill `futures-executor`
 
 From [`futures-executor`],
 [`block_on`] is a simple async executor
@@ -532,7 +581,7 @@ unsafe fn drop(ptr: *const ()) {
 
 
 
-## Step 7: Polyfill `futures-util`
+## Step 8: Polyfill `futures-util`
 
 We use the `unfold` method of the `Stream` trait
 specifically to write one test case and one doc-comment example,
@@ -637,7 +686,7 @@ where
 
 
 
-## Step 8: Polyfill `futures-channel`
+## Step 9: Polyfill `futures-channel`
 
 We needed [`oneshot`] channels.
 This is actually used in the production code path, not just tests,
@@ -686,7 +735,7 @@ impl<T> Future for OneshotFuture<T> {
 
 
 
-## Step 9: Polyfill `bitflags`
+## Step 10: Polyfill `bitflags`
 
 `bitflags` fills a Rust language gap for bit-addressable scalar values or bitfields.
 The TigerBeetle client has a bitfield in the public API,
@@ -913,7 +962,7 @@ macro_rules! bitflags {
 
 
 
-## Step 10: Support [Rust 1.56] - `format` captures
+## Step 11: Support [Rust 1.56] - `format` captures
 
 Can't use [format string captures] anymore.
 
@@ -952,7 +1001,7 @@ ONCE.call_once(|| unsafe {
 ```
 
 
-## Step 11: Remove `rust-version`
+## Step 12: Remove `rust-version`
 
 `cargo` uses [`rust-version`] manifest field to
 verify whether modules are compatible with the Rust toolchain,
@@ -967,7 +1016,7 @@ rust-version = "1.63"
 I think previous toolchains ignore or warn when they see this field.
 
 
-## Step 12: Support [Rust 1.55] - Edition 2021
+## Step 13: Support [Rust 1.55] - Edition 2021
 
 [Edition 2021] was stabilized in [Rust 1.56].
 The only significant fallout for the TigerBeetle client
@@ -984,7 +1033,7 @@ let x: u32 = value.try_into()?;
 ```
 
 
-## Step 13: Support [Rust 1.53] - `CARGO_TARGET_TMPDIR`
+## Step 14: Support [Rust 1.53] - `CARGO_TARGET_TMPDIR`
 
 Modern `cargo` provides a temporary directory in its `target` directory
 for build scripts to use for their own purpose.
@@ -1004,7 +1053,7 @@ since the `target` directory will not be directly
 under the manifest directory.
 
 
-## Step 14: Support [Rust 1.51] - `IntoIterator` for arrays
+## Step 15: Support [Rust 1.51] - `IntoIterator` for arrays
 
 The `IntoIterator` trait that enables coercion
 from containers to iterators wasn't always defined for arrays.
@@ -1021,7 +1070,7 @@ to make this one argument a slice instead of array:
 ```
 
 
-## Step 15: Support [Rust 1.50] - Const generics
+## Step 16: Support [Rust 1.50] - Const generics
 
 [Const generics][const generics] were stabilized in [Rust 1.51].
 This is the ability to make types and functions
@@ -1058,7 +1107,7 @@ reserved_type!(Reserved58, 58);
 ```
 
 
-## Step 16: Support [Rust 1.45] - Trait impls on large arrays
+## Step 17: Support [Rust 1.45] - Trait impls on large arrays
 
 Various [array impls] for lengths > 32 were added in [Rust 1.47].
 Prior to that, types containing large arrays need manual trait impls.
@@ -1122,7 +1171,7 @@ impl core::hash::Hash for Reserved58 {
 ```
 
 
-## Step 17: Support [Rust 1.42] - Associated constants on primitives
+## Step 18: Support [Rust 1.42] - Associated constants on primitives
 
 [Associated constants on primitives][associated constants on primitives] like [`u64::MAX`] were stabilized in [Rust 1.43].
 
@@ -1135,7 +1184,7 @@ core::u64::MAX
 ```
 
 
-## Step 18: Support [Rust 1.41] - `matches!` macro
+## Step 19: Support [Rust 1.41] - `matches!` macro
 
 [`matches!`] was stabilized in [Rust 1.42].
 
@@ -1149,7 +1198,7 @@ assert!(match client { Err(tb::InitStatus::AddressInvalid) => true, _ => false }
 
 
 
-## Step 19: Support [Rust 1.39]
+## Step 20: Support [Rust 1.39]
 
 The [`todo!`] macro, [`mem::take`],
 and the [`non_exhaustive`] attribute
