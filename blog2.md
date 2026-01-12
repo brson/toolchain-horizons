@@ -9,9 +9,9 @@ in the [TigerBeetle] Rust client.
 
 As part of that experiment I removed every dependency from the Rust client,
 and also pushed back the minimum supported Rust version as far
-as I could, to version 1.39 (released todo date).
+as I could, to [Rust 1.39], released November 2019.
 Supporting toolchains prior to 1.39 requires not using
-the `async` / `await` syntax,
+the [`async`/`await`] syntax,
 which in this case I judged too burdensome to consider.
 
 This followup describes in detail each step I took
@@ -22,6 +22,14 @@ it may be interesting to some Rust programmers.
 Much of this work is not in mainline TigerBeetle
 as the benefits and tradeoffs are not clear;
 lined commits are [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
+
+
+
+
+---
+
+
+
 
 My starting `Cargo.toml` was
 
@@ -38,7 +46,6 @@ thiserror = "2.0.3"
 
 [build-dependencies]
 anyhow = "1.0.93"
-bindgen = "0.70.1"
 ignore = "0.4.23"
 
 [dev-dependencies]
@@ -46,12 +53,16 @@ anyhow = "1.0.93"
 tempfile = "3.15.0"
 ```
 
+(Crates: [`bitflags`], [`futures`], [`thiserror`], [`anyhow`], [`ignore`], [`tempfile`].)
 
-The below table shows what I had to do to support progressively
-older versions of the Rust compiler.
-Links generally go to interesting places,
-with the "step" links leading to a detailed description of
-how I enabled compatibility with that version.
+
+
+
+The table below shows the steps
+required to remove all these dependencies
+and to support progressively older versions of the Rust compiler.
+Following that are detailed descriptions of each step,
+the features removed and how it was done.
 
 I have tried to represent the technical details here
 as accurately as reasonable,
@@ -60,31 +71,36 @@ The code examples are representative and not always
 exactly what I did.
 
 
-| Step | Rust | Commit   | Action   | Features                                                              |
-|------|------|----------|----------|-----------------------------------------------------------------------|
-| [1]  | *    | [`4c85`] | Remove   | [`ignore`]                                                            |
-| [2]  | *    | [`e67f`] | Remove   | [`walkdir`]                                                           |
-| [3]  | *    | [`4bef`] | Remove   | [`anyhow`]                                                            |
-| [4]  | 1.61 | [`65d9`] | Remove   | [`thiserror`]                                                         |
-| [5]  | 1.56 | [`f7cc`] | Split    | [`futures`] → `-channel`, `-executor`, `-util`                        |
-| [6]  | 1.56 | [`abd5`] | Polyfill | [`futures-executor`]                                                  |
-| [7]  | 1.56 | [`632b`] | Polyfill | [`futures-util`]                                                      |
-| [8]  | 1.56 | [`381d`] | Polyfill | [`futures-channel`]                                                   |
-| [9]  | 1.56 | [`46bf`] | Polyfill | [`bitflags`]                                                          |
-| [10] | 1.56 | [`fcc1`] | Rework   | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
-| [11] | 1.55 | [`db93`] | Remove   | [`rust-version`] (stabilized 1.56)                                    |
-| [12] | 1.55 | [`71b5`] | Rework   | [Edition 2021]→2018, [`TryFrom`]                                      |
-| [13] | 1.53 | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`] (stabilized 1.54)                             |
-| [14] | 1.51 | [`c459`] | Rework   | [`IntoIterator` for arrays] (stabilized 1.53)                         |
-| [15] | 1.50 | [`ff9c`] | Rework   | [const generics] (stabilized 1.51)                                    |
-| [16] | 1.45 | [`76d5`] | Rework   | [array impls] for lengths > 32 (stabilized 1.47)                      |
-| [17] | 1.42 | [`f0db`] | Replace  | [associated constants] ([`u64::MAX`]) (stabilized 1.43)               |
-| [18] | 1.41 | [`f3ac`] | Replace  | [`matches!`] (stabilized 1.42)                                        |
-| [19] | 1.39 | [`02a8`] | Rework   | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized 1.40)        |
+
+
+| Step | Rust   | Commit   | Action   | Features                                                              |
+|------|--------|----------|----------|-----------------------------------------------------------------------|
+| [1]  | *      | [`4c85`] | Remove   | [`ignore`]                                                            |
+| [2]  | *      | [`e67f`] | Remove   | [`walkdir`]                                                           |
+| [3]  | *      | [`4bef`] | Remove   | [`anyhow`]                                                            |
+| [4]  | [1.61] | [`65d9`] | Remove   | [`thiserror`]                                                         |
+| [5]  | [1.56] | [`f7cc`] | Split    | [`futures`] → `-channel`, `-executor`, `-util`                        |
+| [6]  | [1.56] | [`abd5`] | Polyfill | [`futures-executor`]                                                  |
+| [7]  | [1.56] | [`632b`] | Polyfill | [`futures-util`]                                                      |
+| [8]  | [1.56] | [`381d`] | Polyfill | [`futures-channel`]                                                   |
+| [9]  | [1.56] | [`46bf`] | Polyfill | [`bitflags`]                                                          |
+| [10] | [1.56] | [`fcc1`] | Rework   | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
+| [11] | [1.55] | [`db93`] | Remove   | [`rust-version`] (stabilized [1.56])                                  |
+| [12] | [1.55] | [`71b5`] | Rework   | [Edition 2021]→2018, [`TryFrom`]                                      |
+| [13] | [1.53] | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`] (stabilized [1.54])                           |
+| [14] | [1.51] | [`c459`] | Rework   | [`IntoIterator` for arrays] (stabilized [1.53])                       |
+| [15] | [1.50] | [`ff9c`] | Rework   | [const generics] (stabilized [1.51])                                  |
+| [16] | [1.45] | [`76d5`] | Rework   | [array impls] for lengths > 32 (stabilized [1.47])                    |
+| [17] | [1.42] | [`f0db`] | Replace  | [associated constants] ([`u64::MAX`]) (stabilized [1.43])             |
+| [18] | [1.41] | [`f3ac`] | Replace  | [`matches!`] (stabilized [1.42])                                      |
+| [19] | [1.39] | [`02a8`] | Rework   | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40])      |
 
 > *: `ignore` and `walkdir` are highly compatible back to Edition 2018 (Rust 1.31),
   and neither declares a `rust-version`.
   I removed them anyway as a matter of [TigerStyle](https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/TIGER_STYLE.md).
+
+
+
 
 [`65d9`]: https://github.com/brson/tigerbeetle/commit/65d9b96fa
 [`4c85`]: https://github.com/brson/tigerbeetle/commit/4c85201a2
@@ -153,6 +169,51 @@ exactly what I did.
 [`mem::take`]: https://doc.rust-lang.org/std/mem/fn.take.html
 [`non_exhaustive`]: https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute
 
+[Rust 1.39]: https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html
+[Rust 1.40]: https://blog.rust-lang.org/2019/12/19/Rust-1.40.0.html
+[Rust 1.41]: https://blog.rust-lang.org/2020/01/30/Rust-1.41.0.html
+[Rust 1.42]: https://blog.rust-lang.org/2020/03/12/Rust-1.42.0.html
+[Rust 1.43]: https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html
+[Rust 1.45]: https://blog.rust-lang.org/2020/07/16/Rust-1.45.0.html
+[Rust 1.47]: https://blog.rust-lang.org/2020/10/08/Rust-1.47.html
+[Rust 1.50]: https://blog.rust-lang.org/2021/02/11/Rust-1.50.0.html
+[Rust 1.51]: https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html
+[Rust 1.53]: https://blog.rust-lang.org/2021/06/17/Rust-1.53.0.html
+[Rust 1.54]: https://blog.rust-lang.org/2021/07/29/Rust-1.54.0.html
+[Rust 1.55]: https://blog.rust-lang.org/2021/09/09/Rust-1.55.0.html
+[Rust 1.56]: https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html
+[Rust 1.58]: https://blog.rust-lang.org/2022/01/13/Rust-1.58.0.html
+[Rust 1.61]: https://blog.rust-lang.org/2022/05/19/Rust-1.61.0.html
+[Rust 1.63]: https://blog.rust-lang.org/2022/08/11/Rust-1.63.0.html
+
+[`Mutex`]: https://doc.rust-lang.org/std/sync/struct.Mutex.html
+[`Once`]: https://doc.rust-lang.org/std/sync/struct.Once.html
+[`lazy_static`]: https://crates.io/crates/lazy_static
+[`Path::exists`]: https://doc.rust-lang.org/std/path/struct.Path.html#method.exists
+[associated constants on primitives]: https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html
+[`tempfile`]: https://crates.io/crates/tempfile
+[`async`/`await`]: https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html#async-await-is-stable
+
+[1.39]: https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html
+[1.40]: https://blog.rust-lang.org/2019/12/19/Rust-1.40.0.html
+[1.41]: https://blog.rust-lang.org/2020/01/30/Rust-1.41.0.html
+[1.42]: https://blog.rust-lang.org/2020/03/12/Rust-1.42.0.html
+[1.43]: https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html
+[1.45]: https://blog.rust-lang.org/2020/07/16/Rust-1.45.0.html
+[1.47]: https://blog.rust-lang.org/2020/10/08/Rust-1.47.html
+[1.50]: https://blog.rust-lang.org/2021/02/11/Rust-1.50.0.html
+[1.51]: https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html
+[1.53]: https://blog.rust-lang.org/2021/06/17/Rust-1.53.0.html
+[1.54]: https://blog.rust-lang.org/2021/07/29/Rust-1.54.0.html
+[1.55]: https://blog.rust-lang.org/2021/09/09/Rust-1.55.0.html
+[1.56]: https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html
+[1.61]: https://blog.rust-lang.org/2022/05/19/Rust-1.61.0.html
+
+
+
+
+---
+
 
 
 
@@ -163,9 +224,9 @@ which needs to orchestrate linking of the native `tb_client`
 library in platform-specific ways,
 and to arrange for the inclusion of various static assets.
 
-The `ignore` crate is for walking the file system
+The [`ignore`] crate is for walking the file system
 while following `.gitignore` rules.
-An easy approximation can be written with the simpler `walkdir` crate.
+An easy approximation can be written with the simpler [`walkdir`] crate.
 
 ```rust
 // Before: ignore crate handles .gitignore automatically
@@ -201,8 +262,8 @@ for entry in WalkDir::new(&tigerbeetle_root)
 
 ## Step 2: Remove `walkdir`
 
-We used `walkdir` in the build script to find source files
-for which to emit `cargo:rerun-if-changed` directives,
+We used [`walkdir`] in the build script to find source files
+for which to emit [`cargo:rerun-if-changed` directives],
 allowing cargo to rebuild if non-Rust input files change.
 
 For this specific purpose we can just ask `git ls-files`
@@ -251,7 +312,7 @@ for file_path in stdout.split('\0') {
 
 ## Step 3: Remove `anyhow`
 
-The `anyhow` crate makes it easy to handle errors correctly
+The [`anyhow`] crate makes it easy to handle errors correctly
 without thinking hard about precise error scenarios.
 We used `anyhow` for convenience in the build script &mdash;
 within the crate itself we use precise error types.
@@ -272,25 +333,20 @@ fn test_client() -> Result<tb::Client, Box<dyn std::error::Error>> { ... }
 fn smoke() -> Result<(), Box<dyn std::error::Error>> { ... }
 ```
 
-The resulting types are unpleasant to read
-(especially for code that needs to account for `Send`, `Sync`, and `'static` bounds),
-so this isn't a transformation I favor for anything other
-than small codebases.
-
 
 
 
 ## Step 4: Remove `thiserror`
 
-The `thiserror` crate makes it easy to maintain _precise_ error types.
+The [`thiserror`] crate makes it easy to maintain _precise_ error types.
 Using `thiserror` requires significant metadata annotations,
-and as Rust's `Error` trait has improved
+and as Rust's [`Error`] trait has improved
 the cost-benefit of using `thiserror` over hand-writing
 error trait implementations has become less clear.
 
 Replacing it generally requires adding a one-liner
 that implements the `Error` trait,
-plus a full-boilerplate implementation of the `Display` trait,
+plus a full-boilerplate implementation of the [`Display`] trait,
 the code duplication for which is actually not bad,
 and which has comparable readability to the `thiserror`-annotated version.
 
@@ -339,13 +395,13 @@ impl core::fmt::Display for CreateAccountResult {
 
 ## Step 5: Split futures
 
-The vital `futures` crate is a façade that minimally-wraps
+The [`futures`] crate is a façade that minimally-wraps
 other crates.
 The first step to removing it is to split it
 into the sub-crates containing the features we use:
-message channels,
-the basic `block_on` async executor,
-and the `Stream` trait.
+[`oneshot`] message channels,
+the basic [`block_on`] async executor,
+and the [`Stream`] trait.
 
 ```toml
 # Before
@@ -368,13 +424,13 @@ futures-util = "0.3.31"
 
 ## Step 6: Polyfill `futures-executor`
 
-From `futures-executor`,
-`block_on` is a simple async executor
+From [`futures-executor`],
+[`block_on`] is a simple async executor
 useful for non-I/O async tasks,
 and for writing runtime-agnostic test-cases.
 
-Impleminting the most basic Rust executor is not super hard,
-but involves some unsafe code with careful semantics.
+Impleminting the most basic Rust executor
+involves some unsafe code.
 
 
 ```rust
@@ -431,7 +487,7 @@ impl Parker {
 
 &nbsp;
 
-**That was the easy part. Then there's this unsafe goop:**
+**That was the easy part of implementing `block_on`. Then there's this:**
 
 &nbsp;
 
@@ -857,9 +913,9 @@ macro_rules! bitflags {
 
 
 
-## Step 10: Support Rust 1.56 - `format` captures
+## Step 10: Support [Rust 1.56] - `format` captures
 
-Can't use [`format` captures] anymore.
+Can't use [format string captures] anymore.
 
 ```rust
 // Before
@@ -869,7 +925,7 @@ panic!("Unknown CreateAccountResult: {v}");
 panic!("Unknown CreateAccountResult: {}", v);
 ```
 
-Replace [`Path::try_exists`] with [`Path:::exists`].
+Replace [`Path::try_exists`] with [`Path::exists`].
 `try_exists` is more precise about error handling.
 
 ```rust
@@ -900,7 +956,7 @@ ONCE.call_once(|| unsafe {
 
 `cargo` uses [`rust-version`] manifest field to
 verify whether modules are compatible with the Rust toolchain,
-introduced in Rust 1.56.
+introduced in [Rust 1.56].
 
 ```toml
 # Before
@@ -911,9 +967,9 @@ rust-version = "1.63"
 I think previous toolchains ignore or warn when they see this field.
 
 
-## Step 12: Support Rust 1.55 - Edition 2021
+## Step 12: Support [Rust 1.55] - Edition 2021
 
-Rust Edition 2018 was stabilized in Rust 1.56.
+[Edition 2021] was stabilized in [Rust 1.56].
 The only significant fallout for the TigerBeetle client
 was that the [`TryFrom`] trait was not part of the
 prelude in the 2018 edition.
@@ -928,7 +984,7 @@ let x: u32 = value.try_into()?;
 ```
 
 
-## Step 13: Support Rust 1.51 - `CARGO_TARGET_TMPDIR`
+## Step 13: Support [Rust 1.53] - `CARGO_TARGET_TMPDIR`
 
 Modern `cargo` provides a temporary directory in its `target` directory
 for build scripts to use for their own purpose.
@@ -948,7 +1004,7 @@ since the `target` directory will not be directly
 under the manifest directory.
 
 
-## Step 14: Support Rust 1.51 - `IntoIterator` for arrays.
+## Step 14: Support [Rust 1.51] - `IntoIterator` for arrays
 
 The `IntoIterator` trait that enables coercion
 from containers to iterators wasn't always defined for arrays.
@@ -965,9 +1021,9 @@ to make this one argument a slice instead of array:
 ```
 
 
-## Step 15: Support Rust 1.50 - Const generics
+## Step 15: Support [Rust 1.50] - Const generics
 
-[Const generics] were stabilized in Rust 1.51.
+[Const generics][const generics] were stabilized in [Rust 1.51].
 This is the ability to make types and functions
 generic over integers.
 
@@ -1002,9 +1058,9 @@ reserved_type!(Reserved58, 58);
 ```
 
 
-## Step 16: Support Rust 1.45 - Trait impls on large arrays.
+## Step 16: Support [Rust 1.45] - Trait impls on large arrays
 
-Various trait impls for arrays of lengths > 32 were added in 1.47.
+Various [array impls] for lengths > 32 were added in [Rust 1.47].
 Prior to that, types containing large arrays need manual trait impls.
 We had `Reserved` types containing `[u8; 56]`, `[u8; 58]`, etc.,
 so derive macros no longer work.
@@ -1066,9 +1122,9 @@ impl core::hash::Hash for Reserved58 {
 ```
 
 
-## Step 17: Support Rust 1.42 - Associated constants on primitives.
+## Step 17: Support [Rust 1.42] - Associated constants on primitives
 
-[Associated constants on primitives].
+[Associated constants on primitives][associated constants on primitives] like [`u64::MAX`] were stabilized in [Rust 1.43].
 
 ```rust
 // Before - this is an associated constant on the `u64` primitive type.
@@ -1079,9 +1135,9 @@ core::u64::MAX
 ```
 
 
-## Step 18: Support Rust 1.41 - `matches!` macro
+## Step 18: Support [Rust 1.41] - `matches!` macro
 
-[`matches!`] was stabilized in Rust 1.42.
+[`matches!`] was stabilized in [Rust 1.42].
 
 ```rust
 // Before
@@ -1093,11 +1149,11 @@ assert!(match client { Err(tb::InitStatus::AddressInvalid) => true, _ => false }
 
 
 
-## Step 19: Support Rust 1.39
+## Step 19: Support [Rust 1.39]
 
 The [`todo!`] macro, [`mem::take`],
-and the [`non_exhaustive`] attribute,
-all [Rust 1.40].
+and the [`non_exhaustive`] attribute
+were all stabilized in [Rust 1.40].
 
 ```rust
 // Before
