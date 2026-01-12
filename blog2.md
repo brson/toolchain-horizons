@@ -21,7 +21,7 @@ it may be interesting to some Rust programmers.
 
 Much of this work is not in mainline TigerBeetle
 as the benefits and tradeoffs are not clear;
-lined commits are [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
+linked commits are [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
 
 
 
