@@ -197,6 +197,14 @@ exactly what I did.
 [associated constants on primitives]: https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html
 [`tempfile`]: https://crates.io/crates/tempfile
 [`async`/`await`]: https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html#async-await-is-stable
+[`Error`]: https://doc.rust-lang.org/std/error/trait.Error.html
+[`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
+[`oneshot`]: https://docs.rs/futures-channel/latest/futures_channel/oneshot/index.html
+[`block_on`]: https://docs.rs/futures-executor/latest/futures_executor/fn.block_on.html
+[`Stream`]: https://docs.rs/futures-core/latest/futures_core/stream/trait.Stream.html
+[`unfold`]: https://docs.rs/futures-util/latest/futures_util/stream/fn.unfold.html
+[provides a temporary directory]: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates
+[`cargo:rerun-if-changed` directives]: https://doc.rust-lang.org/cargo/reference/build-scripts.html#rerun-if-changed
 
 [1.39]: https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html
 [1.40]: https://blog.rust-lang.org/2019/12/19/Rust-1.40.0.html
@@ -1036,7 +1044,7 @@ let x: u32 = value.try_into()?;
 ## Step 14: Support [Rust 1.53] - `CARGO_TARGET_TMPDIR`
 
 Modern `cargo` [provides a temporary directory] in its `target` directory
-for build scripts to use for their own purpose.
+for integration tests to use.
 The fix was just to hardcode that same path (`target/tmp`).
 
 ```rust
