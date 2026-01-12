@@ -23,6 +23,31 @@ it may be interesting to some Rust programmers.
   as the benefits and tradeoffs are not clear;
   it is [on my own branch](https://github.com/brson/tigerbeetle/tree/rustclient-no-deps-do-not-delete).
 
+
+My starting `Cargo.toml` was
+
+```toml
+[package]
+name = "tigerbeetle"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bitflags = "2.6.0"
+futures = "0.3.31"
+thiserror = "2.0.3"
+
+[build-dependencies]
+anyhow = "1.0.93"
+bindgen = "0.70.1"
+ignore = "0.4.23"
+
+[dev-dependencies]
+anyhow = "1.0.93"
+tempfile = "3.15.0"
+```
+
+
 The below table shows what I had to do to support progressively
 older versions of the Rust compiler.
 Links generally go to interesting places,
@@ -50,13 +75,13 @@ exactly what I did.
 | [10] | 1.56 | [`fcc1`] | Rework   | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
 | [11] | 1.56 | [`db93`] | Remove   | [`rust-version`] (manifest)                                           |
 | [12] | 1.55 | [`71b5`] | Rework   | [Edition 2021]→2018, [`TryFrom`]                                      |
-| [13] | 1.53 | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`]                                               |
-| [14] | 1.51 | [`c459`] | Rework   | [`IntoIterator` for arrays] (introduced 1.53)                         |
-| [15] | 1.50 | [`ff9c`] | Rework   | [const generics] (introduced 1.51)                                    |
-| [16] | 1.45 | [`76d5`] | Rework   | [array impls] for lengths > 32 (extended 1.47)                        |
-| [17] | 1.42 | [`f0db`] | Replace  | [associated constants] ([`u64::MAX`]) (introduced 1.43)               |
+| [13] | 1.53 | [`dad2`] | Replace  | [`CARGO_TARGET_TMPDIR`] (stabilized 1.54)                             |
+| [14] | 1.51 | [`c459`] | Rework   | [`IntoIterator` for arrays] (stabilized 1.53)                         |
+| [15] | 1.50 | [`ff9c`] | Rework   | [const generics] (stabilized 1.51)                                    |
+| [16] | 1.45 | [`76d5`] | Rework   | [array impls] for lengths > 32 (stabilized 1.47)                      |
+| [17] | 1.42 | [`f0db`] | Replace  | [associated constants] ([`u64::MAX`]) (stabilized 1.43)               |
 | [18] | 1.41 | [`f3ac`] | Replace  | [`matches!`] (stabilized 1.42)                                        |
-| [19] | 1.39 | [`02a8`] | Rework   | [`todo!`], [`mem::take`], [`#[non_exhaustive]`] (stabilized 1.40)     |
+| [19] | 1.39 | [`02a8`] | Rework   | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized 1.40)        |
 
 > *: `ignore` and `walkdir` are highly compatible back to Edition 2018 (Rust 1.31),
   and neither declares a `rust-version`.
@@ -127,7 +152,7 @@ exactly what I did.
 [`matches!`]: https://doc.rust-lang.org/std/macro.matches.html
 [`todo!`]: https://doc.rust-lang.org/std/macro.todo.html
 [`mem::take`]: https://doc.rust-lang.org/std/mem/fn.take.html
-[`#[non_exhaustive]`]: https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute
+[`non_exhaustive`]: https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute
 
 
 
