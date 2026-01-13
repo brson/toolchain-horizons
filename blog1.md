@@ -7,6 +7,7 @@ supported Rust version I encountered multiple
 surprises about how common Rust crates manage their toolchain dependencies.
 So I did an experiment to learn more about toolchain
 support in the Rust dependency landscape.
+
 In the course of this experiment I learned
 that common Rust crates support
 only 1-2 years of prior Rust toolchains;
