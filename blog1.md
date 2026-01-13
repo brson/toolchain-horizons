@@ -150,16 +150,48 @@ It has this to say about dependencies:
   For foundational infrastructure in particular,
   the cost of any dependency is further amplified throughout the rest of the stack.
 
+In order to support older Rust toolchains,
+and as a general matter of TigerStyle,
+one of my first tasks to land the Rust client
+was to judiciously remove crate dependencies.
 
 
 
-## TigerBeetle Rust client dependencies
 
+## Reducing TigerBeetle Rust client dependencies
+
+At the start of the process the client's dependencies were thus:
+
+```toml
+[package]
+name = "tigerbeetle"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bitflags = "2.6.0"
+futures = "0.3.31"
+thiserror = "2.0.3"
+
+[build-dependencies]
+anyhow = "1.0.93"
+ignore = "0.4.23"
+
+[dev-dependencies]
+anyhow = "1.0.93"
+tempfile = "3.15.0"
+```
+
+To Rust programmers this is common stuff,
+dependecies most of us use.
 
 
 
 
 ## The Rust `futures` dependency problem
+
+
+
 
 
 
