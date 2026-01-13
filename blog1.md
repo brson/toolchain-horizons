@@ -17,12 +17,60 @@ TigerBeetle has a client-server architecture,
 and provides client libraries for most popular languages:
 Python, Java, Go, Node, .NET, and now Rust.
 Each of these is a bindings/FFI project that binds
-to the single `tb_client` library, written in Zig,
+to the single `tb_client` library,
+written in Zig,
 exposing a C ABI,
-wrapped in the idioms of the appropriate language.
+wrapped in the idioms of the embedding language.
 
 
 <!-- todo tb_client diagram -->
+
+
+The Rust client is less than two thousand lines of production Rust code,
+some of it generated, some of it written by hand.
+It provides a simple asynchronous,
+futures-oriented API for use with `async` / `await`;
+and it is runtime-agnostic,
+requiring no dependencies on specific Rust async runtimes.
+
+In use it looks like this:
+
+```rust
+use tigerbeetle as tb;
+
+// Connect to TigerBeetle
+let client = tb::Client::new(0, "127.0.0.1:3000")?;
+
+// Create two accounts on the same ledger
+let accounts = [
+    tb::Account {
+        id: tb::id(),
+        ledger: 1,
+        code: 1,
+        ..Default::default()
+    },
+    tb::Account {
+        id: tb::id(),
+        ledger: 1,
+        code: 1,
+        ..Default::default()
+    },
+];
+client.create_accounts(&accounts).await?;
+
+// Transfer 100 units from the first account to the second
+let transfers = [tb::Transfer {
+    id: tb::id(),
+    debit_account_id: accounts[0].id,
+    credit_account_id: accounts[1].id,
+    amount: 100,
+    ledger: 1,
+    code: 1,
+    ..Default::default()
+}];
+client.create_transfers(&transfers).await?;
+```
+
 
 
 
