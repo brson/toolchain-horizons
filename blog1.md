@@ -1,6 +1,6 @@
 # Toolchain Horizons: Exploring Dependency-Toolchain Compatibility
 
-Last year I created the Rust client for [TigerBeetle],
+Last year I created the Rust client for [TigerBeetle](https://github.com/tigerbeetle/tigerbeetle),
 the double-entry financial accounting database.
 While landing the code and establishing the minimum
 supported Rust version I encountered multiple
@@ -23,7 +23,7 @@ exposing a C ABI,
 wrapped in the idioms of the embedding language.
 
 
-<!-- todo tb_client diagram -->
+![TigerBeetle client architecture: language clients (Python, Java, Go, Node, .NET, Rust) all connect to the central tb_client library written in Zig](tb-client-arch.svg)
 
 
 The Rust client is less than two thousand lines of production Rust code,
