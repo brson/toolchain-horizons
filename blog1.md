@@ -267,6 +267,35 @@ tough to eliminate from large Rust programs.
 
 ---
 
+So I did my rework on the Rust client pull request,
+removing one dependency at a time,
+reducing the MSRV.
+
+I had succeeding in reducing the MSRV to 1.63
+after removing dependencies on those crates
+which were simplest to remove: `ignore`,
+`walkdir`, `anyhow`, `thiserror`, `tempfile`.
+Most everything but `futures`.
+
+Then one day I resumed my work
+and found the The Rust client no longer built on our CI:
+the `syn` crate had published a point release that broke our build.
+
+It wasn't an accidental breaking change.
+It was `rust-version`.
+In `syn` version `2.0.107`,
+its `rust-version` changed from 1.61 to 1.68.
+
+My work undone.
+
+Yes in a point release this crate broke backwards toolchain compatibility.
+This seems to be considered a valid thing to change in a point release,
+though I have no insight into the rationale &mdash;
+it is plainly a "breaking change" in some reasonable sense of the words.
+
+This bothered me a lot,
+so I did an experiment to learn more
+about the state of crate-toolchain compatibility.
 
 
 
