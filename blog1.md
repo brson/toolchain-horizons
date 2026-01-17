@@ -289,11 +289,12 @@ its `rust-version` changed from 1.61 to 1.68.
 My work undone.
 
 Yes in a point release this crate broke backwards toolchain compatibility.
-This seems to be considered a valid thing to change in a point release,
+This seems to be considered a valid thing to change in a point release among Rust maintainers,
 though I have no insight into the rationale &mdash;
-it is plainly a "breaking change" in some reasonable sense of the words.
+it is plainly a "breaking change" in some reasonable sense,
+generally discouraged in point releases.
 
-This bothered me a lot,
+I was greatly annoyed,
 so I did an experiment to learn more
 about the state of crate-toolchain compatibility.
 
