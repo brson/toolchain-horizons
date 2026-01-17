@@ -204,7 +204,21 @@ Most of these were easy to remove.
 
 ## The Rust `futures` dependency problem
 
+The `futures` crate was not easy to remove.
+
+The `futures` crate is fundamentally important
+to the Rust ecosystem.
+It was where the original futures implementation was prototyped,
+and continues to maintain code that so important
+that it continues to be all but required for using async Rust.
+I suspect that most sizable Rust projects depend on the `futures` crate.
+It is an official crate maintained by the Rust project.
+
+It's a big dependency,
+as shown in this dependency graph from `cargo tree`:
+
 ```
+futures v0.3.31
 ├── futures-channel v0.3.31
 │   ├── futures-core v0.3.31
 │   └── futures-sink v0.3.31
@@ -237,6 +251,21 @@ Most of these were easy to remove.
 └── futures-util v0.3.31 (*)
 ```
 
+The `futures` crate is a "façade" crate &mdash;
+it mostly reexports other crates into a single interface.
+
+Notice that `futures` transitively depends on
+[`syn`] and [`proc-macro`].
+These two are fundamental ecosystem crates in their own right,
+used when implementing macros.
+They are not official crates
+but they are critical and tightly related to the Rust compiler,
+tracking its lexical structure, syntax and macro interfaces.
+
+This is a very sticky dependency,
+tough to eliminate from large Rust programs.
+
+---
 
 
 
