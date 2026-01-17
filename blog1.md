@@ -185,11 +185,57 @@ tempfile = "3.15.0"
 To Rust programmers this is common stuff,
 dependecies most of us use.
 
+Only 3 dependencies for production code,
+more for the build script and test.
+Some might consider it important to
+reduce production dependencies while allowing
+build- and test-time dependencies;
+but it's important to realize that build
+and dev dependencies still affect cargo's
+ability to resolve the crate graph.
+In particular,
+build and dev dependencies that declare a supported `rust-version`
+will limit your ability to compile on older toolchains.
+
+Most of these were easy to remove.
+
 
 
 
 ## The Rust `futures` dependency problem
 
+```
+├── futures-channel v0.3.31
+│   ├── futures-core v0.3.31
+│   └── futures-sink v0.3.31
+├── futures-core v0.3.31
+├── futures-executor v0.3.31
+│   ├── futures-core v0.3.31
+│   ├── futures-task v0.3.31
+│   └── futures-util v0.3.31
+│       ├── futures-channel v0.3.31 (*)
+│       ├── futures-core v0.3.31
+│       ├── futures-io v0.3.31
+│       ├── futures-macro v0.3.31 (proc-macro)
+│       │   ├── proc-macro2 v1.0.90
+│       │   │   └── unicode-ident v1.0.14
+│       │   ├── quote v1.0.37
+│       │   │   └── proc-macro2 v1.0.90 (*)
+│       │   └── syn v2.0.88
+│       │       ├── proc-macro2 v1.0.90 (*)
+│       │       ├── quote v1.0.37 (*)
+│       │       └── unicode-ident v1.0.14
+│       ├── futures-sink v0.3.31
+│       ├── futures-task v0.3.31
+│       ├── memchr v2.7.4
+│       ├── pin-project-lite v0.2.15
+│       ├── pin-utils v0.1.0
+│       └── slab v0.4.9
+├── futures-io v0.3.31
+├── futures-sink v0.3.31
+├── futures-task v0.3.31
+└── futures-util v0.3.31 (*)
+```
 
 
 
