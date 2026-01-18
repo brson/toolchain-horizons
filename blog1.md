@@ -307,6 +307,34 @@ about the state of crate-toolchain compatibility.
 
 ## Why support older Rust version?
 
+I've been asked multiple times why bother supporting older Rust versions.
+
+So I've had to think about this a bit,
+and I'm not sure it does matter to support older Rust compilers.
+The reality we're in now we're most Rust projects
+are forced to "keep up" with the ecosystem and compiler is working ok.
+
+
+There does seem to be an acceptance within Rust
+that everybody should just use recent versions of the compiler,
+probably accompanied by some thinking about how stable Rust is
+and that upgrading is pretty easy usually.
+
+The Rust compiler and standard library are fairly stable,
+at least with respect to backwards compatibility.
+The Rust crate ecosystem is not very stable &mdash;
+they have too much incentive to adopt new compiler and language features.
+
+todo
+
+
+Based on my experience here I think there's about a 2 year
+window in which any particular Rust compiler is viable.
+Most projects need to update their Rust compiler with at least this frequency
+in order to stay compatible with, and have the ability to upgrade to,
+new releases of their dependencies.
+
+
 
 
 ## And does it matter that we can't?
