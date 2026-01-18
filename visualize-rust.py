@@ -216,26 +216,21 @@ for year in range(2019, 2026):
         ax1.axvline(days_from_start, color='gray', linestyle='--', alpha=cs.GRID_ALPHA, linewidth=cs.MARKER_LINEWIDTH)
         year_markers.append((days_from_start, str(year)))
 
-# Set x-axis labels to years
+# Set x-axis labels to years (bottom)
 ax1.set_xticks([pos for pos, _ in year_markers])
 ax1.set_xticklabels([label for _, label in year_markers], fontsize=int(cs.FONT_XTICK*fs))
+
+# Add x-axis labels to top as well
+ax1_top = ax1.twiny()
+ax1_top.set_xlim(ax1.get_xlim())
+ax1_top.set_xticks([pos for pos, _ in year_markers])
+ax1_top.set_xticklabels([label for _, label in year_markers], fontsize=int(cs.FONT_XTICK*fs))
 
 # Add grid
 ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
 
 # Add baseline indicator
 baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
-
-# Create legend for impact levels
-legend_elements = [
-    mpatches.Patch(color=color_map["minimal"], label='Minimal', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["low"], label='Low', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["moderate"], label='Moderate', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["high"], label='High', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["severe"], label='Severe', alpha=cs.BAR_ALPHA),
-]
-ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs),
-           title='Impact Severity', title_fontsize=int(cs.FONT_LEGEND_TITLE*fs))
 
 plt.tight_layout()
 plt.subplots_adjust(top=0.95)
