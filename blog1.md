@@ -303,9 +303,24 @@ about the state of crate-toolchain compatibility.
 
 ## The experiment and its results
 
+![Rust Toolchain Horizons - January 2026](compatibility-timeline-rust.png)
 
 
-## Why support older Rust version?
+
+
+## Removing Rust language features for further compatibility
+
+todo
+
+I'll do a followup post with more details about every
+crate and every language feature I removed from the TigerBeetle Rust client
+as well as how I did it.
+I think it might be interesting to Rust historians.
+
+
+
+
+## Why support older Rust versions, and does it matter that we can't?
 
 I've been asked multiple times why bother supporting older Rust versions.
 
@@ -337,9 +352,10 @@ new releases of their dependencies.
 
 
 
-## And does it matter that we can't?
+Does it matter that we can't?
 
 Probably not.
 
 
 So what about TigerBeetle's zero-dependency policy?
+
