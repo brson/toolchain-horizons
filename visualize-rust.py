@@ -228,16 +228,17 @@ baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELI
 
 # Create legend for impact levels
 legend_elements = [
-    mpatches.Patch(color=color_map["minimal"], label='Minimal (<=15 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["low"], label='Low (16-30 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["moderate"], label='Moderate (31-40 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["high"], label='High (41-50 versions lost)', alpha=cs.BAR_ALPHA),
-    mpatches.Patch(color=color_map["severe"], label='Severe (>50 versions lost)', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["minimal"], label='Minimal', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["low"], label='Low', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["moderate"], label='Moderate', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["high"], label='High', alpha=cs.BAR_ALPHA),
+    mpatches.Patch(color=color_map["severe"], label='Severe', alpha=cs.BAR_ALPHA),
 ]
 ax1.legend(handles=legend_elements, loc='upper left', fontsize=int(cs.FONT_LEGEND*fs),
            title='Impact Severity', title_fontsize=int(cs.FONT_LEGEND_TITLE*fs))
 
 plt.tight_layout()
+plt.subplots_adjust(top=0.95)
 plt.savefig('compatibility-timeline-rust.png', dpi=cs.DPI, bbox_inches='tight')
 print("Visualization saved to compatibility-timeline-rust.png")
 
@@ -258,7 +259,7 @@ ax.set_yticks(range(len(crate_names)))
 ax.set_yticklabels(crate_names, fontsize=int(cs.FONT_PKG_NAME*fs))
 ax.set_xlabel('Number of Rust Versions Lost', fontsize=int(cs.FONT_AXIS_LABEL*fs))
 ax.set_title(f'Toolchain Compatibility Loss by Crate\n(Compared to no-dependency baseline of {baseline_total} versions)',
-             fontsize=int(13*fs), fontweight='bold')
+             fontsize=int(13*fs), fontweight='bold', pad=20)
 ax.grid(axis='x', alpha=cs.GRID_ALPHA)
 
 # Add percentage labels
@@ -272,6 +273,7 @@ for i, (bar, lost) in enumerate(zip(bars, versions_lost)):
 ax.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=0.5, label='Baseline (no deps)')
 
 plt.tight_layout()
+plt.subplots_adjust(top=0.95)
 plt.savefig('versions-lost-rust.png', dpi=cs.DPI, bbox_inches='tight')
 print("Visualization saved to versions-lost-rust.png")
 
