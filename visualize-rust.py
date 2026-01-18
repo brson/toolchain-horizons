@@ -203,7 +203,7 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
 # Timeline from baseline to now
 total_days = (latest_date - baseline_date).days
 ax1.set_xlim(0, total_days)
-ax1.set_ylim(-0.5, len(crates_data) - 0.5)
+ax1.set_ylim(len(crates_data) - 0.5, -0.5)
 ax1.set_xlabel('')
 ax1.set_yticks([])
 
