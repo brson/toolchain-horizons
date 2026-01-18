@@ -197,19 +197,19 @@ In particular,
 build and dev dependencies that declare a supported `rust-version`
 will limit your ability to compile on older toolchains.
 
-Most of these were easy to remove.
+Most of these are reasy to remove.
 
 
 
 
 ## The Rust `futures` dependency problem
 
-The `futures` crate was not easy to remove.
+The `futures` crate is not easy to remove.
 
 The `futures` crate is fundamentally important
 to the Rust ecosystem.
 It was where the original futures implementation was prototyped,
-and continues to maintain code that so important
+and continues to maintain code that is so important
 that it continues to be all but required for using async Rust.
 I suspect that most sizable Rust projects depend on the `futures` crate.
 It is an official crate maintained by the Rust project.
@@ -265,7 +265,10 @@ tracking its lexical structure, syntax and macro interfaces.
 This is a very sticky dependency,
 tough to eliminate from large Rust programs.
 
----
+
+
+
+## Part 2
 
 So I did my rework on the Rust client pull request,
 removing one dependency at a time,
@@ -303,7 +306,15 @@ about the state of crate-toolchain compatibility.
 
 ## The experiment and its results
 
+todo
+
 ![Rust Toolchain Horizons - January 2026](compatibility-timeline-rust.png)
+
+
+
+
+
+## Removing the `futures` dependency
 
 
 
