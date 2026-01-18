@@ -173,7 +173,7 @@ color_map = cs.COLOR_MAP
 
 # Create figure
 fig, ax1 = plt.subplots(figsize=cs.FIGURE_SIZE)
-fig.suptitle('Rust Toolchain Horizons - Edition 2018', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
+fig.suptitle('Rust Toolchain Horizons - January 2026', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
 # Timeline bars
 y_pos = 0
