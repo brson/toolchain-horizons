@@ -306,10 +306,20 @@ about the state of crate-toolchain compatibility.
 
 ## The experiment and its results
 
-todo
+I tested the top 100 crates from crates.io by download count
+to find the oldest Rust version each could compile with.
+For each crate I created a minimal project depending on it,
+then binary-searched through Rust releases from 1.0 to 1.90
+to find the oldest compatible toolchain.
+
+The chart below shows the results.
+Each bar represents a crate's compatibility window &mdash;
+the span of Rust versions from its oldest compatible release to the present.
+Crates are sorted by their minimum supported Rust version (MSRV).
 
 ![Rust Toolchain Horizons - January 2026](compatibility-timeline-rust.png)
 
+todo commentary
 
 
 
