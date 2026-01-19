@@ -315,7 +315,6 @@ to find the oldest compatible toolchain.
 The chart below shows the results.
 Each bar represents a crate's compatibility window &mdash;
 the span of Rust versions from its oldest compatible release to the present.
-Crates are sorted by their minimum supported Rust version (MSRV).
 
 ![Rust Toolchain Horizons - January 2026](compatibility-timeline-rust.png)
 
