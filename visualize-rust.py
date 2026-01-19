@@ -123,8 +123,8 @@ rust_versions = {
     '1.90.0': ('2024-12-01', 90),
 }
 
-# Baseline: Edition 2018 stabilized in Rust 1.31.
-baseline_version = '1.31.1'
+# Baseline: earliest version we test (1.15.1 from Feb 2017).
+baseline_version = '1.15.1'
 baseline_date = datetime.strptime(rust_versions[baseline_version][0], '%Y-%m-%d')
 latest_date = datetime(2026, 1, 1)
 
@@ -209,7 +209,7 @@ ax1.set_yticks([])
 
 # Add year markers
 year_markers = []
-for year in range(2019, 2026):
+for year in range(2017, 2026):
     year_date = datetime(year, 1, 1)
     if year_date >= baseline_date and year_date <= latest_date:
         days_from_start = (year_date - baseline_date).days
