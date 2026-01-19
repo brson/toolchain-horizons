@@ -320,6 +320,13 @@ the span of Rust versions from its oldest compatible release to the present.
 
 todo commentary
 
+The oldest supported toolchains we see here are 1.31, December 2018.
+This is the release of Rust that introduced [edition 2018].
+I was curious if 1.31 and edition 2018 was _really_ a hard support
+cutoff like the experiment says.
+
+todo
+
 
 
 
@@ -331,6 +338,20 @@ todo commentary
 ## Removing Rust language features for further compatibility
 
 todo
+
+| Rust | Date   | Features                                                              |
+|------|----------|-----------------------------------------------------------------------|
+| 1.56 |    | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
+| 1.55 |    | [`rust-version`] (stabilized [1.56])                                  |
+| 1.55 |    | [Edition 2021]→2018, [`TryFrom`]                                      |
+| 1.53 |   | [`CARGO_TARGET_TMPDIR`] (stabilized [1.54])                           |
+| 1.51 |    | [`IntoIterator` for arrays] (stabilized [1.53])                       |
+| 1.50 |    | [const generics] (stabilized [1.51])                                  |
+| 1.45 |    | [array impls] for lengths > 32 (stabilized [1.47])                    |
+| 1.42 |   | [associated constants] ([`u64::MAX`]) (stabilized [1.43])             |
+| 1.41 |   | [`matches!`] (stabilized [1.42])                                      |
+| 1.39 |    | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40])      |
+
 
 I'll do a followup post with more details about every
 crate and every language feature I removed from the TigerBeetle Rust client
