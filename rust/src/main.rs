@@ -240,7 +240,7 @@ fn test_control_case() -> Result<ExperimentResult, Box<dyn std::error::Error>> {
     let cargo_toml = r#"[package]
 name = "control"
 version = "0.1.0"
-edition = "2018"
+edition = "2015"
 
 [dependencies]
 "#;
@@ -273,7 +273,7 @@ fn test_crate(crate_name: &str, version_spec: &str) -> Result<ExperimentResult, 
         r#"[package]
 name = "test-{}"
 version = "0.1.0"
-edition = "2018"
+edition = "2015"
 
 [dependencies]
 {} = "{}"
@@ -308,8 +308,8 @@ fn generate_lib_rs(crate_name: &str) -> String {
     let safe_name = crate_name.replace('-', "_");
     format!(
         r#"// Test usage of {}
-#[allow(unused_imports)]
-use {};
+#[allow(unused_extern_crates)]
+extern crate {};
 "#,
         crate_name, safe_name
     )
