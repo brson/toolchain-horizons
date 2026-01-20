@@ -382,20 +382,232 @@ Here are the 4 steps I needed to take.
 
 ### Step 1: Break out sub-crates
 
+The first step was to depend only on the specific subcrates I actually used.
+For the TigerBeetle client I needed:
+
+- `futures-core` for the `Future` and `Stream` traits
+- `futures-channel` for oneshot channels
+- `futures-executor` for `block_on` in tests
+
+Relevant bits of `Cargo.toml` before:
+
+```toml
+[dependencies]
+futures = "0.3.31"
+```
+
+After:
+
+```toml
+[dependencies]
+futures-channel = "0.3.31"
+
+[dev-dependencies]
+futures-executor = "0.3.31"
+futures-util = "0.3.31"
+```
+
+This has the nice effect of clarifying which futures bits
+are production dependencies and which are test dependencies.
+
 
 
 
 ### Step 2: Polyfill `block_on`
+
+The [`block_on`] function from `futures-executor` is used to
+run a future to completion on the current thread.
+It's commonly used in tests, examples,
+and for scheduling non-I/O asynchronous work.
+The implementation is straightforward:
+poll the future in a loop, parking the thread when it returns `Pending`.
+
+```rust
+pub fn block_on<F: Future>(mut future: F) -> F::Output {
+    let mut future = unsafe { Pin::new_unchecked(&mut future) };
+    let waker = /* ... */;
+    let mut cx = Context::from_waker(&waker);
+    loop {
+        match future.as_mut().poll(&mut cx) {
+            Poll::Ready(result) => return result,
+            Poll::Pending => std::thread::park(),
+        }
+    }
+}
+```
+
+The tricky part is constructing the `Waker`.
+I won't go into detail here,
+but it requires some unsafe code and a vtable.
+The full implementation is about 50 lines.
 
 
 
 
 ### Step 3: Polyfill `Stream` utilities
 
+We use the [`unfold`] function from `futures-util`
+to write one test case and one doc-comment example,
+both demonstrating how to use the TigerBeetle client API.
+
+`unfold`'s function signature looks like this:
+
+```rust
+pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>where
+    F: FnMut(T) -> Fut,
+    Fut: Future<Output = Option<(Item, T)>>,
+```
+
+It's a lot to understand and implement,
+but what it does is convert repeated calls to a future-returning closure
+into a stream of futures.
+It's like a closure-to-iterator adapter but for streams,
+`Unfold` implementing `Stream`.
+
+The polyfill includes the [`Stream`] trait itself,
+a [`StreamExt`] extension trait with `next()`,
+and the `unfold` function with its `Unfold` struct.
+
+```rust
+pub trait Stream {
+    type Item;
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>;
+}
+
+pub trait StreamExt: Stream {
+    fn next(&mut self) -> Next<'_, Self> where Self: Unpin {
+        Next { stream: self }
+    }
+}
+
+impl<T: Stream + ?Sized> StreamExt for T {}
+
+pub struct Next<'a, S: ?Sized> {
+    stream: &'a mut S,
+}
+
+impl<S: Stream + Unpin + ?Sized> Future for Next<'_, S> {
+    type Output = Option<S::Item>;
+
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        Pin::new(&mut *self.stream).poll_next(cx)
+    }
+}
+
+pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>
+where
+    F: FnMut(T) -> Fut,
+    Fut: Future<Output = Option<(Item, T)>>,
+{
+    Unfold { state: Some(init), f, fut: None }
+}
+
+pub struct Unfold<T, F, Fut> {
+    state: Option<T>,
+    f: F,
+    fut: Option<Fut>,
+}
+
+impl<T, F, Fut> Unpin for Unfold<T, F, Fut> {}
+
+impl<T, F, Fut, Item> Stream for Unfold<T, F, Fut>
+where
+    F: FnMut(T) -> Fut,
+    Fut: Future<Output = Option<(Item, T)>>,
+{
+    type Item = Item;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = unsafe { self.get_unchecked_mut() };
+
+        loop {
+            if let Some(fut) = &mut this.fut {
+                let fut = unsafe { Pin::new_unchecked(fut) };
+                match fut.poll(cx) {
+                    Poll::Ready(Some((item, next_state))) => {
+                        this.fut = None;
+                        this.state = Some(next_state);
+                        return Poll::Ready(Some(item));
+                    }
+                    Poll::Ready(None) => {
+                        this.fut = None;
+                        this.state = None;
+                        return Poll::Ready(None);
+                    }
+                    Poll::Pending => return Poll::Pending,
+                }
+            }
+
+            if let Some(state) = this.state.take() {
+                this.fut = Some((this.f)(state));
+            } else {
+                return Poll::Ready(None);
+            }
+        }
+    }
+}
+```
+
+This works for the TigerBeetle client because
+it is only using it for tests and examples;
+in production, duplicating the `Stream` trait like
+this would mean `unfold` is not compatible
+with the real stream trait.
+
 
 
 
 ### Step 4: Polyfill `oneshot` channels
+
+[Oneshot channels] send a single value between tasks.
+The TigerBeetle client uses them internally to communicate
+with an internal I/O thread.
+
+A minimal implementation needs:
+
+- A shared state protected by a `Mutex`
+- A `Sender` that stores the value and wakes the receiver
+- A `Receiver` that implements `Future`
+
+```rust
+struct OneshotShared<T> {
+    waker: Mutex<Option<Waker>>,
+    value: Mutex<Option<T>>,
+}
+
+struct OneshotSender<T> {
+    shared: Arc<OneshotShared<T>>,
+}
+
+impl<T> OneshotSender<T> {
+    fn send(self, value: T) {
+        *self.shared.value.lock().unwrap() = Some(value);
+        if let Some(waker) = self.shared.waker.lock().unwrap().take() {
+            waker.wake();
+        }
+    }
+}
+
+struct OneshotFuture<T> {
+    shared: Arc<OneshotShared<T>>,
+}
+
+impl<T> Future for OneshotFuture<T> {
+    type Output = T;
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<T> {
+        if let Some(value) = self.shared.value.lock().unwrap().take() {
+            return Poll::Ready(value);
+        }
+        *self.shared.waker.lock().unwrap() = Some(cx.waker().clone());
+        Poll::Pending
+    }
+}
+```
+
+Pretty straightforward,
+though this probably won't perform like the real oneshot channel
+which uses more precise unsafe atomics.
 
 
 
@@ -452,7 +664,10 @@ Some easy answers to why it matters to support.
    support older compilers they know the maintainer is present
    and cares. After this exercise I have a greater sense
    of how different Rust maintainers treat backwards-compatibility.
-3. todo
+3. Some environments have slow upgrade cycles.
+   Enterprise deployments, embedded systems, and distro packages
+   often lag behind the latest toolchain by months or years.
+   Supporting older compilers means not excluding these users.
 
 There does seem to be an acceptance within Rust
 that everybody should just use recent versions of the compiler,
@@ -530,3 +745,6 @@ expand their … toolchain horizons.
 [`non_exhaustive`]: https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute
 [1.40]: https://blog.rust-lang.org/2019/12/19/Rust-1.40.0.html
 ["stability without stagnation"]: https://blog.rust-lang.org/2014/10/30/Stability.html
+[`block_on`]: https://docs.rs/futures-executor/latest/futures_executor/fn.block_on.html
+[`Stream`]: https://docs.rs/futures-core/latest/futures_core/stream/trait.Stream.html
+[`unfold`]: https://docs.rs/futures-util/latest/futures_util/stream/fn.unfold.html
