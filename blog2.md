@@ -15,9 +15,9 @@ the [`async`/`await`] syntax,
 which in this case I judged too burdensome to consider.
 
 This followup describes in detail each step I took
-to establish a very early MSVR on a very small Rust project.
+to establish a very early MSRV on a very small Rust project.
 As an exploration of Rust's language evolution
-it may be interesting to some Rust programmers.
+Rust historians may find it useful.
 
 Much of this work is not in mainline TigerBeetle
 as the benefits and tradeoffs are not clear;
@@ -486,7 +486,7 @@ From [`futures-executor`],
 useful for non-I/O async tasks,
 and for writing runtime-agnostic test-cases.
 
-Impleminting the most basic Rust executor
+Implementing the most basic Rust executor
 involves some unsafe code.
 
 
@@ -1021,7 +1021,7 @@ introduced in [Rust 1.56].
 rust-version = "1.63"
 ```
 
-nI think previous toolchains ignore or warn when they see this field.
+I think previous toolchains ignore or warn when they see this field.
 
 
 ## Step 13: Support [Rust 1.55] - Edition 2021
