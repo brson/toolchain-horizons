@@ -310,8 +310,7 @@ to find the oldest toolchain for which `cargo check` succeeds.
 The test run for this blog post was conducted on Jan 20, 2026.
 
 > Caution: while I have iterated on this experiment and run
-  it many times, it ingests a lot of data and there are surely
-  mistakes. Please forgive me. Further, while there exist techniques
+  it many times there are surely mistakes. Further, while there exist techniques
   to munge lockfiles etc. to achieve compatibility, this experiment
   is just letting cargo resolve how it wants and seeing what happens.
 
@@ -356,7 +355,11 @@ You can see for yourself the crates at the puny end of the spectrum.
 
 
 
-## Removing the `futures` dependency
+## Supporting old toolchains: removing the `futures` dependency
+
+I'll conclude with some examples of what it looks like
+to aggressively reduce dependencies and language features
+to increase toolchain compatibility.
 
 The `futures` crate is in an interesting situation:
 it reexports other crates in the same "family" (the futures family),
@@ -373,6 +376,9 @@ It's what dependencies are for!
 
 But how can we get rid of it?
 Here are the 4 steps I needed to take.
+
+
+
 
 ### Step 1: Break out sub-crates
 
@@ -441,45 +447,12 @@ into a stream of futures.
 The TigerBeetle client uses them internally to communicate
 with an internal I/O thread.
 
-```rust
-struct OneshotShared<T> {
-    waker: Mutex<Option<Waker>>,
-    value: Mutex<Option<T>>,
-}
+A oneshot channel is just a shared `Option<T>`
+to transfer a value
+plus a signal to wake up the reciever.
+Plus it needs to conform to the [`Future`] trait.
 
-struct OneshotSender<T> {
-    shared: Arc<OneshotShared<T>>,
-}
-
-impl<T> OneshotSender<T> {
-    fn send(self, value: T) {
-        *self.shared.value.lock().unwrap() = Some(value);
-        if let Some(waker) = self.shared.waker.lock().unwrap().take() {
-            waker.wake();
-        }
-    }
-}
-
-struct OneshotFuture<T> {
-    shared: Arc<OneshotShared<T>>,
-}
-
-impl<T> Future for OneshotFuture<T> {
-    type Output = T;
-
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<T> {
-        if let Some(value) = self.shared.value.lock().unwrap().take() {
-            return Poll::Ready(value);
-        }
-        *self.shared.waker.lock().unwrap() = Some(cx.waker().clone());
-        Poll::Pending
-    }
-}
-```
-
-Straightforward,
-though this won't perform like the real oneshot channel
-which uses more precise synchronization techniques.
+Easy to implement naively.
 
 
 
@@ -593,3 +566,4 @@ But it requires crate authors — one by one — to expand their toolchain horiz
 [`StreamExt`]: https://docs.rs/futures-util/latest/futures_util/stream/trait.StreamExt.html
 [oneshot channels]: https://docs.rs/futures-channel/latest/futures_channel/oneshot/index.html
 [Oneshot channels]: https://docs.rs/futures-channel/latest/futures_channel/oneshot/index.html
+[`Future`]: https://doc.rust-lang.org/std/future/trait.Future.html
