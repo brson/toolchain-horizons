@@ -3,7 +3,7 @@
     "crate_name": "CONTROL",
     "dependency_spec": "none",
     "resolved_version": null,
-    "oldest_compatible": "1.16.0",
+    "oldest_compatible": "1.0.0",
     "latest_compatible": "1.90.0",
     "error": null
   },
@@ -35,7 +35,7 @@
     "crate_name": "autocfg",
     "dependency_spec": "1",
     "resolved_version": "1.5.0",
-    "oldest_compatible": "1.16.0",
+    "oldest_compatible": "1.15.1",
     "latest_compatible": "1.90.0",
     "error": null
   },
@@ -179,7 +179,7 @@
     "crate_name": "fnv",
     "dependency_spec": "1",
     "resolved_version": "1.0.7",
-    "oldest_compatible": "1.16.0",
+    "oldest_compatible": "1.7.0",
     "latest_compatible": "1.90.0",
     "error": null
   },
@@ -795,7 +795,7 @@
     "crate_name": "version_check",
     "dependency_spec": "0.9",
     "resolved_version": "0.9.5",
-    "oldest_compatible": "1.16.0",
+    "oldest_compatible": "1.15.1",
     "latest_compatible": "1.90.0",
     "error": null
   },
