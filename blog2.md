@@ -274,6 +274,7 @@ for entry in WalkDir::new(&tigerbeetle_root)
 
 ## Step 2: Remove `walkdir`
 
+Replacing `ignore` with `walkdir` didn't last long.
 We used [`walkdir`] in the build script to find source files
 for which to emit [`cargo:rerun-if-changed` directives],
 allowing cargo to rebuild if non-Rust input files change.
