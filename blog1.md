@@ -280,9 +280,8 @@ Most everything but `futures`.
 Then one day I resumed my work
 and found the Rust client no longer built on our CI:
 the `syn` crate had published a point release that broke our build.
-
 It wasn't an accidental breaking change.
-It was `rust-version`.
+It was [`rust-version`].
 In `syn` version `2.0.107`,
 its `rust-version` changed from 1.61 to 1.68.
 
@@ -290,9 +289,7 @@ My work undone.
 
 Yes in a point release this crate broke backwards toolchain compatibility.
 This seems to be considered a valid thing to change in a point release among Rust maintainers,
-though I have no insight into the rationale &mdash;
-it is plainly a "breaking change" in some reasonable sense,
-generally discouraged in point releases.
+though I have no insight into the rationale.
 
 I was annoyed,
 so I did an experiment to learn more
@@ -346,7 +343,7 @@ That zone is the epoch prior to the introduction of `async` / `await`,
 in [Rust 1.39], 2019.
 Curiously no crates landed directly on 1.39 for their MSRV.
 As another practical matter this release is probably the hard MSRV
-cutoff for any async Rust crates:
+cutoff for any async Rust crates.
 `futures-core` is in this zone,
 providing ongoing support for the entire `async` / `await` epoch.
 
