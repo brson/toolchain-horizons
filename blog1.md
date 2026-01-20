@@ -619,25 +619,25 @@ I think it might be interesting to Rust historians.
 ## Why support older Rust versions, and does it matter that we can't?
 
 So I achieved compatibility with Rust 1.39, from November 2019.
-I'm not checking that code in &mdash;
+I'me not checking that code in &mdash;
 there are too many tradeoffs I am not comfortable with.
 The in-tree Rust client is currently compatible with Rust 1.63, from August 2022.
 
-I've been asked multiple times why bother supporting older Rust versions.
-So I've had to think about this a bit,
+I've been asked multiple times why bother supporting older Rust versions,
+so I've had to think about this a bit,
 and I'm still not confident about whether it is important to
 support old to medium-old Rust compilers:
 the reality we're in now is that most Rust projects
 are forced to "keep up" with the ecosystem and compiler,
-and that's working ok:
-compiler upgrades are usually smooth,
+and that's working ok.
+Compiler upgrades are usually smooth,
 crate upgrades sometimes not smooth as
 various crate clusters work out the ongoing puzzle of how they fit together.
 
-Some easy answers to why it matters to support.
+Some easy answers to why it matters to support older toolchains:
 
-1. It's a matter of professional responsibility that every
-   library author that wants others to consume their library
+1. It's a matter of professional responsibility.
+   Every library author that wants others to consume their library
    should know and publish their supported toolchain range.
    In this sense it doesn't matter what the range is,
    just as long as there is one.
@@ -650,7 +650,7 @@ Some easy answers to why it matters to support.
    often lag behind the latest toolchain by months or years.
 
 There does seem to be an acceptance within Rust
-that everybody should just use recent versions of the compiler,
+that everybody should use recent versions of the compiler,
 probably accompanied by some thinking about how stable Rust is
 and that upgrading is usually easy.
 
@@ -667,9 +667,8 @@ the Rust compiler and standard library are quite stable,
 at least with respect to backwards compatibility.
 
 The Rust crate ecosystem is not stable &mdash;
-they have too much incentive to adopt new compiler and language features,
-break from the past.
-It's churn, churn, churn.
+crate authors have too much incentive to adopt new compiler and language features
+and break from the past.
 
 Based on my experience here I think there's about a 2 year
 window in which any particular Rust compiler is viable.
