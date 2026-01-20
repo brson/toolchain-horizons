@@ -144,17 +144,16 @@ for crate in results:
 
     crate_date = datetime.strptime(rust_versions[oldest][0], '%Y-%m-%d')
     versions_lost = rust_versions[oldest][1] - rust_versions[baseline_version][1]
+    version_index = rust_versions[oldest][1]
 
-    # Categorize impact.
-    if versions_lost <= 15:
+    # Categorize impact by version thresholds.
+    if version_index < 20:  # < 1.20
         impact = 'minimal'
-    elif versions_lost <= 30:
+    elif version_index < 46:  # < 1.46
         impact = 'low'
-    elif versions_lost <= 40:
+    elif version_index < 68:  # < 1.68
         impact = 'moderate'
-    elif versions_lost <= 50:
-        impact = 'high'
-    else:
+    else:  # >= 1.68
         impact = 'severe'
 
     crates_data.append((

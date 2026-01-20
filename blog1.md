@@ -267,7 +267,7 @@ tough to eliminate from large Rust programs.
 
 
 
-## Part 2
+## The Setback
 
 So I did my rework on the Rust client pull request,
 removing one dependency at a time,
