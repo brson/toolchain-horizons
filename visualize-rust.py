@@ -147,7 +147,7 @@ for crate in results:
     version_index = rust_versions[oldest][1]
 
     # Categorize impact by version thresholds.
-    if version_index < 20:  # < 1.20
+    if version_index < 31:  # < 1.31
         impact = 'minimal'
     elif version_index < 46:  # < 1.46
         impact = 'low'

@@ -205,12 +205,12 @@ Most of these are easy to remove.
 
 The `futures` crate is not easy to remove.
 
-The `futures` crate is fundamentally important
+The `futures` crate is critical
 to the Rust ecosystem.
 It was where the original futures implementation was prototyped,
 and continues to maintain code that is so important
 that it remains all but required for using async Rust.
-I suspect that most sizable Rust projects depend on the `futures` crate.
+Most sizable Rust projects depend on the `futures` crate.
 It is an official crate maintained by the Rust project.
 
 It's a big dependency,
@@ -261,7 +261,7 @@ They are not official crates
 but they are critical and tightly related to the Rust compiler,
 tracking its lexical structure, syntax and macro interfaces.
 
-This is a very sticky dependency,
+This is a sticky dependency,
 tough to eliminate from large Rust programs.
 
 
@@ -296,7 +296,7 @@ though I have no insight into the rationale &mdash;
 it is plainly a "breaking change" in some reasonable sense,
 generally discouraged in point releases.
 
-I was greatly annoyed,
+I was annoyed,
 so I did an experiment to learn more
 about the state of crate-toolchain compatibility.
 
@@ -330,7 +330,7 @@ A fun Rust curiosity: `cargo check` was introduced in [Rust 1.16], from 2017,
 so we can't use it to verify highly-compatible crates.
 This experiment uses `cargo build` to verify toolchains prior to that.
 
-Good news first: I was pleasantly surprised that very old toolchains still install and work,
+Good news first: I was surprised that old toolchains still install and work,
 and that some crates actually do remain compatible with them:
 super-kudos to [`autocfg`], [`fnv`], [`mime`], [`version_check`], [`memoffset`], and [`scopeguard`].
 
@@ -581,8 +581,8 @@ impl<T> Future for OneshotFuture<T> {
 }
 ```
 
-Pretty straightforward,
-though this probably won't perform like the real oneshot channel
+Straightforward,
+though this won't perform like the real oneshot channel
 which uses more precise synchronization techniques.
 
 
@@ -591,7 +591,7 @@ which uses more precise synchronization techniques.
 ## Removing Rust language features for further compatibility
 
 After removing every crate dependency,
-I continued on my journey and started removing language and standard library features
+I started removing language and standard library features
 to achieve even greater compatibility.
 Below is a summary of the features I had to remove.
 
@@ -663,7 +663,7 @@ that their new languages was going be ok.
 That was 12 years ago.
 
 And yeah it's working well for the compiler:
-the Rust compiler and standard library are quite stable,
+the Rust compiler and standard library are stable,
 at least with respect to backwards compatibility.
 
 The Rust crate ecosystem is not stable &mdash;
