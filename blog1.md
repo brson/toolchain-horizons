@@ -8,10 +8,7 @@ surprises about how common Rust crates manage their toolchain dependencies.
 So I did an experiment to learn more about toolchain
 support in the Rust ecosystem.
 
-In the course of this experiment I learned
-that common Rust crates support
-only 1-2 years of prior Rust toolchains;
-I removed every dependency from the TigerBeetle Rust client,
+Then I removed every dependency from the TigerBeetle Rust client,
 and replaced modern Rust language features
 until it was compatible with Rust 1.39, from 2019.
 For the sake of curiosity.
@@ -86,7 +83,7 @@ client.create_transfers(&transfers).await?;
 The Rust ecosystem has a concept of
 the "Minimum Supported Rust Version" (MSRV) for its crates.
 This means exactly what it sounds like.
-It is a versioning scheme that relates crates
+It relates crates
 to the Rust compiler version,
 and it is separate from SemVer,
 Rust's primary versioning scheme.
@@ -149,8 +146,8 @@ It has this to say about dependencies:
   For foundational infrastructure in particular,
   the cost of any dependency is further amplified throughout the rest of the stack.
 
-In order to support older Rust toolchains,
-and as a general matter of TigerStyle,
+In order to support older Rust toolchains &mdash;
+and as a matter of TigerStyle &mdash;
 one of my first tasks to land the Rust client
 was to judiciously remove crate dependencies.
 
