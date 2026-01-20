@@ -202,7 +202,7 @@ Most of these are reasy to remove.
 
 
 
-## The Rust `futures` dependency problem
+## The Rust `futures` dependency
 
 The `futures` crate is not easy to remove.
 
@@ -484,3 +484,43 @@ todo
 So what about TigerBeetle's zero-dependency policy?
 
 todo
+
+
+[initial pull request]: https://github.com/tigerbeetle/tigerbeetle/pull/2617
+[`syn`]: https://crates.io/crates/syn
+[`proc-macro`]: https://crates.io/crates/proc-macro2
+[Rust 1.16]: https://blog.rust-lang.org/2017/03/16/Rust-1.16.html
+[`autocfg`]: https://crates.io/crates/autocfg
+[`fnv`]: https://crates.io/crates/fnv
+[`mime`]: https://crates.io/crates/mime
+[`version_check`]: https://crates.io/crates/version_check
+[`memoffset`]: https://crates.io/crates/memoffset
+[`scopeguard`]: https://crates.io/crates/scopeguard
+[`serde`]: https://crates.io/crates/serde
+[Rust 1.31]: https://blog.rust-lang.org/2018/12/06/Rust-1.31-and-rust-2018.html
+[Rust 1.39]: https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html
+[format string captures]: https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html#captured-identifiers-in-format-strings
+[`Path::try_exists`]: https://doc.rust-lang.org/std/path/struct.Path.html#method.try_exists
+[`const Mutex::new`]: https://doc.rust-lang.org/std/sync/struct.Mutex.html#method.new
+[`rust-version`]: https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field
+[1.56]: https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html
+[Edition 2021]: https://doc.rust-lang.org/edition-guide/rust-2021/index.html
+[`TryFrom`]: https://doc.rust-lang.org/std/convert/trait.TryFrom.html
+[`CARGO_TARGET_TMPDIR`]: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates
+[1.54]: https://blog.rust-lang.org/2021/07/29/Rust-1.54.0.html
+[`IntoIterator` for arrays]: https://blog.rust-lang.org/2021/06/17/Rust-1.53.0.html#intoiterator-for-arrays
+[1.53]: https://blog.rust-lang.org/2021/06/17/Rust-1.53.0.html
+[const generics]: https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html#const-generics-mvp
+[1.51]: https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html
+[array impls]: https://blog.rust-lang.org/2020/10/08/Rust-1.47.html#traits-on-larger-arrays
+[1.47]: https://blog.rust-lang.org/2020/10/08/Rust-1.47.html
+[associated constants]: https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html#associated-constants-for-floats-and-integers
+[`u64::MAX`]: https://doc.rust-lang.org/std/primitive.u64.html#associatedconstant.MAX
+[1.43]: https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html
+[`matches!`]: https://doc.rust-lang.org/std/macro.matches.html
+[1.42]: https://blog.rust-lang.org/2020/03/12/Rust-1.42.html
+[`todo!`]: https://doc.rust-lang.org/std/macro.todo.html
+[`mem::take`]: https://doc.rust-lang.org/std/mem/fn.take.html
+[`non_exhaustive`]: https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute
+[1.40]: https://blog.rust-lang.org/2019/12/19/Rust-1.40.0.html
+["stability without stagnation"]: https://blog.rust-lang.org/2014/10/30/Stability.html
