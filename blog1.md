@@ -306,11 +306,18 @@ about the state of crate-toolchain compatibility.
 
 ## The experiment and its results
 
-I tested the top 100 crates from crates.io by download count
+I tested the top 100 crates from crates.io by download count,
+the most recent major releases of each,
 to find the oldest Rust version each could compile with.
 For each crate I created a minimal project depending on it,
 then binary-searched through Rust releases from 1.0 to 1.90
-to find the oldest compatible toolchain.
+to find the oldest toolchain for which `cargo check` succeeds.
+
+> Caution: while I have iterated on this experiment and run
+  it many times, it ingests a lot of data and there are surely
+  mistakes. Please forgive me. Further, while there exist techniques
+  to munge lockfiles etc. to achieve compatibility, this expirement
+  is just letting cargo resolve how it wants and seeing what happens.
 
 The chart below shows the results.
 Each bar represents a crate's compatibility window &mdash;
@@ -318,26 +325,88 @@ the span of Rust versions from its oldest compatible release to the present.
 
 ![Rust Toolchain Horizons - January 2026](compatibility-timeline-rust.png)
 
-todo commentary
+A fun Rust curiosity: `cargo check` was introduced in [Rust 1.16], from 2017,
+so we can't use it to verify highly-compatible crates.
+This experiment uses `cargo build` to verify toolchains prior to that.
 
-The oldest supported toolchains we see here are 1.31, December 2018.
-This is the release of Rust that introduced [edition 2018].
-I was curious if 1.31 and edition 2018 was _really_ a hard support
-cutoff like the experiment says.
+Good news first: I was pleasantly surprised that very old toolchains still install and work,
+and that some crates actually do remain compatible with them:
+super-kudos to [`autocfg`], [`fnv`], [`mime`], [`version_check`], [`memoffset`], and [`scopeguard`].
 
-todo
+Big kudos to [`serde`] as well.
+A lynchpin of the ecysostem,
+it is compatible back to [Rust 1.31], from 2018.
+This is the toolchain that introduced edition 2018.
+As a practical matter supporting Rust prior to edition 2018
+is unnecessary for any but the super-kudos crates mentioned above.
+Rust 2015 edition is very old Rust.
+
+There are a large handful of crates hanging out with `serde`
+in the "yellow" zone in the chart.
+That zone is the epoch prior to the introduction of `async` / `await`,
+in [Rust 1.39], 2019.
+Curiously no crates landed directly on 1.39 for their MSRV.
+As another practical matter this release is probably the hard MSRV
+cutoff for any async Rust crates:
+`future-core` is in this zone,
+providing ongoing support for the entire `async` / `await` epoch.
+
+Through the remaining gradient of decreasing support
+we see other scattered futures crates,
+and many other familiar crates,
+including `syn` and `proc-macro2`.
+You can see for yourself the crates at the puny end of the spectrum.
 
 
 
 
 ## Removing the `futures` dependency
 
+The `future`s crate is in an interesting situation:
+it reepxorts other crates in the same "family" (the futures familly),
+and each of those subcrates seems to have their own support levels,
+with `futures-core`, where the key traits are,
+having great support, `futures-executor`,
+whith its dependency on `syn` having poor support.
+
+I said before it is "sticky" &mdash; used ubiquitously in the ecosystem,
+providing features that are unsafe, with tricky semantics,
+that should be implemented once with close scrutiny and reused.
+
+It's what dependencies are for!
+
+But how can we get rid of it?
+Here are the 4 steps I needed to take.
+
+
+
+
+### Step 1: Break out sub-crates
+
+
+
+
+### Step 2: Polyfill `block_on`
+
+
+
+
+### Step 3: Polyfill `Stream` utilities
+
+
+
+
+### Step 4: Polyfill `oneshot` channels
+
 
 
 
 ## Removing Rust language features for further compatibility
 
-todo
+After removing every crate dependency,
+I continued on my journey and started removing language and standard library features
+to achieve even greater compatibility.
+Below is a summary of the features I had to remove.
 
 | Rust | Date   | Features                                                              |
 |------|----------|-----------------------------------------------------------------------|
@@ -352,8 +421,7 @@ todo
 | 1.41 |   | [`matches!`] (stabilized [1.42])                                      |
 | 1.39 |    | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40])      |
 
-
-I'll do a followup post with more details about every
+No details today, but I'll do a followup post with more about every
 crate and every language feature I removed from the TigerBeetle Rust client
 as well as how I did it.
 I think it might be interesting to Rust historians.
@@ -364,39 +432,52 @@ I think it might be interesting to Rust historians.
 ## Why support older Rust versions, and does it matter that we can't?
 
 I've been asked multiple times why bother supporting older Rust versions.
-
 So I've had to think about this a bit,
-and I'm not sure it does matter to support older Rust compilers.
-The reality we're in now we're most Rust projects
+and I'm still not confident about whether it is important to
+support old to medium-old Rust compilers:
+the reality we're in now we're most Rust projects
 are forced to "keep up" with the ecosystem and compiler is working ok.
 
+Some easy answers:
+
+1. It's a matter of professional responsibility that every
+   library author that wants others to consume their library
+   should know and publish their supported toolchain range.
+   In this sense it doesn't matter what the range is,
+   just as long as there is one.
+2. It builds trust. When users see an effort to
+   support older compilers they know the maintainer is present
+   and cares. After this exercise I have a greater sense
+   of how different Rust maintainers treat backwards-compatibility.
+3. todo
 
 There does seem to be an acceptance within Rust
 that everybody should just use recent versions of the compiler,
 probably accompanied by some thinking about how stable Rust is
-and that upgrading is pretty easy usually.
+and that upgrading is usually easy.
 
-The Rust compiler and standard library are fairly stable,
+That doesn't sit well with me though.
+It's the state we've found ourselves in,
+but it is not an ideal state.
+Yeah, yeah, ["stability without stagnation"], etc.
+That's a great pre-1.0 slogan to reassure everybody
+that their new languages is gonna be ok.
+That was 10 years ago.
+When is it time for a little more maturity?
+
+And yeah it's working well for the compiler:
+the Rust compiler and standard library are quite stable,
 at least with respect to backwards compatibility.
-The Rust crate ecosystem is not very stable &mdash;
+
+The Rust crate ecosystem is not stable &mdash;
 they have too much incentive to adopt new compiler and language features.
-
-todo
-
+It's churn, churn, churn.
 
 Based on my experience here I think there's about a 2 year
 window in which any particular Rust compiler is viable.
 Most projects need to update their Rust compiler with at least this frequency
 in order to stay compatible with, and have the ability to upgrade to,
 new releases of their dependencies.
-
-
-
-
-Does it matter that we can't?
-
-Probably not.
-
 
 So what about TigerBeetle's zero-dependency policy?
 
