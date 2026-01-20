@@ -462,7 +462,7 @@ but it is not an ideal state.
 Yeah, yeah, ["stability without stagnation"], etc.
 That's a great pre-1.0 slogan to reassure everybody
 that their new languages is gonna be ok.
-That was 10 years ago.
+That was 12 years ago.
 When is it time for a little more maturity?
 
 And yeah it's working well for the compiler:
