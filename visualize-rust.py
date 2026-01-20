@@ -128,6 +128,9 @@ baseline_version = '1.15.1'
 baseline_date = datetime.strptime(rust_versions[baseline_version][0], '%Y-%m-%d')
 latest_date = datetime(2026, 1, 1)
 
+# Chart start date: beginning of 2016 to show full data range.
+chart_start_date = datetime(2016, 1, 1)
+
 # Process data.
 crates_data = []
 for crate in results:
@@ -181,7 +184,7 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
     crate_date = datetime.strptime(date_str, "%Y-%m-%d")
 
     # Calculate bar position and width
-    bar_start = (crate_date - baseline_date).days
+    bar_start = (crate_date - chart_start_date).days
     bar_width = (latest_date - crate_date).days
 
     color = color_map[impact]
@@ -200,8 +203,8 @@ for crate_name, rust_version, date_str, versions_lost, impact in crates_data:
 
     y_pos += 1
 
-# Timeline from baseline to now
-total_days = (latest_date - baseline_date).days
+# Timeline from chart start to now
+total_days = (latest_date - chart_start_date).days
 ax1.set_xlim(0, total_days)
 ax1.set_ylim(len(crates_data) - 0.5, -0.5)
 ax1.set_xlabel('')
@@ -209,10 +212,10 @@ ax1.set_yticks([])
 
 # Add year markers
 year_markers = []
-for year in range(2017, 2026):
+for year in range(2016, 2026):
     year_date = datetime(year, 1, 1)
-    if year_date >= baseline_date and year_date <= latest_date:
-        days_from_start = (year_date - baseline_date).days
+    if year_date >= chart_start_date and year_date <= latest_date:
+        days_from_start = (year_date - chart_start_date).days
         ax1.axvline(days_from_start, color='gray', linestyle='--', alpha=cs.GRID_ALPHA, linewidth=cs.MARKER_LINEWIDTH)
         year_markers.append((days_from_start, str(year)))
 
@@ -230,7 +233,8 @@ ax1_top.set_xticklabels([label for _, label in year_markers], fontsize=int(cs.FO
 ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
 
 # Add baseline indicator
-baseline_line = ax1.axvline(0, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
+baseline_pos = (baseline_date - chart_start_date).days
+baseline_line = ax1.axvline(baseline_pos, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
 
 plt.tight_layout()
 plt.subplots_adjust(top=0.95)

@@ -182,7 +182,7 @@ tempfile = "3.15.0"
 ```
 
 To Rust programmers this is common stuff,
-dependecies most of us use.
+dependencies most of us use.
 
 Only 3 dependencies for production code,
 more for the build script and test.
@@ -196,7 +196,7 @@ In particular,
 build and dev dependencies that declare a supported `rust-version`
 will limit your ability to compile on older toolchains.
 
-Most of these are reasy to remove.
+Most of these are easy to remove.
 
 
 
@@ -209,7 +209,7 @@ The `futures` crate is fundamentally important
 to the Rust ecosystem.
 It was where the original futures implementation was prototyped,
 and continues to maintain code that is so important
-that it continues to be all but required for using async Rust.
+that it remains all but required for using async Rust.
 I suspect that most sizable Rust projects depend on the `futures` crate.
 It is an official crate maintained by the Rust project.
 
@@ -276,11 +276,11 @@ reducing the MSRV.
 I had succeeding in reducing the MSRV to 1.63
 after removing dependencies on those crates
 which were simplest to remove: `ignore`,
-`walkdir`, `anyhow`, `thiserror`, `tempfile`.
+`anyhow`, `thiserror`, `tempfile`.
 Most everything but `futures`.
 
 Then one day I resumed my work
-and found the The Rust client no longer built on our CI:
+and found the Rust client no longer built on our CI:
 the `syn` crate had published a point release that broke our build.
 
 It wasn't an accidental breaking change.
@@ -315,7 +315,7 @@ to find the oldest toolchain for which `cargo check` succeeds.
 > Caution: while I have iterated on this experiment and run
   it many times, it ingests a lot of data and there are surely
   mistakes. Please forgive me. Further, while there exist techniques
-  to munge lockfiles etc. to achieve compatibility, this expirement
+  to munge lockfiles etc. to achieve compatibility, this experiment
   is just letting cargo resolve how it wants and seeing what happens.
 
 The chart below shows the results.
@@ -333,7 +333,7 @@ and that some crates actually do remain compatible with them:
 super-kudos to [`autocfg`], [`fnv`], [`mime`], [`version_check`], [`memoffset`], and [`scopeguard`].
 
 Big kudos to [`serde`] as well.
-A lynchpin of the ecysostem,
+A lynchpin of the ecosystem,
 it is compatible back to [Rust 1.31], from 2018.
 This is the toolchain that introduced edition 2018.
 As a practical matter supporting Rust prior to edition 2018
@@ -347,7 +347,7 @@ in [Rust 1.39], 2019.
 Curiously no crates landed directly on 1.39 for their MSRV.
 As another practical matter this release is probably the hard MSRV
 cutoff for any async Rust crates:
-`future-core` is in this zone,
+`futures-core` is in this zone,
 providing ongoing support for the entire `async` / `await` epoch.
 
 Through the remaining gradient of decreasing support
@@ -361,12 +361,12 @@ You can see for yourself the crates at the puny end of the spectrum.
 
 ## Removing the `futures` dependency
 
-The `future`s crate is in an interesting situation:
-it reepxorts other crates in the same "family" (the futures familly),
+The `futures` crate is in an interesting situation:
+it reexports other crates in the same "family" (the futures family),
 and each of those subcrates seems to have their own support levels,
 with `futures-core`, where the key traits are,
-having great support, `futures-executor`,
-whith its dependency on `syn` having poor support.
+having great support; `futures-executor`,
+with its dependency on `syn`, having poor support.
 
 I said before it is "sticky" &mdash; used ubiquitously in the ecosystem,
 providing features that are unsafe, with tricky semantics,
@@ -385,9 +385,9 @@ Here are the 4 steps I needed to take.
 The first step was to depend only on the specific subcrates I actually used.
 For the TigerBeetle client I needed:
 
-- `futures-core` for the `Future` and `Stream` traits
-- `futures-channel` for oneshot channels
-- `futures-executor` for `block_on` in tests
+- `futures-channel` for [oneshot channels]
+- `futures-executor` for [`block_on`] in tests
+- `futures-util` for the [`unfold`] function on [`StreamExt`]
 
 Relevant bits of `Cargo.toml` before:
 
@@ -444,7 +444,7 @@ The full implementation is about 50 lines.
 
 
 
-### Step 3: Polyfill `Stream` utilities
+### Step 3: Polyfill `unfold`
 
 We use the [`unfold`] function from `futures-util`
 to write one test case and one doc-comment example,
@@ -464,36 +464,12 @@ into a stream of futures.
 It's like a closure-to-iterator adapter but for streams,
 `Unfold` implementing `Stream`.
 
-The polyfill includes the [`Stream`] trait itself,
-a [`StreamExt`] extension trait with `next()`,
+The polyfill includes the [`Stream`] trait itself
 and the `unfold` function with its `Unfold` struct.
 
+Abridged:
+
 ```rust
-pub trait Stream {
-    type Item;
-    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>;
-}
-
-pub trait StreamExt: Stream {
-    fn next(&mut self) -> Next<'_, Self> where Self: Unpin {
-        Next { stream: self }
-    }
-}
-
-impl<T: Stream + ?Sized> StreamExt for T {}
-
-pub struct Next<'a, S: ?Sized> {
-    stream: &'a mut S,
-}
-
-impl<S: Stream + Unpin + ?Sized> Future for Next<'_, S> {
-    type Output = Option<S::Item>;
-
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-        Pin::new(&mut *self.stream).poll_next(cx)
-    }
-}
-
 pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>
 where
     F: FnMut(T) -> Fut,
@@ -507,8 +483,6 @@ pub struct Unfold<T, F, Fut> {
     f: F,
     fut: Option<Fut>,
 }
-
-impl<T, F, Fut> Unpin for Unfold<T, F, Fut> {}
 
 impl<T, F, Fut, Item> Stream for Unfold<T, F, Fut>
 where
@@ -607,7 +581,7 @@ impl<T> Future for OneshotFuture<T> {
 
 Pretty straightforward,
 though this probably won't perform like the real oneshot channel
-which uses more precise unsafe atomics.
+which uses more precise synchronization techniques.
 
 
 
@@ -642,6 +616,11 @@ I think it might be interesting to Rust historians.
 
 ## Why support older Rust versions, and does it matter that we can't?
 
+So I achieved compatibility with Rust 1.39, from November 2019.
+I'm not checking that code in &mdash;
+there are too many tradeoffs I am not comfortable with.
+The in-tree Rust client is currently compatible with Rust todo, from todo.
+
 I've been asked multiple times why bother supporting older Rust versions.
 So I've had to think about this a bit,
 and I'm still not confident about whether it is important to
@@ -664,10 +643,9 @@ Some easy answers to why it matters to support.
    support older compilers they know the maintainer is present
    and cares. After this exercise I have a greater sense
    of how different Rust maintainers treat backwards-compatibility.
-3. Some environments have slow upgrade cycles.
+3. Some environments have and desire slow upgrade cycles.
    Enterprise deployments, embedded systems, and distro packages
    often lag behind the latest toolchain by months or years.
-   Supporting older compilers means not excluding these users.
 
 There does seem to be an acceptance within Rust
 that everybody should just use recent versions of the compiler,
@@ -678,17 +656,17 @@ That doesn't sit well with me though.
 It's the state we've found ourselves in,
 but it is not an ideal state.
 Yeah, yeah, ["stability without stagnation"], etc.
-That's a great pre-1.0 slogan to reassure everybody
-that their new languages is gonna be ok.
+That was an early slogan to reassure everybody
+that their new languages was going be ok.
 That was 12 years ago.
-When is it time for a little more maturity?
 
 And yeah it's working well for the compiler:
 the Rust compiler and standard library are quite stable,
 at least with respect to backwards compatibility.
 
 The Rust crate ecosystem is not stable &mdash;
-they have too much incentive to adopt new compiler and language features.
+they have too much incentive to adopt new compiler and language features,
+break from the past.
 It's churn, churn, churn.
 
 Based on my experience here I think there's about a 2 year
@@ -702,7 +680,7 @@ the Rust world we live in now where projects must keep up with the compiler
 across a small support window is not ideal.
 We can increase that support window,
 but it requires increasing numbers of individual crate authors to
-expand their … toolchain horizons.
+expand their toolchain horizons.
 
 
 
@@ -748,3 +726,6 @@ expand their … toolchain horizons.
 [`block_on`]: https://docs.rs/futures-executor/latest/futures_executor/fn.block_on.html
 [`Stream`]: https://docs.rs/futures-core/latest/futures_core/stream/trait.Stream.html
 [`unfold`]: https://docs.rs/futures-util/latest/futures_util/stream/fn.unfold.html
+[`StreamExt`]: https://docs.rs/futures-util/latest/futures_util/stream/trait.StreamExt.html
+[oneshot channels]: https://docs.rs/futures-channel/latest/futures_channel/oneshot/index.html
+[Oneshot channels]: https://docs.rs/futures-channel/latest/futures_channel/oneshot/index.html
