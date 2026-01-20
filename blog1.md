@@ -479,5 +479,8 @@ Most projects need to update their Rust compiler with at least this frequency
 in order to stay compatible with, and have the ability to upgrade to,
 new releases of their dependencies.
 
+todo
+
 So what about TigerBeetle's zero-dependency policy?
 
+todo

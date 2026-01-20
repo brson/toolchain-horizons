@@ -396,6 +396,19 @@ fn find_oldest_compatible(
     Ok(oldest)
 }
 
+/// Compare two version strings (e.g., "1.15.1" < "1.16.0").
+fn version_less_than(a: &str, b: &str) -> bool {
+    let parse = |v: &str| -> (u32, u32, u32) {
+        let parts: Vec<u32> = v.split('.').filter_map(|s| s.parse().ok()).collect();
+        (
+            parts.get(0).copied().unwrap_or(0),
+            parts.get(1).copied().unwrap_or(0),
+            parts.get(2).copied().unwrap_or(0),
+        )
+    };
+    parse(a) < parse(b)
+}
+
 /// Test if a project compiles with a specific Rust version.
 fn test_rust_version(project_path: &Path, version: &str) -> Result<bool, Box<dyn std::error::Error>> {
     // First, ensure the toolchain is installed.
@@ -414,10 +427,16 @@ fn test_rust_version(project_path: &Path, version: &str) -> Result<bool, Box<dyn
         fs::remove_file(lock_path)?;
     }
 
-    // Try to check the project.
+    // Use `cargo build` for versions before 1.16.0 (when `cargo check` was added).
+    let subcommand = if version_less_than(version, "1.16.0") {
+        "build"
+    } else {
+        "check"
+    };
+
     let check_output = Command::new("cargo")
         .arg(&format!("+{}", version))
-        .arg("check")
+        .arg(subcommand)
         .current_dir(project_path)
         .output()?;
 
