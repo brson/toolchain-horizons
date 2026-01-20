@@ -36,8 +36,7 @@ wrapped in the idioms of the embedding language.
 
 The Rust client is less than two thousand lines of production Rust code,
 some of it generated, some of it written by hand.
-It provides a simple asynchronous,
-futures-oriented API for use with `async` / `await`;
+It provides a simple asynchronous API for use with `async` / `await`;
 and it is runtime-agnostic,
 requiring no dependencies on specific Rust async runtimes.
 
@@ -408,18 +407,18 @@ I continued on my journey and started removing language and standard library fea
 to achieve even greater compatibility.
 Below is a summary of the features I had to remove.
 
-| Rust | Date   | Features                                                              |
-|------|----------|-----------------------------------------------------------------------|
-| 1.56 |    | [format string captures], [`Path::try_exists`], [`const Mutex::new`]  |
-| 1.55 |    | [`rust-version`] (stabilized [1.56])                                  |
-| 1.55 |    | [Edition 2021]→2018, [`TryFrom`]                                      |
-| 1.53 |   | [`CARGO_TARGET_TMPDIR`] (stabilized [1.54])                           |
-| 1.51 |    | [`IntoIterator` for arrays] (stabilized [1.53])                       |
-| 1.50 |    | [const generics] (stabilized [1.51])                                  |
-| 1.45 |    | [array impls] for lengths > 32 (stabilized [1.47])                    |
-| 1.42 |   | [associated constants] ([`u64::MAX`]) (stabilized [1.43])             |
-| 1.41 |   | [`matches!`] (stabilized [1.42])                                      |
-| 1.39 |    | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40])      |
+| Rust | Date     | Features                                                    |
+|------|----------|-------------------------------------------------------------|
+| 1.56 | Oct 2021 | [format string captures], [`Path::try_exists`], [`const Mutex::new`] |
+| 1.55 | Sep 2021 | [`rust-version`] (stabilized [1.56])                        |
+| 1.55 | Sep 2021 | [Edition 2021]→2018, [`TryFrom`]                            |
+| 1.53 | Jun 2021 | [`CARGO_TARGET_TMPDIR`] (stabilized [1.54])                 |
+| 1.51 | Mar 2021 | [`IntoIterator` for arrays] (stabilized [1.53])             |
+| 1.50 | Feb 2021 | [const generics] (stabilized [1.51])                        |
+| 1.45 | Jul 2020 | [array impls] for lengths > 32 (stabilized [1.47])          |
+| 1.42 | Mar 2020 | [associated constants] ([`u64::MAX`]) (stabilized [1.43])   |
+| 1.41 | Jan 2020 | [`matches!`] (stabilized [1.42])                            |
+| 1.39 | Nov 2019 | [`todo!`], [`mem::take`], [`non_exhaustive`] (stabilized [1.40]) |
 
 No details today, but I'll do a followup post with more about every
 crate and every language feature I removed from the TigerBeetle Rust client
@@ -435,10 +434,14 @@ I've been asked multiple times why bother supporting older Rust versions.
 So I've had to think about this a bit,
 and I'm still not confident about whether it is important to
 support old to medium-old Rust compilers:
-the reality we're in now we're most Rust projects
-are forced to "keep up" with the ecosystem and compiler is working ok.
+the reality we're in now is that most Rust projects
+are forced to "keep up" with the ecosystem and compiler,
+and that's working ok:
+compiler upgrades are usually smooth,
+crate upgrades sometimes not smooth as
+various crate clusters work out the ongoing puzzle of how they fit together.
 
-Some easy answers:
+Some easy answers to why it matters to support.
 
 1. It's a matter of professional responsibility that every
    library author that wants others to consume their library
@@ -479,11 +482,14 @@ Most projects need to update their Rust compiler with at least this frequency
 in order to stay compatible with, and have the ability to upgrade to,
 new releases of their dependencies.
 
-todo
+A harder answer to why it matters to support older Rust toolchains:
+the Rust world we live in now where projects must keep up with the compiler
+across a small support window is not ideal.
+We can increase that support window,
+but it requires increasing numbers of individual crate authors to
+expand their … toolchain horizons.
 
-So what about TigerBeetle's zero-dependency policy?
 
-todo
 
 
 [initial pull request]: https://github.com/tigerbeetle/tigerbeetle/pull/2617
