@@ -1,4 +1,4 @@
-# Toolchain Horizons: Exploring Dependency-Toolchain Compatibility
+# Toolchain Horizons: Exploring Rust Dependency-Toolchain Compatibility
 
 I mass-tested the top 100 crates on crates.io for backwards compatibility.
 Many support fewer than 3 years of prior Rust toolchains.
