@@ -123,12 +123,12 @@ rust_versions = {
     '1.90.0': ('2024-12-01', 90),
 }
 
-# Baseline: earliest version we test (1.15.1 from Feb 2017).
-baseline_version = '1.15.1'
+# Baseline: Rust 1.0 release.
+baseline_version = '1.0.0'
 baseline_date = datetime.strptime(rust_versions[baseline_version][0], '%Y-%m-%d')
 latest_date = datetime(2026, 1, 1)
 
-# Chart start date: beginning of 2016 to show full data range.
+# Chart start date.
 chart_start_date = datetime(2016, 1, 1)
 
 # Process data.
@@ -231,10 +231,6 @@ ax1_top.set_xticklabels([label for _, label in year_markers], fontsize=int(cs.FO
 
 # Add grid
 ax1.grid(axis='x', alpha=cs.GRID_ALPHA)
-
-# Add baseline indicator
-baseline_pos = (baseline_date - chart_start_date).days
-baseline_line = ax1.axvline(baseline_pos, color='green', linestyle='-', linewidth=cs.BASELINE_LINEWIDTH, alpha=cs.BASELINE_ALPHA)
 
 plt.tight_layout()
 plt.subplots_adjust(top=0.95)

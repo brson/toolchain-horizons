@@ -6,7 +6,7 @@ While landing the code and establishing the minimum
 supported Rust version I encountered multiple
 surprises about how common Rust crates manage their toolchain dependencies.
 So I did an experiment to learn more about toolchain
-support in the Rust dependency landscape.
+support in the Rust ecosystem.
 
 In the course of this experiment I learned
 that common Rust crates support
@@ -311,6 +311,8 @@ to find the oldest Rust version each could compile with.
 For each crate I created a minimal project depending on it,
 then binary-searched through Rust releases from 1.0 to 1.90
 to find the oldest toolchain for which `cargo check` succeeds.
+
+The test run for this blog post was conducted on Jan 20, 2026.
 
 > Caution: while I have iterated on this experiment and run
   it many times, it ingests a lot of data and there are surely
@@ -619,7 +621,7 @@ I think it might be interesting to Rust historians.
 So I achieved compatibility with Rust 1.39, from November 2019.
 I'm not checking that code in &mdash;
 there are too many tradeoffs I am not comfortable with.
-The in-tree Rust client is currently compatible with Rust todo, from todo.
+The in-tree Rust client is currently compatible with Rust 1.63, from August 2022.
 
 I've been asked multiple times why bother supporting older Rust versions.
 So I've had to think about this a bit,
