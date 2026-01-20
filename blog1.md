@@ -374,9 +374,6 @@ It's what dependencies are for!
 But how can we get rid of it?
 Here are the 4 steps I needed to take.
 
-
-
-
 ### Step 1: Break out sub-crates
 
 The first step was to depend only on the specific subcrates I actually used.
@@ -385,27 +382,6 @@ For the TigerBeetle client I needed:
 - `futures-channel` for [oneshot channels]
 - `futures-executor` for [`block_on`] in tests
 - `futures-util` for the [`unfold`] function on [`StreamExt`]
-
-Relevant bits of `Cargo.toml` before:
-
-```toml
-[dependencies]
-futures = "0.3.31"
-```
-
-After:
-
-```toml
-[dependencies]
-futures-channel = "0.3.31"
-
-[dev-dependencies]
-futures-executor = "0.3.31"
-futures-util = "0.3.31"
-```
-
-This has the nice effect of clarifying which futures bits
-are production dependencies and which are test dependencies.
 
 
 
@@ -416,8 +392,6 @@ The [`block_on`] function from `futures-executor` is used to
 run a future to completion on the current thread.
 It's commonly used in tests, examples,
 and for scheduling non-I/O asynchronous work.
-The implementation is straightforward:
-poll the future in a loop, parking the thread when it returns `Pending`.
 
 ```rust
 pub fn block_on<F: Future>(mut future: F) -> F::Output {
@@ -433,10 +407,9 @@ pub fn block_on<F: Future>(mut future: F) -> F::Output {
 }
 ```
 
-The tricky part is constructing the `Waker`.
-I won't go into detail here,
-but it requires some unsafe code and a vtable.
-The full implementation is about 50 lines.
+The tricky part is constructing the "waker".
+I won't go into detail here
+but it requires some unsafe code.
 
 
 
@@ -455,75 +428,9 @@ pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>where
     Fut: Future<Output = Option<(Item, T)>>,
 ```
 
-It's a lot to understand and implement,
-but what it does is convert repeated calls to a future-returning closure
+It's like a closure-to-iterator adapter but for streams.
+It converts repeated calls to a future-returning closure
 into a stream of futures.
-It's like a closure-to-iterator adapter but for streams,
-`Unfold` implementing `Stream`.
-
-The polyfill includes the [`Stream`] trait itself
-and the `unfold` function with its `Unfold` struct.
-
-Abridged:
-
-```rust
-pub fn unfold<T, F, Fut, Item>(init: T, f: F) -> Unfold<T, F, Fut>
-where
-    F: FnMut(T) -> Fut,
-    Fut: Future<Output = Option<(Item, T)>>,
-{
-    Unfold { state: Some(init), f, fut: None }
-}
-
-pub struct Unfold<T, F, Fut> {
-    state: Option<T>,
-    f: F,
-    fut: Option<Fut>,
-}
-
-impl<T, F, Fut, Item> Stream for Unfold<T, F, Fut>
-where
-    F: FnMut(T) -> Fut,
-    Fut: Future<Output = Option<(Item, T)>>,
-{
-    type Item = Item;
-
-    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        let this = unsafe { self.get_unchecked_mut() };
-
-        loop {
-            if let Some(fut) = &mut this.fut {
-                let fut = unsafe { Pin::new_unchecked(fut) };
-                match fut.poll(cx) {
-                    Poll::Ready(Some((item, next_state))) => {
-                        this.fut = None;
-                        this.state = Some(next_state);
-                        return Poll::Ready(Some(item));
-                    }
-                    Poll::Ready(None) => {
-                        this.fut = None;
-                        this.state = None;
-                        return Poll::Ready(None);
-                    }
-                    Poll::Pending => return Poll::Pending,
-                }
-            }
-
-            if let Some(state) = this.state.take() {
-                this.fut = Some((this.f)(state));
-            } else {
-                return Poll::Ready(None);
-            }
-        }
-    }
-}
-```
-
-This works for the TigerBeetle client because
-it is only using it for tests and examples;
-in production, duplicating the `Stream` trait like
-this would mean `unfold` is not compatible
-with the real stream trait.
 
 
 
@@ -533,12 +440,6 @@ with the real stream trait.
 [Oneshot channels] send a single value between tasks.
 The TigerBeetle client uses them internally to communicate
 with an internal I/O thread.
-
-A minimal implementation needs:
-
-- A shared state protected by a `Mutex`
-- A `Sender` that stores the value and wakes the receiver
-- A `Receiver` that implements `Future`
 
 ```rust
 struct OneshotShared<T> {
