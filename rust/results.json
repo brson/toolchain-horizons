@@ -4,7 +4,7 @@
     "dependency_spec": "none",
     "resolved_version": null,
     "oldest_compatible": "1.0.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -12,7 +12,7 @@
     "dependency_spec": "1",
     "resolved_version": "1.1.4",
     "oldest_compatible": "1.61.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -20,15 +20,15 @@
     "dependency_spec": "0.8",
     "resolved_version": "0.8.12",
     "oldest_compatible": "1.65.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "anyhow",
     "dependency_spec": "1",
-    "resolved_version": "1.0.100",
-    "oldest_compatible": "1.38.0",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.0.102",
+    "oldest_compatible": "1.68.2",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -36,7 +36,7 @@
     "dependency_spec": "1",
     "resolved_version": "1.5.0",
     "oldest_compatible": "1.15.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -44,7 +44,7 @@
     "dependency_spec": "0.3",
     "resolved_version": "0.3.76",
     "oldest_compatible": "1.82.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -52,31 +52,31 @@
     "dependency_spec": "0.22",
     "resolved_version": "0.22.1",
     "oldest_compatible": "1.47.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "bitflags",
     "dependency_spec": "2",
-    "resolved_version": "2.10.0",
+    "resolved_version": "2.11.0",
     "oldest_compatible": "1.56.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "block-buffer",
-    "dependency_spec": "0.11",
-    "resolved_version": "0.11.0",
+    "dependency_spec": "0.12",
+    "resolved_version": "0.12.0",
     "oldest_compatible": "1.85.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "bytes",
     "dependency_spec": "1",
-    "resolved_version": "1.11.0",
+    "resolved_version": "1.11.1",
     "oldest_compatible": "1.57.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -84,15 +84,15 @@
     "dependency_spec": "1",
     "resolved_version": "1.5.0",
     "oldest_compatible": "1.60.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "cc",
     "dependency_spec": "1",
-    "resolved_version": "1.2.53",
+    "resolved_version": "1.2.59",
     "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -100,31 +100,31 @@
     "dependency_spec": "1",
     "resolved_version": "1.0.4",
     "oldest_compatible": "1.32.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "chrono",
     "dependency_spec": "0.4",
-    "resolved_version": "0.4.43",
+    "resolved_version": "0.4.44",
     "oldest_compatible": "1.62.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "clap",
     "dependency_spec": "4",
-    "resolved_version": "4.5.54",
-    "oldest_compatible": "1.74.1",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "4.6.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "clap_lex",
-    "dependency_spec": "0.7",
-    "resolved_version": "0.7.7",
-    "oldest_compatible": "1.74.1",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "1",
+    "resolved_version": "1.1.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -132,7 +132,7 @@
     "dependency_spec": "0.8",
     "resolved_version": "0.8.4",
     "oldest_compatible": "1.61.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -140,15 +140,15 @@
     "dependency_spec": "0.8",
     "resolved_version": "0.8.21",
     "oldest_compatible": "1.60.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "digest",
-    "dependency_spec": "0.10",
-    "resolved_version": "0.10.7",
-    "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.11",
+    "resolved_version": "0.11.2",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -156,23 +156,23 @@
     "dependency_spec": "1",
     "resolved_version": "1.15.0",
     "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "env_logger",
     "dependency_spec": "0.11",
-    "resolved_version": "0.11.8",
+    "resolved_version": "0.11.10",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "fastrand",
     "dependency_spec": "2",
-    "resolved_version": "2.3.0",
-    "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "2.4.1",
+    "oldest_compatible": "1.43.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -180,63 +180,63 @@
     "dependency_spec": "1",
     "resolved_version": "1.0.7",
     "oldest_compatible": "1.7.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "0.3.32",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures-channel",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
-    "oldest_compatible": "1.52.1",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "0.3.32",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures-core",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
+    "resolved_version": "0.3.32",
     "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures-io",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
+    "resolved_version": "0.3.32",
     "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures-sink",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
+    "resolved_version": "0.3.32",
     "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures-task",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
-    "oldest_compatible": "1.52.1",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "0.3.32",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "futures-util",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.31",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "0.3.32",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -244,15 +244,15 @@
     "dependency_spec": "1",
     "resolved_version": "1.3.5",
     "oldest_compatible": "1.65.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "getrandom",
-    "dependency_spec": "0.3",
-    "resolved_version": "0.3.4",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.4",
+    "resolved_version": "0.4.2",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -260,7 +260,7 @@
     "dependency_spec": "0.4",
     "resolved_version": "0.4.13",
     "oldest_compatible": "1.82.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -268,7 +268,7 @@
     "dependency_spec": "0.15",
     "resolved_version": "0.15.5",
     "oldest_compatible": "1.65.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -276,7 +276,7 @@
     "dependency_spec": "0.5",
     "resolved_version": "0.5.0",
     "oldest_compatible": "1.56.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -284,7 +284,7 @@
     "dependency_spec": "0.4",
     "resolved_version": "0.4.3",
     "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -292,7 +292,7 @@
     "dependency_spec": "1",
     "resolved_version": "1.4.0",
     "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -300,31 +300,31 @@
     "dependency_spec": "1",
     "resolved_version": "1.0.1",
     "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "hyper",
     "dependency_spec": "1",
-    "resolved_version": "1.8.1",
+    "resolved_version": "1.9.0",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "idna",
     "dependency_spec": "1",
     "resolved_version": "1.1.0",
-    "oldest_compatible": "1.83.0",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.86.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "indexmap",
     "dependency_spec": "2",
-    "resolved_version": "2.13.0",
+    "resolved_version": "2.13.1",
     "oldest_compatible": "1.82.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -332,39 +332,39 @@
     "dependency_spec": "0.14",
     "resolved_version": "0.14.0",
     "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "itoa",
     "dependency_spec": "1",
-    "resolved_version": "1.0.17",
+    "resolved_version": "1.0.18",
     "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "lazy_static",
     "dependency_spec": "1",
     "resolved_version": "1.5.0",
-    "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.40.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "libc",
     "dependency_spec": "0.2",
-    "resolved_version": "0.2.180",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "0.2.184",
+    "oldest_compatible": "1.65.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "linux-raw-sys",
-    "dependency_spec": "0.9",
-    "resolved_version": "0.9.4",
+    "dependency_spec": "0.12",
+    "resolved_version": "0.12.1",
     "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -372,7 +372,7 @@
     "dependency_spec": "0.4",
     "resolved_version": "0.4.14",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -380,15 +380,15 @@
     "dependency_spec": "0.4",
     "resolved_version": "0.4.29",
     "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "memchr",
     "dependency_spec": "2",
-    "resolved_version": "2.7.6",
+    "resolved_version": "2.8.0",
     "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -396,7 +396,7 @@
     "dependency_spec": "0.9",
     "resolved_version": "0.9.1",
     "oldest_compatible": "1.18.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -404,23 +404,31 @@
     "dependency_spec": "0.3",
     "resolved_version": "0.3.17",
     "oldest_compatible": "1.16.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "miniz_oxide",
-    "dependency_spec": "0.8",
-    "resolved_version": "0.8.9",
-    "oldest_compatible": "1.56.1",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.9",
+    "resolved_version": "0.9.1",
+    "oldest_compatible": "1.60.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "mio",
     "dependency_spec": "1",
-    "resolved_version": "1.1.1",
+    "resolved_version": "1.2.0",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
+    "error": null
+  },
+  {
+    "crate_name": "nix",
+    "dependency_spec": "0.31",
+    "resolved_version": "0.31.2",
+    "oldest_compatible": "1.69.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -428,23 +436,23 @@
     "dependency_spec": "0.2",
     "resolved_version": "0.2.19",
     "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "num_cpus",
     "dependency_spec": "1",
     "resolved_version": "1.17.0",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.65.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "once_cell",
     "dependency_spec": "1",
-    "resolved_version": "1.21.3",
+    "resolved_version": "1.21.4",
     "oldest_compatible": "1.56.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -452,7 +460,7 @@
     "dependency_spec": "0.12",
     "resolved_version": "0.12.5",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -460,7 +468,7 @@
     "dependency_spec": "0.9",
     "resolved_version": "0.9.12",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -468,15 +476,15 @@
     "dependency_spec": "2",
     "resolved_version": "2.3.2",
     "oldest_compatible": "1.46.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "pin-project-lite",
     "dependency_spec": "0.2",
-    "resolved_version": "0.2.16",
+    "resolved_version": "0.2.17",
     "oldest_compatible": "1.33.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -484,7 +492,7 @@
     "dependency_spec": "0.1",
     "resolved_version": "0.1.0",
     "oldest_compatible": "1.32.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -492,47 +500,47 @@
     "dependency_spec": "0.2",
     "resolved_version": "0.2.21",
     "oldest_compatible": "1.61.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "proc-macro2",
     "dependency_spec": "1",
-    "resolved_version": "1.0.105",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.0.106",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "quote",
     "dependency_spec": "1",
-    "resolved_version": "1.0.43",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.0.45",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "rand",
-    "dependency_spec": "0.9",
-    "resolved_version": "0.9.2",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.10",
+    "resolved_version": "0.10.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "rand_chacha",
-    "dependency_spec": "0.9",
-    "resolved_version": "0.9.0",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.10",
+    "resolved_version": "0.10.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "rand_core",
-    "dependency_spec": "0.9",
-    "resolved_version": "0.9.5",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.10",
+    "resolved_version": "0.10.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -540,55 +548,55 @@
     "dependency_spec": "1",
     "resolved_version": "1.11.0",
     "oldest_compatible": "1.80.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "regex",
     "dependency_spec": "1",
-    "resolved_version": "1.12.2",
+    "resolved_version": "1.12.3",
     "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "regex-automata",
     "dependency_spec": "0.4",
-    "resolved_version": "0.4.13",
+    "resolved_version": "0.4.14",
     "oldest_compatible": "1.65.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "regex-syntax",
     "dependency_spec": "0.8",
-    "resolved_version": "0.8.8",
+    "resolved_version": "0.8.10",
     "oldest_compatible": "1.65.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "rustix",
     "dependency_spec": "1",
-    "resolved_version": "1.1.3",
+    "resolved_version": "1.1.4",
     "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "rustls",
     "dependency_spec": "0.23",
-    "resolved_version": "0.23.36",
+    "resolved_version": "0.23.37",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "ryu",
     "dependency_spec": "1",
-    "resolved_version": "1.0.22",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.0.23",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -596,15 +604,15 @@
     "dependency_spec": "1",
     "resolved_version": "1.2.0",
     "oldest_compatible": "1.20.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "semver",
     "dependency_spec": "1",
-    "resolved_version": "1.0.27",
+    "resolved_version": "1.0.28",
     "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -612,39 +620,39 @@
     "dependency_spec": "1",
     "resolved_version": "1.0.228",
     "oldest_compatible": "1.31.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "serde_derive",
     "dependency_spec": "1",
     "resolved_version": "1.0.228",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "serde_json",
     "dependency_spec": "1",
     "resolved_version": "1.0.149",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "sha2",
-    "dependency_spec": "0.10",
-    "resolved_version": "0.10.9",
-    "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "0.11",
+    "resolved_version": "0.11.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "slab",
     "dependency_spec": "0.4",
-    "resolved_version": "0.4.11",
+    "resolved_version": "0.4.12",
     "oldest_compatible": "1.51.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -652,15 +660,15 @@
     "dependency_spec": "1",
     "resolved_version": "1.15.1",
     "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "socket2",
     "dependency_spec": "0.6",
-    "resolved_version": "0.6.1",
+    "resolved_version": "0.6.3",
     "oldest_compatible": "1.70.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -668,47 +676,47 @@
     "dependency_spec": "0.11",
     "resolved_version": "0.11.1",
     "oldest_compatible": "1.36.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "syn",
     "dependency_spec": "2",
-    "resolved_version": "2.0.114",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "2.0.117",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "tempfile",
     "dependency_spec": "3",
-    "resolved_version": "3.24.0",
-    "oldest_compatible": "1.65.0",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "3.27.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "thiserror",
     "dependency_spec": "2",
     "resolved_version": "2.0.18",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "time",
     "dependency_spec": "0.3",
-    "resolved_version": "0.3.45",
-    "oldest_compatible": "1.83.0",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "0.3.47",
+    "oldest_compatible": "1.88.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "tokio",
     "dependency_spec": "1",
-    "resolved_version": "1.49.0",
+    "resolved_version": "1.51.1",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -716,23 +724,23 @@
     "dependency_spec": "0.7",
     "resolved_version": "0.7.18",
     "oldest_compatible": "1.71.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "toml",
-    "dependency_spec": "0.9",
-    "resolved_version": "0.9.11+spec-1.1.0",
-    "oldest_compatible": "1.76.0",
-    "latest_compatible": "1.90.0",
+    "dependency_spec": "1",
+    "resolved_version": "1.1.2+spec-1.1.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "tracing",
     "dependency_spec": "0.1",
     "resolved_version": "0.1.44",
-    "oldest_compatible": "1.68.2",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -740,7 +748,7 @@
     "dependency_spec": "0.1",
     "resolved_version": "0.1.36",
     "oldest_compatible": "1.56.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -748,23 +756,23 @@
     "dependency_spec": "1",
     "resolved_version": "1.19.0",
     "oldest_compatible": "1.37.0",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "unicode-ident",
     "dependency_spec": "1",
-    "resolved_version": "1.0.22",
-    "oldest_compatible": "1.31.1",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.0.24",
+    "oldest_compatible": "1.71.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "unicode-segmentation",
     "dependency_spec": "1",
-    "resolved_version": "1.12.0",
-    "oldest_compatible": "1.56.1",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.13.2",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -772,23 +780,23 @@
     "dependency_spec": "0.2",
     "resolved_version": "0.2.2",
     "oldest_compatible": "1.66.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "url",
     "dependency_spec": "2",
     "resolved_version": "2.5.8",
-    "oldest_compatible": "1.83.0",
-    "latest_compatible": "1.90.0",
+    "oldest_compatible": "1.86.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
     "crate_name": "uuid",
     "dependency_spec": "1",
-    "resolved_version": "1.19.0",
-    "oldest_compatible": "1.63.0",
-    "latest_compatible": "1.90.0",
+    "resolved_version": "1.23.0",
+    "oldest_compatible": "1.85.1",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -796,7 +804,7 @@
     "dependency_spec": "0.9",
     "resolved_version": "0.9.5",
     "oldest_compatible": "1.15.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   },
   {
@@ -804,7 +812,7 @@
     "dependency_spec": "2",
     "resolved_version": "2.5.0",
     "oldest_compatible": "1.31.1",
-    "latest_compatible": "1.90.0",
+    "latest_compatible": "1.94.1",
     "error": null
   }
 ]
