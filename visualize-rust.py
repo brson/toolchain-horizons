@@ -120,13 +120,17 @@ rust_versions = {
     '1.87.0': ('2025-05-16', 87),
     '1.88.0': ('2025-06-27', 88),
     '1.89.0': ('2025-08-08', 89),
-    '1.90.0': ('2024-12-01', 90),
+    '1.90.0': ('2025-09-18', 90),
+    '1.91.1': ('2025-11-10', 91),
+    '1.92.0': ('2025-12-11', 92),
+    '1.93.1': ('2026-02-12', 93),
+    '1.94.1': ('2026-03-26', 94),
 }
 
 # Baseline: Rust 1.0 release.
 baseline_version = '1.0.0'
 baseline_date = datetime.strptime(rust_versions[baseline_version][0], '%Y-%m-%d')
-latest_date = datetime(2026, 1, 1)
+latest_date = datetime(2026, 7, 1)
 
 # Chart start date.
 chart_start_date = datetime(2016, 1, 1)
@@ -168,14 +172,14 @@ for crate in results:
 crates_data.sort(key=lambda x: x[3])
 
 # Calculate total versions in baseline range.
-baseline_total = rust_versions['1.90.0'][1] - rust_versions[baseline_version][1]
+baseline_total = rust_versions['1.94.1'][1] - rust_versions[baseline_version][1]
 
 # Color scheme based on impact
 color_map = cs.COLOR_MAP
 
 # Create figure
 fig, ax1 = plt.subplots(figsize=cs.FIGURE_SIZE)
-fig.suptitle('Rust Toolchain Horizons - January 2026', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
+fig.suptitle('Rust Toolchain Horizons - April 2026', fontsize=int(cs.FONT_TITLE*fs), fontweight='bold')
 
 # Timeline bars
 y_pos = 0
@@ -211,7 +215,7 @@ ax1.set_yticks([])
 
 # Add year markers
 year_markers = []
-for year in range(2016, 2026):
+for year in range(2016, 2027):
     year_date = datetime(year, 1, 1)
     if year_date >= chart_start_date and year_date <= latest_date:
         days_from_start = (year_date - chart_start_date).days
